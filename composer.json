@@ -1,0 +1,41 @@
+{
+    "name": "transave/scola-bookstore",
+    "description": "An e library package",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lubem Tser",
+            "email": "lubem@raadaa.com",
+            "homepage": "https://raadaa.com"
+        }
+    ],
+    "homepage": "https://github.com/transave/scola-bookstore",
+    "keywords": ["Laravel", "ScolaBookstore"],
+    "require": {
+        "illuminate/support": "~9"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~9.0",
+        "orchestra/testbench": "~7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Transave\\ScolaBookstore\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Transave\\ScolaBookstore\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Transave\\ScolaBookstore\\ScolaBookstoreServiceProvider"
+            ],
+            "aliases": {
+                "ScolaBookstore": "Transave\\ScolaBookstore\\Facades\\ScolaBookstore"
+            }
+        }
+    }
+}
