@@ -1,26 +1,29 @@
 {
     "name": "transave/scola-bookstore",
-    "description": "An e library package",
+    "description": "A package for an online buying and selling of ebooks for users and publishers",
     "license": "MIT",
     "authors": [
         {
-            "name": "Lubem Tser",
-            "email": "lubem@raadaa.com",
+            "name": "Jonathan Audu",
+            "email": "jaudu2@gmail.com",
             "homepage": "https://raadaa.com"
         }
     ],
     "homepage": "https://github.com/transave/scola-bookstore",
     "keywords": ["Laravel", "ScolaBookstore"],
     "require": {
-        "illuminate/support": "~9"
+        "illuminate/contracts": "7.* || ^8.15 || 9.0 - 9.34 || ^9.36 || ^10.0",
+        "ext-json": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "~9.0",
-        "orchestra/testbench": "~7"
+        "phpunit/phpunit": "^9.6",
+        "orchestra/testbench": "~3.6.7 || ~3.7.8 || ~3.8.6 || ^4.8 || ^5.2 || ^6.0 || ^7.0",
+        "laravel/sanctum": "^3.2"
     },
     "autoload": {
         "psr-4": {
-            "Transave\\ScolaBookstore\\": "src/"
+            "Transave\\ScolaBookstore\\": "src/",
+            "Transave\\ScolaBookstore\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
@@ -37,5 +40,19 @@
                 "ScolaBookstore": "Transave\\ScolaBookstore\\Facades\\ScolaBookstore"
             }
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-f": "vendor/bin/phpunit --filter",
+        "repositories": [
+            {
+                "type": "path",
+                "url": "../../scola-bookstore-package"
+            }
+        ]
+    },
+
+    "config": {
+        "process-timeout": 0
     }
 }

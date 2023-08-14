@@ -2,26 +2,65 @@
 
 namespace Transave\ScolaBookstore;
 
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Transave\ScolaBookstore\Helpers\PublishMigrations;
+use Transave\ScolaBookstore\Http\Models\User;
+use Transave\ScolaCbt\Http\Middlewares\AllowIfAdmin;
+use Transave\ScolaCbt\Http\Middlewares\AllowIfPublisher;
+use Transave\ScolaCbt\Http\Middlewares\AllowIfSuperAdmin;
+use Transave\ScolaCbt\Http\Middlewares\AllowIfUser;
+use Transave\ScolaCbt\Http\Middlewares\VerifiedAccount;
+
 
 class ScolaBookstoreServiceProvider extends ServiceProvider
 {
+    use PublishMigrations;
+
     /**
      * Perform post-registration booting of services.
      *
      * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
+
     public function boot(): void
     {
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'transave');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'transave');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'bookstore');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->registerRoutes();
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
             $this->bootForConsole();
         }
+
+        Config::set('auth.defaults', [
+            'guard' => 'api',
+            'passwords' => 'users',
+        ]);
+
+        Config::set('auth.guards.api', [
+            'driver' => 'session',
+            'provider' => 'users',
+            'hash' => false,
+        ]);
+
+        Config::set('auth.providers.users', [
+            'driver' => 'eloquent',
+            'model' => User::class,
+        ]);
+
+
+        $router = $this->app->make(Router::class);
+        $router->aliasMiddleware('superAdmin', AllowIfSuperAdmin::class);
+        $router->aliasMiddleware('admin', AllowIfAdmin::class);
+        $router->aliasMiddleware('verify', VerifiedAccount::class);
+        $router->aliasMiddleware('publisher', AllowIfPublisher::class);
+        $router->aliasMiddleware('user', AllowIfUser::class);
     }
 
     /**
@@ -32,6 +71,7 @@ class ScolaBookstoreServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/scola-bookstore.php', 'scola-bookstore');
+         $this->mergeConfigFrom(__DIR__.'/../config/endpoints.php', 'endpoints');
 
         // Register the service the package provides.
         $this->app->singleton('scola-bookstore', function ($app) {
@@ -49,6 +89,8 @@ class ScolaBookstoreServiceProvider extends ServiceProvider
         return ['scola-bookstore'];
     }
 
+
+
     /**
      * Console-specific booting.
      *
@@ -59,24 +101,37 @@ class ScolaBookstoreServiceProvider extends ServiceProvider
         // Publishing the configuration file.
         $this->publishes([
             __DIR__.'/../config/scola-bookstore.php' => config_path('scola-bookstore.php'),
-        ], 'scola-bookstore.config');
+        ], 'bookstore-config');
+
+        // Publishing migrations
+        $this->registerMigrations(__DIR__ . '/../database/migrations');
+        $this->publishes([
+            __DIR__.'/../database/migrations' => database_path('migrations'),
+        ], 'bookstore-migrations');
 
         // Publishing the views.
-        /*$this->publishes([
-            __DIR__.'/../resources/views' => base_path('resources/views/vendor/transave'),
-        ], 'scola-bookstore.views');*/
+        $this->publishes([
+            __DIR__.'/../resources/views' => base_path('resources/views/vendor/bookstore'),
+        ], 'views');
 
-        // Publishing assets.
-        /*$this->publishes([
-            __DIR__.'/../resources/assets' => public_path('vendor/transave'),
-        ], 'scola-bookstore.views');*/
-
-        // Publishing the translation files.
-        /*$this->publishes([
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/transave'),
-        ], 'scola-bookstore.views');*/
-
-        // Registering package commands.
-        // $this->commands([]);
     }
+
+    protected function registerRoutes()
+    {
+        Route::group($this->routeConfiguration(), function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        });
+    }
+
+    protected function routeConfiguration()
+    {
+        return [
+            'prefix' => config('scola-bookstore.route.prefix'),
+            'middleware' => config('scola-bookstore.route.middleware'),
+        ];
+    }
+
+
+
+
 }
