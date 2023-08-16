@@ -6,7 +6,6 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Transave\ScolaBookstore\Helpers\PublishMigrations;
 use Transave\ScolaBookstore\Http\Models\User;
 use Transave\ScolaCbt\Http\Middlewares\AllowIfAdmin;
 use Transave\ScolaCbt\Http\Middlewares\AllowIfPublisher;
@@ -17,7 +16,6 @@ use Transave\ScolaCbt\Http\Middlewares\VerifiedAccount;
 
 class ScolaBookstoreServiceProvider extends ServiceProvider
 {
-    use PublishMigrations;
 
     /**
      * Perform post-registration booting of services.
@@ -104,7 +102,6 @@ class ScolaBookstoreServiceProvider extends ServiceProvider
         ], 'bookstore-config');
 
         // Publishing migrations
-        $this->registerMigrations(__DIR__ . '/../database/migrations');
         $this->publishes([
             __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'bookstore-migrations');
