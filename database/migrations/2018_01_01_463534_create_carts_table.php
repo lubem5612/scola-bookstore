@@ -14,8 +14,8 @@ class CreateCartsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('book_id');
             $table->Integer('quantity');
-            $table->integer('amount');
-            $table->integer('total_amount');
+            $table->decimal('amount', 16, 9);
+            $table->decimal('total_amount', 16, 9);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
