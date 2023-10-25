@@ -11,11 +11,11 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('book_id');
+            $table->foreignuuid('user_id');
+            $table->foreignuuid('book_id');
             $table->string('invoice_no')->unique();
-            $table->integer('amount');
-            $table->integer('total_amount');
+            $table->decimal('amount', 15, 5);
+            $table->decimal('total_amount', 15, 5);
             $table->enum('status', ['processing', 'on_the_way', 'arrived', 'delivered', 'cancelled'])->default('processing');
             $table->timestamps();
 

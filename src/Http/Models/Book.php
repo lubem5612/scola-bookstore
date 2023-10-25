@@ -46,10 +46,6 @@ class Book extends Model
         return $this->hasMany(Cart::class);
     }
 
-    public function purchases()
-    {
-        return $this->hasMany(Purchase::class);
-    }
 
     public function saves()
     {
@@ -59,6 +55,11 @@ class Book extends Model
     public function sales()
     {
         return $this->hasMany(Sale::class);
+    }
+
+    public function orderdetails()
+    {
+        return $this->hasMany(OrderDetail::class);
     }
 
 

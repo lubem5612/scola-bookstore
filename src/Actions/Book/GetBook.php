@@ -2,6 +2,7 @@
 
 namespace Transave\ScolaBookstore\Actions\Book;
 
+use Transave\ScolaBookstore\Events\BookViewed;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Book;
@@ -36,13 +37,16 @@ class GetBook
         $this->book = Book::query()
             ->with(['user', 'category', 'publisher'])
             ->find($this->request['id']);
+        $user = auth()->user();
+        event(new BookViewed($user, $this->book));
+
         return $this;
     }
 
     private function validateRequest(): self
     {
         $id = $this->validate($this->request, [
-        'id' => 'required|exists:books,id'
+            'id' => 'required|exists:books,id'
         ]);
         $this->validatedInput = $id;
         return $this;

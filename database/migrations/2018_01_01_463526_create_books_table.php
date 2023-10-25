@@ -23,10 +23,10 @@ class CreateBooksTable extends Migration
             $table->string('publisher');
             $table->string('edition')->nullable();
             $table->string('ISBN')->unique();
-            $table->integer('price');
+            $table->decimal('price', 15, 5);
             $table->string('tags')->nullable();
             $table->string('summary')->nullable();
-            $table->integer('percentage_share')->default(50);
+            $table->decimal('percentage_share', 3, 2)->default(50.00);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();

@@ -5,6 +5,7 @@ namespace Transave\ScolaBookstore\Tests\Feature\Restful;
 use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Book;
+use Transave\ScolaBookstore\Http\Models\Order;
 use Transave\ScolaBookstore\Http\Models\User;
 use Transave\ScolaBookstore\Tests\TestCase;
 
@@ -102,6 +103,28 @@ class CreateResourceTest extends TestCase
         ];
 
         $response = $this->json('POST', 'bookstore/general/saves', $data, ['Accept' => 'application/json']);
+        $response->assertStatus(200)
+            ->assertJson([
+                'success' => true,
+                'data' => [],
+            ]);
+    }
+
+
+    /** @test */
+    public function can_create_orderdetails()
+    {
+        $order = Order::factory()->create();
+        $book = Book::factory()->create();
+        $data = [
+            'order_id' => $order->id,
+            'book_id' => $book->id,
+            'quantity' => $this->faker->randomFloat(),
+            'total_price' => $this->faker->randomFloat(),
+            'discount' => $this->faker->randomFloat(),
+        ];
+
+        $response = $this->json('POST', 'bookstore/general/orderdetails', $data, ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,

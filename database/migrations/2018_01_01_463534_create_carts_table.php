@@ -11,11 +11,11 @@ class CreateCartsTable extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('book_id');
+            $table->foreignuuid('user_id');
+            $table->foreignuuid('book_id');
             $table->Integer('quantity');
-            $table->integer('amount');
-            $table->integer('total_amount');
+            $table->decimal('amount', 15,5);
+            $table->decimal('total_amount', 15, 5);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

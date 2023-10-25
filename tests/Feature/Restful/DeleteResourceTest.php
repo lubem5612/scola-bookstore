@@ -6,6 +6,7 @@ use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Cart;
 use Transave\ScolaBookstore\Http\Models\Category;
+use Transave\ScolaBookstore\Http\Models\OrderDetail;
 use Transave\ScolaBookstore\Http\Models\Publisher;
 use Transave\ScolaBookstore\Http\Models\Save;
 use Transave\ScolaBookstore\Http\Models\School;
@@ -56,6 +57,17 @@ class DeleteResourceTest extends TestCase
         Cart::factory()->count(10)->create();
         $cart = Cart::query()->inRandomOrder()->first();
         $response = $this->json('DELETE', "bookstore/general/carts/{$cart->id}");
+        $array = json_decode($response->getContent(), true);
+        $this->assertEquals(true, $array['success']);
+
+    }
+
+    /** @test */
+    function can_delete_orderdetails_with_specific_id()
+    {
+        OrderDetail::factory()->count(10)->create();
+        $orderdetail = OrderDetail::query()->inRandomOrder()->first();
+        $response = $this->json('DELETE', "bookstore/general/orderdetails/{$orderdetail->id}");
         $array = json_decode($response->getContent(), true);
         $this->assertEquals(true, $array['success']);
 
