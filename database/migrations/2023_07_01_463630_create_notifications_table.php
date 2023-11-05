@@ -8,18 +8,19 @@ return new class extends Migration
 {
     public function up()
     {
-        if (Schema::hasTable('book_viewed_notifications')) return;
-        Schema::create('book_viewed_notifications', function (Blueprint $table) {
+        if (Schema::hasTable('notifications')) return;
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignuuid('user_id');
             $table->foreignuuid('book_id');
-            $table->string('message');
+            $table->string('type')->nullable()->index();
+            $table->string('message', 700)->nullable();
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('book_viewed_notifications');
+        Schema::dropIfExists('notifications');
     }
 };
