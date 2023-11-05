@@ -9,6 +9,7 @@ return new class extends Migration
 {
     public function up()
     {
+        if (Schema::hasTable('books')) return;
         Schema::create('books', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignuuid('user_id');

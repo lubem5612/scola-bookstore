@@ -8,19 +8,18 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('saves', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        if (Schema::hasTable('book_viewed_notifications')) return;
+        Schema::create('book_viewed_notifications', function (Blueprint $table) {
+            $table->id();
             $table->foreignuuid('user_id');
             $table->foreignuuid('book_id');
+            $table->string('message');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('saves');
+        Schema::dropIfExists('book_viewed_notifications');
     }
 };

@@ -12,7 +12,7 @@ use Transave\ScolaBookstore\Helpers\UUIDHelper;
 class OrderDetail extends Model
 {
     use HasFactory, Notifiable, UUIDHelper, HasApiTokens;
-    protected $table = "orderdetails";
+    protected $table = "order_details";
 
     protected $guarded = ['id'];
     protected static function newFactory()

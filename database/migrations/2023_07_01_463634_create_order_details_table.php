@@ -4,10 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrderDetailsTable extends Migration {
+return new class extends Migration {
+
     public function up()
     {
-        Schema::create('orderdetails', function (Blueprint $table) {
+        if (Schema::hasTable('order_details')) return;
+        Schema::create('order_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignuuid('order_id');
             $table->foreignuuid('book_id');
@@ -23,6 +25,6 @@ class CreateOrderDetailsTable extends Migration {
 
     public function down()
     {
-        Schema::dropIfExists('orderdetails');
+        Schema::dropIfExists('order_details');
     }
-}
+};
