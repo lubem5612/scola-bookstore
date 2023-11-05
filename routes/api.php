@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Transave\ScolaBookstore\Http\Controllers\AuthController;
 use Transave\ScolaBookstore\Http\Controllers\BookController;
-use Transave\ScolaBookstore\Http\Controllers\CartController;
 use Transave\ScolaBookstore\Http\Controllers\OrderController;
 use Transave\ScolaBookstore\Http\Controllers\RestfulAPIController;
 use Transave\ScolaBookstore\Http\Controllers\SearchController;
@@ -32,6 +31,7 @@ Route::prefix('general')->as('bookstore.')->group(function () {
     Route::get('carts', [SearchController::class, 'indexCarts'])->name('carts');
     Route::get('schools', [SearchController::class, 'indexSchools'])->name('schools');
     Route::get('saves', [SearchController::class, 'indexSaves'])->name('saves');
+    Route::get('orderdetails', [SearchController::class, 'indexOrderDetails'])->name('orderdetails');
 });
 
 

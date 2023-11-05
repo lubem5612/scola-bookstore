@@ -6,6 +6,7 @@ use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Cart;
 use Transave\ScolaBookstore\Http\Models\Category;
+use Transave\ScolaBookstore\Http\Models\OrderDetail;
 use Transave\ScolaBookstore\Http\Models\Publisher;
 use Transave\ScolaBookstore\Http\Models\Save;
 use Transave\ScolaBookstore\Http\Models\School;
@@ -64,6 +65,20 @@ class GetResourceTest extends TestCase
         $this->assertNotNull($array['data']);
         $this->assertEquals($array['data']['user_id'], $cart->user_id);
         $this->assertEquals($array['data']['book_id'], $cart->book_id);
+    }
+
+
+    /** @test */
+    function can_get_orderdetails_with_specific_id()
+    {
+        OrderDetail::factory()->count(10)->create();
+        $orderdetail = OrderDetail::query()->inRandomOrder()->first();
+        $response = $this->json('GET', "bookstore/general/orderdetails/{$orderdetail->id}");
+        $array = json_decode($response->getContent(), true);
+        $this->assertEquals(true, $array['success']);
+        $this->assertNotNull($array['data']);
+        $this->assertEquals($array['data']['order_id'], $orderdetail->order_id);
+        $this->assertEquals($array['data']['book_id'], $orderdetail->book_id);
     }
 
 

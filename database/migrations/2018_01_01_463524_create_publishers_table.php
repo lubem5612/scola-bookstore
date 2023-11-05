@@ -1,24 +1,28 @@
 <?php
 
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreatePublishersTable extends Migration
 {
     public function up()
     {
-        Schema::create('schools', function (Blueprint $table) {
+        Schema::create('publishers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('faculty')->nullable();
-            $table->string('department')->nullable();
+            $table->string('name');
             $table->timestamps();
 
+
+
+            $table->index(['name']);
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('schools');
+        Schema::dropIfExists('publishers');
+
     }
-};
+}
