@@ -86,7 +86,7 @@ return [
             'relationships' => ['user', 'book'],
         ],
 
-        'orderdetails' => [
+        'order_details' => [
             'model' => \Transave\ScolaBookstore\Http\Models\OrderDetail::class,
             'rules' => [
                 'store' => [
@@ -97,7 +97,6 @@ return [
                     'discount' => 'nullable|numeric',
                 ],
                 'update' => [
-                    'orderdetail_id' => 'required|exists:orderdetails,id',
                     'order_id' => 'sometimes|required|exists:orders,id',
                     'book_id' => 'sometimes|required|exists:books,id',
                     'quantity' => 'sometimes|required|numeric',
