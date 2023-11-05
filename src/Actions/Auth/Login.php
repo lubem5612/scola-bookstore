@@ -47,7 +47,7 @@ class Login
             $this->username = 'email';
         }
         else {
-            $this->username = 'phone';
+            return $this->sendError('wrong email', [], 401);
         }
         return $this;
     }
@@ -55,7 +55,7 @@ class Login
     private function validateLoginData()
     {
         $this->validatedInput = $this->validate($this->data, [
-            'email' => ['required', 'string', 'max:50'],
+            'email' => ['required', 'string', 'email', 'max:50'],
             'password' => ['required', 'string', 'max:60']
         ]);
 

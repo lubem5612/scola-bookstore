@@ -7,6 +7,8 @@ use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Book;
 use Transave\ScolaBookstore\Http\Models\Cart;
 use Transave\ScolaBookstore\Http\Models\Category;
+use Transave\ScolaBookstore\Http\Models\Order;
+use Transave\ScolaBookstore\Http\Models\OrderDetail;
 use Transave\ScolaBookstore\Http\Models\Publisher;
 use Transave\ScolaBookstore\Http\Models\Save;
 use Transave\ScolaBookstore\Http\Models\School;
@@ -77,6 +79,32 @@ class UpdateResourceTest extends TestCase
         Cart::factory()->count(10)->create();
         $cart = Cart::query()->inRandomOrder()->first();
         $response = $this->json('POST', "/bookstore/general/carts/{$cart->id}", $data, ['Accept' => 'application/json']);
+        $response->assertStatus(200);
+
+        $arrayData = json_decode($response->getContent(), true);
+        $this->assertEquals(true, $arrayData['success']);
+        $this->assertNotNull($arrayData['data']);
+    }
+
+
+    /** @test */
+    function can_update_specified_orderdetails()
+    {
+        $book = Book::factory()->create();
+        $order = Order::factory()->create();
+        $orderdetail = OrderDetail::factory()->create();
+        $data = [
+            'orderdetail_id' => $orderdetail->id,
+            'book_id' => $book->id,
+            'order_id' => $order->id,
+            'quantity' => $this->faker->randomDigit(),
+            'amount' => $this->faker->randomNumber(4, 9),
+            'total_amount' => $this->faker->randomNumber(4, 9),
+        ];
+
+        OrderDetail::factory()->count(5)->create();
+        $orderdetail = OrderDetail::query()->inRandomOrder()->first();
+        $response = $this->json('POST', "/bookstore/general/orderdetails/{$orderdetail->id}", $data, ['Accept' => 'application/json']);
         $response->assertStatus(200);
 
         $arrayData = json_decode($response->getContent(), true);

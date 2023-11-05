@@ -6,6 +6,7 @@ use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Cart;
 use Transave\ScolaBookstore\Http\Models\Category;
+use Transave\ScolaBookstore\Http\Models\OrderDetail;
 use Transave\ScolaBookstore\Http\Models\Publisher;
 use Transave\ScolaBookstore\Http\Models\Save;
 use Transave\ScolaBookstore\Http\Models\School;
@@ -60,6 +61,20 @@ class SearchResourceTest extends TestCase
         $this->assertEquals(true, $arrayData['success']);
         $this->assertNotNull($arrayData['data']);
     }
+
+
+    /** @test */
+    public function can_get_orderdetails()
+    {
+        OrderDetail::factory()->count(10)->create();
+        $response = $this->json('GET', "bookstore/general/orderdetails");
+        $response->assertStatus(200);
+
+        $arrayData = json_decode($response->getContent(), true);
+        $this->assertEquals(true, $arrayData['success']);
+        $this->assertNotNull($arrayData['data']);
+    }
+
 
     /** @test */
     public function can_get_schools()

@@ -11,8 +11,8 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('book_id');
+            $table->foreignuuid('user_id');
+            $table->foreignuuid('book_id');
             $table->Integer('quantity');
             $table->string('status');
             $table->timestamps();

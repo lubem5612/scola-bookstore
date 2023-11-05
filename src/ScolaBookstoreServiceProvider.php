@@ -26,6 +26,12 @@ class ScolaBookstoreServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+
+        $this->app['events']->listen(
+            \Transave\ScolaBookstore\Events\BookViewed::class,
+            \Transave\ScolaBookstore\Listeners\NotifyPublisher::class
+        );
+
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'transave');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'bookstore');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');

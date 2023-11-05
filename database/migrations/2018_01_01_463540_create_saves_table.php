@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('saves', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('book_id');
+            $table->foreignuuid('user_id');
+            $table->foreignuuid('book_id');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

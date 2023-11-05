@@ -86,6 +86,32 @@ return [
             'relationships' => ['user', 'book'],
         ],
 
+        'orderdetails' => [
+            'model' => \Transave\ScolaBookstore\Http\Models\OrderDetail::class,
+            'rules' => [
+                'store' => [
+                    'order_id' => 'required|exists:orders,id',
+                    'book_id' => 'required|exists:books,id',
+                    'quantity' => 'required|numeric',
+                    'total_price' => 'required|numeric',
+                    'discount' => 'nullable|numeric',
+                ],
+                'update' => [
+                    'orderdetail_id' => 'required|exists:orderdetails,id',
+                    'order_id' => 'sometimes|required|exists:orders,id',
+                    'book_id' => 'sometimes|required|exists:books,id',
+                    'quantity' => 'sometimes|required|numeric',
+                    'total_price' => 'sometimes|required|numeric',
+                    'discount' => 'sometimes|nullable|numeric',
+                ]
+            ],
+            'order' => [
+                'column' => 'created_at',
+                'pattern' => 'DESC',
+            ],
+            'relationships' => ['order', 'book'],
+        ],
+
 
         'publishers' => [
             'model' => \Transave\ScolaBookstore\Http\Models\Publisher::class,
