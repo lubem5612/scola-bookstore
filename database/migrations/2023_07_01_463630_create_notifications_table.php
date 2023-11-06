@@ -4,21 +4,23 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBookViewedNotificationsTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
-        Schema::create('book_viewed_notifications', function (Blueprint $table) {
+        if (Schema::hasTable('notifications')) return;
+        Schema::create('notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignuuid('user_id');
             $table->foreignuuid('book_id');
-            $table->string('message');
+            $table->string('message', 600)->index();
+            $table->string('type', 60)->index()->nullable();
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('book_viewed_notifications');
+        Schema::dropIfExists('notifications');
     }
-}
+};

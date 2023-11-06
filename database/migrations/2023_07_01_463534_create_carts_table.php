@@ -9,6 +9,7 @@ return new class extends Migration
 {
     public function up()
     {
+        if (Schema::hasTable('carts')) return;
         Schema::create('carts', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignuuid('user_id');
