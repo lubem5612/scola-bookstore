@@ -9,7 +9,7 @@ class CreateBookViewedNotificationsTable extends Migration
     public function up()
     {
         Schema::create('book_viewed_notifications', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->foreignuuid('user_id');
             $table->foreignuuid('book_id');
             $table->string('message');
