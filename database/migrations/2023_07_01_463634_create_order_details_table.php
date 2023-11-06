@@ -9,7 +9,7 @@ class CreateOrderDetailsTable extends Migration {
 
     public function up()
     {
-        Schema::create('orderdetails', function (Blueprint $table) {
+        Schema::create('order_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignuuid('order_id');
             $table->foreignuuid('book_id');
@@ -25,6 +25,6 @@ class CreateOrderDetailsTable extends Migration {
 
     public function down()
     {
-        Schema::dropIfExists('orderdetails');
+        Schema::dropIfExists('order_details');
     }
 }
