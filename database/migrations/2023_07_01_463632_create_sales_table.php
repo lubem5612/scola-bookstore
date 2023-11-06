@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignuuid('user_id');
             $table->foreignuuid('book_id');
             $table->Integer('quantity');
-            $table->string('status');
+            $table->string('status')->index()->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
