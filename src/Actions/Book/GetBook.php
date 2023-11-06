@@ -37,8 +37,6 @@ class GetBook
         $this->book = Book::query()
             ->with(['user', 'category', 'publisher'])
             ->find($this->request['id']);
-//        $user = auth()->user();
-//        event(new BookViewed($user, $this->book));
 
         return $this;
     }
