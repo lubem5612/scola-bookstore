@@ -19,6 +19,12 @@ class BookViewedNotification extends Notification
     }
 
 
+    public function via($notifiable)
+    {
+        return ['database'];
+    }
+
+
     public function toDatabase($notifiable)
     {
         return [
@@ -31,14 +37,10 @@ class BookViewedNotification extends Notification
     public function toArray($notifiable)
     {
         return [
-            // Additional data you might want to send
+
         ];
     }
 
-    public function via($notifiable)
-    {
-        return ['database']; // Use the database channel for this notification
-    }
 
 
 

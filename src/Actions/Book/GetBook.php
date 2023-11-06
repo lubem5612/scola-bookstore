@@ -32,13 +32,11 @@ class GetBook
             return $this->sendServerError($e);
         }
     }
-    private function setBook(): self
+    private function setBook()
     {
         $this->book = Book::query()
             ->with(['user', 'category', 'publisher'])
             ->find($this->request['id']);
-        $user = auth()->user();
-        event(new BookViewed($user, $this->book));
 
         return $this;
     }

@@ -16,7 +16,7 @@ class NotifyPublisher
     public function handle(BookViewed $event)
     {
         // Get the admin user
-        $admin = User::where('role', 'superAdmin')->first();
+        $admin = User::where('role', 'superAdmin','publisher')->first();
 
         if ($admin) {
             // Send a notification to the admin
