@@ -4,11 +4,9 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-<<<<<<< Updated upstream
+
 class CreateOrderDetailsTable extends Migration {
-=======
-class giCreateOrderDetailsTable extends Migration {
->>>>>>> Stashed changes
+
     public function up()
     {
         Schema::create('orderdetails', function (Blueprint $table) {
