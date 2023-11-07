@@ -39,6 +39,7 @@ class RegisterTest extends TestCase
     public function can_register_account_successfully()
     {
         $response = $this->json('POST', route('bookstore.register'), $this->request, ['Accept' => 'application/json']);
+        dd($response);
         $response->assertStatus(200);
         $response->assertJsonStructure(["success", "message", "data"]);
         $json = $response->json();

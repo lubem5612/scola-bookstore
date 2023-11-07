@@ -14,7 +14,7 @@ class RestfulAPIController extends Controller
     public function __construct(RestFulAPIHelper $api)
     {
         $this->api = $api;
-        $this->middleware('auth:sanctum')->except(['index', 'show']);
+        $this->middleware('auth:sanctum');
     }
 
     public function index(Request $request, $endpoint)
