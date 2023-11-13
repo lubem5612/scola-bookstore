@@ -31,7 +31,7 @@ class VerifyEmail
 
     private function setUser()
     {
-        $this->user = User::query()->where("token", $this->request["token"])->first();
+        $this->user = User::query()->where("verification_token", $this->request["verification_token"])->first();
         if (!$this->user) {
             return $this->sendError("User not found", [], 404);
         }
@@ -52,7 +52,7 @@ class VerifyEmail
         $this->user->update([
             "email_verified_at" => Carbon::now(),
             "is_verified" => 1,
-            "token" => null,
+            "verification_token" => null,
         ]);
         return $this->sendSuccess($this->user, "Email Verified");
     }
@@ -60,7 +60,7 @@ class VerifyEmail
     private function validateRequest()
     {
         $this->validate($this->request, [
-            "token" => 'string|digits_between:100000,999999|exists:users,token'
+            "verification_token" => 'string|exists:users,verification_token'
         ]);
         return $this;
     }

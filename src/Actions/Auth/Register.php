@@ -26,7 +26,7 @@ class Register
         $this->request = $request;
     }
 
-    
+
     public function execute()
     {
         try{
@@ -67,7 +67,7 @@ class Register
 
     private function setVerificationToken(): self
     {
-        $this->validatedInput['token'] = rand(100000, 999999);
+        $this->validatedInput['verification_token'] = rand(100000, 999999);
         $this->validatedInput['email_verified_at'] = Carbon::now();
         return $this;
     }
@@ -79,7 +79,7 @@ class Register
         try {
             Notification::route('mail', $this->user->email)
                 ->notify(new WelcomeNotification([
-                    "token" => $this->validatedInput['token'],
+                    "token" => $this->validatedInput['verification_token'],
                     "user" => $this->user
                 ]));
         } catch (\Exception $exception) {

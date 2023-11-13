@@ -38,6 +38,7 @@ class CreateBookTest extends TestCase
     public function can_create_book_via_api()
     {
         $response = $this->json('POST', 'bookstore/books', $this->request, ['Accept' => 'application/json']);
+        dd($response);
         $response->assertStatus(200);
         $response->assertJsonStructure(["success", "message", "data"]);
         $this->assertEquals(true, $response['success']);

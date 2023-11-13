@@ -46,7 +46,7 @@ class UpdateBook
 
     private function uploadCoverIfExists()
     {
-        if($this->request['cover']) {
+        if (isset($this->request['cover']) && $this->request['cover']) {
             $response = $this->uploader->uploadOrReplaceFile($this->request['cover'], 'scola-bookstore/Books', $this->book, 'cover');
             if ($response['success']) {
                 $this->validatedInput['cover'] = $response['upload_url'];
@@ -59,7 +59,7 @@ class UpdateBook
 
     private function uploadFileIfExists()
     {
-        if($this->request['file']) {
+        if (isset($this->request['file']) && $this->request['file']) {
             $response = $this->uploader->uploadOrReplaceFile($this->request['file'], 'scola-bookstore/Books', $this->book, 'file');
             if ($response['success']) {
                 $this->validatedInput['file'] = $response['upload_url'];
