@@ -84,7 +84,7 @@ class CreateResourceTest extends TestCase
             'department' => $this->faker->word,
         ];
 
-        $response = $this->json('POST', 'bookstore/general/schools', $data, ['Accept' => 'application/json']);
+        $response = $this->json('POST', 'RR', $data, ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,

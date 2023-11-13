@@ -15,7 +15,6 @@ class OrderController extends Controller
     use ResponseHelper;
 
 
-
     /**
      * Get a listing of orders
      *

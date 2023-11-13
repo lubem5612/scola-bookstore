@@ -49,10 +49,9 @@ class UpdateUser
         return $this;
     }
 
-
     private function uploadprofile_imageIfExists()
     {
-        if ($this->request['profile_image']) {
+        if (isset($this->request['profile_image']) && $this->request['profile_image']) {
             $response = $this->uploader->uploadOrReplaceFile($this->request['profile_image'], 'bookstore/profile', $this->user, 'profile_image');
             if ($response['success']) {
                 $this->validatedInput['profile_image'] = $response['upload_url'];
@@ -60,6 +59,7 @@ class UpdateUser
         }
         return $this;
     }
+
 
     private function updateUser()
     {
@@ -74,9 +74,6 @@ class UpdateUser
             'first_name' => 'sometimes|required|string|max:255',
             'last_name' => 'sometimes|required|string|max:255',
             'role' => 'sometimes|required|in:superAdmin, admin, publisher, user',
-            'email' => 'sometimes|required|unique:users,email',
-            'email_verified_at' => 'sometimes|required|date',
-            'is_verified' => 'sometimes|required|in:1,0',
             "school_id" => 'sometimes|required|string|exists:schools,id',
             "bio" => 'sometimes|required|string',
             "specialization" => 'sometimes|required|string',
@@ -87,7 +84,7 @@ class UpdateUser
             "delivery_address" => 'sometimes|required|string',
             "phone" => 'sometimes|required|string|max:20|Min:11',
         ]);
-        $this->validatedInput = Arr::except($data, ['email', 'profile_image']);
+        $this->validatedInput = Arr::except($data, ['profile_image']);
         return $this;
     }
 }
