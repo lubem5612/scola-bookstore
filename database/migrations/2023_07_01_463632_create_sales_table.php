@@ -9,13 +9,13 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('carts', function (Blueprint $table) {
+        if (Schema::hasTable('sales')) return;
+        Schema::create('sales', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignuuid('user_id');
             $table->foreignuuid('book_id');
             $table->Integer('quantity');
-            $table->decimal('amount', 15,5);
-            $table->decimal('total_amount', 15, 5);
+            $table->string('status')->index()->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -25,6 +25,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('sales');
     }
 };

@@ -7,22 +7,23 @@ use Illuminate\Support\Facades\Schema;
 
 class CreatePublishersTable extends Migration
 {
-    public function up()
-    {
-        Schema::create('publishers', function (Blueprint $table) {
+    public function up() {
+        if (Schema::hasTable('categories')) return;
+        Schema::create('categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->timestamps();
-
-
 
             $table->index(['name']);
         });
     }
 
-    public function down()
-    {
-        Schema::dropIfExists('publishers');
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down() {
+        Schema::dropIfExists('categories');
     }
 }
