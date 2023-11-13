@@ -58,11 +58,15 @@ class Register
     }
 
     private function setUserType(): self
+
     {
-        if (!array_key_exists('role', $this->validatedInput)) {
+        if (isset($this->validatedInput['role']) && in_array($this->validatedInput['role'], ['superAdmin', 'admin', 'publisher', 'user'])) {
+            $this->validatedInput['role'] = $this->validatedInput['role'];
+        } else {
             $this->validatedInput['role'] = 'user';
         }
         return $this;
+
     }
 
     private function setVerificationToken(): self
@@ -96,7 +100,7 @@ class Register
             'role' => ['string', 'in:superAdmin,admin,publisher,user'],
             'password' => ['required', 'string'],
         ]);
-        $this->validatedInput = Arr::only($data, ['first_name', 'last_name', 'email', 'password']);
+        $this->validatedInput = Arr::only($data, ['first_name', 'last_name', 'email', 'role', 'password']);
         return $this;
     }
 }
