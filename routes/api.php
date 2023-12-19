@@ -7,6 +7,10 @@ use Transave\ScolaBookstore\Http\Controllers\OrderController;
 use Transave\ScolaBookstore\Http\Controllers\RestfulAPIController;
 use Transave\ScolaBookstore\Http\Controllers\SearchController;
 use Transave\ScolaBookstore\Http\Controllers\UserController;
+use Transave\ScolaBookstore\Http\Controllers\ConferencePaperController;
+use Transave\ScolaBookstore\Http\Controllers\ArticleController;
+use Transave\ScolaBookstore\Http\Controllers\monographController;
+use Transave\ScolaBookstore\Http\Controllers\JournalController;
 
 $prefix = !empty(config('endpoints.prefix')) ? config('endpoints.prefix') : 'general';
 /**
@@ -51,6 +55,7 @@ Route::as('bookstore.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::get('/{id}', [UserController::class, 'show'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [UserController::class, 'update'])->name('update');
+        Route::patch('user-type/{id}',  [UserController::class, 'becomeReviewer'])->name('user-type');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('delete');
     });
 
@@ -62,6 +67,61 @@ Route::as('bookstore.')->group(function () {
         Route::get('/{id}', [BookController::class, 'show'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [BookController::class, 'update'])->name('update');
         Route::delete('/{id}', [BookController::class, 'destroy'])->name('delete');
+
+    });
+
+      
+    //Conference Paper Route
+    Route::prefix('papers')->group(function () {
+        Route::get('/', [ConferencePaperController::class, 'index'])->name('index');
+        Route::post('/', [ConferencePaperController::class, 'store'])->name('store');
+        Route::get('/{id}', [ConferencePaperController::class, 'show'])->name('show');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [ConferencePaperController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ConferencePaperController::class, 'destroy'])->name('delete');
+
+    });
+
+
+        //Articles Route
+    Route::prefix('articles')->group(function () {
+        Route::get('/', [ArticleController::class, 'index'])->name('index');
+        Route::post('/', [ArticleController::class, 'store'])->name('store');
+        Route::get('/{id}', [ArticleController::class, 'show'])->name('show');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [ArticleController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ArticleController::class, 'destroy'])->name('delete');
+
+    });
+
+
+        //festchrisfts Route
+    Route::prefix('festchrisfts')->group(function () {
+        Route::get('/', [festchrisftController::class, 'index'])->name('index');
+        Route::post('/', [festchrisftController::class, 'store'])->name('store');
+        Route::get('/{id}', [festchrisftController::class, 'show'])->name('show');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [festchrisftController::class, 'update'])->name('update');
+        Route::delete('/{id}', [festchrisftController::class, 'destroy'])->name('delete');
+
+    });
+
+
+            //Journal Route
+    Route::prefix('journals')->group(function () {
+        Route::get('/', [JournalController::class, 'index'])->name('index');
+        Route::post('/', [JournalController::class, 'store'])->name('store');
+        Route::get('/{id}', [JournalController::class, 'show'])->name('show');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [JournalController::class, 'update'])->name('update');
+        Route::delete('/{id}', [JournalController::class, 'destroy'])->name('delete');
+
+    });
+
+
+//Monograph route
+        Route::prefix('monographs')->group(function () {
+        Route::get('/', [MonographController::class, 'index'])->name('index');
+        Route::post('/', [MonographController::class, 'store'])->name('store');
+        Route::get('/{id}', [MonographController::class, 'show'])->name('show');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [MonographController::class, 'update'])->name('update');
+        Route::delete('/{id}', [MonographController::class, 'destroy'])->name('delete');
 
     });
 

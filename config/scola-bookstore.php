@@ -11,6 +11,11 @@ return [
         4 => 'user'
     ],
 
+    'user_type' => [
+        1 => 'reviewer',
+        2 => 'normal'
+    ],
+
     'route' => [
         'prefix' => 'bookstore',
         'middleware' => 'api',

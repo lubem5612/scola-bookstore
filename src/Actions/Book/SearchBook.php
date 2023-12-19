@@ -15,10 +15,11 @@ class SearchBook
             $query
                 ->where('title', 'like', "%$search%")
                 ->orWhere('subtitle', 'like', "%$search%")
-                ->orWhere('author', 'like', "%$search%")
+                ->orWhere('primary_author', 'like', "%$search%")
+                ->orWhere('other_authors', 'like', "%$search%")
                 ->orWhere('edition', 'like', "%$search%")
                 ->orWhere('publish_date', 'like', "%$search%")
-                ->orWhere('publisher', 'like', "%$search%")
+                ->orWhere('publisher', 'like', "%$search%")//during registration, user's enter new publisher if the publisher been searched is not registered/found.
                 ->orWhere('tags', 'like', "%$search%")
                 ->orWhereHas('user', function ($query1) use ($search) {
                     $query1->where('first_name', 'like', "%$search%")

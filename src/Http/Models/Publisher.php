@@ -28,4 +28,14 @@ class Publisher extends Model
     {
         return $this->hasMany(Book::class);
     }
+
+    public function monograph()
+    {
+        return $this->hasMany(Monograph::class);
+    }
+
+        public function journal()
+    {
+        return $this->hasMany(Journal::class);
+    }
 }

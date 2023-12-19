@@ -1,7 +1,5 @@
 <?php
 
-
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,6 +22,7 @@ return new class extends Migration
             $table->string('email', 100)->unique();
             $table->string('password');
             $table->enum('role', ['superAdmin', 'admin', 'publisher', 'user']);
+            $table->string('user_type')->default('normal');
             $table->boolean('is_verified')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('bio')->nullable();
@@ -44,6 +43,7 @@ return new class extends Migration
             $table->index(['last_name']);
             $table->index(['is_verified']);
             $table->index(['role']);
+            $table->index(['user_type']);
             $table->index(['specialization']);
             $table->index('phone');
         });

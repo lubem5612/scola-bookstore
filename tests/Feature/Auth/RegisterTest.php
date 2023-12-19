@@ -26,6 +26,7 @@ class RegisterTest extends TestCase
     {
         $response = (new Register($this->request))->execute();
         $arrayData = json_decode($response->getContent(), true);
+        dd($arrayData);
         $this->assertEquals(true, $arrayData['success']);
         $this->assertNotNull($arrayData['data']);
     }

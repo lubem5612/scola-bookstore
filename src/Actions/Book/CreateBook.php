@@ -79,6 +79,7 @@ class CreateBook
         return $this->sendSuccess($book->load('user', 'category', 'publisher'), 'Book created successfully');
     }
 
+
     private function setPercentageShare(): self
     {
         if (!array_key_exists('percentage_share', $this->request)) {
@@ -90,22 +91,27 @@ class CreateBook
     private function validateRequest(): self
     {
         $data = $this->validate($this->request, [
-            'user_id' => 'required|exists:users,id',
-            'category_id' => 'required|exists:categories,id',
-            'publisher_id' => 'required|exists:publishers,id',
+            'user_id' => 'required|max:255|exists:users,id',
+            'category_id' => 'required|max:255|exists:categories,id',
+            'publisher_id' => 'string|max:255|exists:publishers,id',
             'title' => 'required|string|max:255',
-            'subtitle' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
+            'subtitle' => 'string|max:255',
+            'abstract' => 'required|string|max:255',
+            'primary_author' => 'required|string|max:255',
             "cover" => 'file|max:5000|mimes:png,jpeg,jpg,gif,webp',
-            'file' => 'required|file|max:10000|mimes:png,jpeg,jpg,gif,webp',
-            'publish_date' => 'required|date',
-            'publisher' => 'required|string|max:255',
+            'file' => 'required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
+            'publish_date' => 'required|date|max:255',
+            'publisher' => 'nullable|string|max:255',
+            'other_authors' => 'string|max:255|json',
             'edition' => 'nullable|string|max:255',
-            'ISBN' => 'nullable|string|max:255',
+            'introduction' => 'nullable|string|max:255',
+            'ISBN' => 'nullable|string|max:255|unique:books,ISBN',
             'price' => 'required|integer',
             'tags' => 'nullable|string|max:255',
             'summary' => 'nullable|string|max:255',
             'percentage_share' => 'nullable',
+            'language' => 'nullable|string|max:255',
+            'table_of_contents' => 'nullable|string|max:255',
         ]);
 
         $this->validatedInput = Arr::except($data, ['cover', 'file']);
@@ -113,3 +119,4 @@ class CreateBook
 
     }
 }
+

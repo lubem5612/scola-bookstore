@@ -22,7 +22,7 @@ class DeleteBook
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function execute()
     {

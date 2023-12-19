@@ -18,7 +18,7 @@ class OrderController extends Controller
     /**
      * Get a listing of orders
      *
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function index()
     {
@@ -44,7 +44,7 @@ class OrderController extends Controller
      * Get an order by id
      *
      * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function show($id)
     {
@@ -58,7 +58,7 @@ class OrderController extends Controller
      *
      * @param Request $request
      * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function update(Request $request, $id)
     {

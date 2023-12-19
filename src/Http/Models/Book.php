@@ -16,6 +16,10 @@ class Book extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'other_authors' => 'json',
+    ];
+
     protected static function newFactory()
     {
         return BookFactory::new();
@@ -63,5 +67,5 @@ class Book extends Model
     }
 
 
-    protected $dates = ['published_date'];
+    protected $dates = ['publish_date'];
 }

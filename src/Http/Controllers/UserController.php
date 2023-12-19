@@ -8,13 +8,14 @@ use Transave\ScolaBookstore\Actions\User\DeleteUser;
 use Transave\ScolaBookstore\Actions\User\GetUser;
 use Transave\ScolaBookstore\Actions\User\SearchUser;
 use Transave\ScolaBookstore\Actions\User\UpdateUser;
+use Transave\ScolaBookstore\Actions\User\BecomeReviewer;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Http\Models\User;
 
 class UserController extends Controller
 {
     use ResponseHelper;
-    private  User $user;
+    private User $user;
 
     /**
      * AuthController constructor.
@@ -29,7 +30,7 @@ class UserController extends Controller
     /**
      * Get a listing of users
      *
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function index()
     {
@@ -42,7 +43,7 @@ class UserController extends Controller
      * Show a specified user
      *
      * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function show($id)
     {
@@ -56,7 +57,7 @@ class UserController extends Controller
      *
      * @param Request $request
      * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function update(Request $request, $id)
     {
@@ -65,11 +66,26 @@ class UserController extends Controller
     }
 
 
+
+        /**
+     * Update a specified user
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
+     */
+    public function becomeReviewer(Request $request, $id)
+    {
+        $inputs = $request->merge(['user_id' => $id])->all();
+        return (new BecomeReviewer($inputs))->execute();
+    }
+
+
     /**
      * Delete a specified user
      *
      * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function destroy($id)
     {

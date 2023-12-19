@@ -30,7 +30,7 @@ class BookController extends Controller
     /**
      * Get a listing of Books
      *
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function index()
     {
@@ -57,7 +57,7 @@ class BookController extends Controller
      * Get a specified book
      *
      * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function show($id)
     {
@@ -71,7 +71,7 @@ class BookController extends Controller
      *
      * @param Request $request
      * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function update(Request $request, $id)
     {
@@ -84,7 +84,7 @@ class BookController extends Controller
      * Delete a specified Book
      *
      * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function destroy($id)
     {

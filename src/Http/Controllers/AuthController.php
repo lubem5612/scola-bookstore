@@ -29,7 +29,7 @@ class AuthController extends Controller
      * Login user
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function login(Request $request)
     {
@@ -41,7 +41,7 @@ class AuthController extends Controller
      * Register a new account
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function register(Request $request)
     {
@@ -53,7 +53,7 @@ class AuthController extends Controller
      * Get authenticated user
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function user(Request $request)
     {
@@ -68,7 +68,7 @@ class AuthController extends Controller
      * Log out user
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function logout(Request $request)
     {
@@ -84,7 +84,7 @@ class AuthController extends Controller
      * Verify created account
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function verifyEmail(Request $request)
     {
@@ -95,7 +95,7 @@ class AuthController extends Controller
      * Resend account verification token for auth user
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaCbt\Helpers\Response
+     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */
     public function resendToken(Request $request)
     {
