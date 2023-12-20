@@ -16,20 +16,19 @@ class CreateJournalsTable extends Migration
     {
         Schema::create('journals', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignUuid('category_id')->constrained('categories')->cascadeOnDelete();
             $table->foreignUuid('publisher_id')->constrained('publishers')->cascadeOnDelete();
             $table->string('title')->index();
             $table->string('subtitle')->nullable();
             $table->string('publisher')->nullable()->index();
-            $table->string('publish_date')->nullable()->index();
+            $table->string('publication_date')->nullable()->index();
             $table->json('editors')->nullable()->index();
             $table->string('website')->nullable()->index();
-            // $table->text('table_of_contents')->nullable();
-            $table->text('editorial')->nullable();
+            $table->string('editorial')->nullable();
             $table->json('editorial_board_members')->nullable()->index();
             $table->string('file_path');
-            // $table->string('cover')->nullable();
-            $table->text('conclusion')->nullable();
+            $table->string('conclusion')->nullable();
             $table->decimal('price', 15, 5)->index();
             $table->float('percentage_share', 5, 2)->default(50);
             $table->timestamps();

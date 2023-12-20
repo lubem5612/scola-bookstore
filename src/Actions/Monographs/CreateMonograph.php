@@ -43,13 +43,13 @@ class CreateMonograph
 
     private function uploadCover(): self
     {
-        if (request()->hasFile('cover')) {
-            $file = request()->file('cover');
+        if (request()->hasFile('cover_image')) {
+            $file = request()->file('cover_image');
 
             $response = $this->uploader->uploadFile($file, 'monographs', 'local');
 
             if ($response['success']) {
-                $this->validatedInput['cover'] = $response['upload_url'];
+                $this->validatedInput['cover_image'] = $response['upload_url'];
             }
         }
         return $this;
@@ -58,13 +58,13 @@ class CreateMonograph
     
     private function uploadFile(): self
     {
-        if (request()->hasFile('file')) {
-            $file = request()->file('file');
+        if (request()->hasFile('file_path')) {
+            $file = request()->file('file_path');
 
             $response = $this->uploader->uploadFile($file, 'monographs', 'local');
 
             if ($response['success']) {
-                $this->validatedInput['file'] = $response['upload_url'];
+                $this->validatedInput['file_path'] = $response['upload_url'];
             }
         }
         return $this;
@@ -97,31 +97,24 @@ class CreateMonograph
         $data = $this->validate($this->request, [
             'user_id' => 'required|exists:users,id',
             'category_id' => 'required|exists:categories,id',
-            'title' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
-            'abstract'=> 'nullable|string|max:225',
-            'primary_author' => 'required|string|max:255',
-            'other_authors' => 'nullable|max:255|json',
-            'publish_date' => 'required|date',
             'publisher_id' => 'nullable|exists:publishers,id',
             'publisher' => 'nullable|string|max:225',
+            'title' => 'required|string|max:255',
+            'subtitle' => 'string|max:255',
+            'abstract'=> 'string|max:225',
+            'primary_author' => 'required|string|max:255',
+            'contributors' => 'json|max:255',
+            'publication_date' => 'required|string|max:255',
             'keywords' => 'required|max:255|json',
-            'references' => 'required|max:255|json',
-            'file' => 'file|max:10000|mimes:png,jpeg,jpg,gif,webp',
-            'cover' => 'file|max:5000|mimes:png,jpeg,jpg,gif,webp',
-            'conclusion' => 'nullable|string|max:225',
+            'file_path' => 'required|file|max:10000|mimes:pdf,doc,docx,wps,webp',
+            'cover_image' => 'nullable|image|max:5000|mimes:png,jpeg,jpg,gif,webp',
             'price' => 'required|integer',
-            'percentage_share' => 'nullable',
-            'ISBN' => 'nullable|string|max:255',
-            'edition' => 'nullable|string|max:255',
-            'language' => 'nullable|string|max:255',
-            'acknowledgments' => 'nullable|string|max:255',
-            'table_of_contents' => 'nullable|string|max:255',
-            'license_info' => 'nullable|string|max:255',
-
+            'percentage_share' => 'required|max:255',
+            'ISBN' => 'string|max:255',
+            'edition' => 'string|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file', 'cover']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
         return $this;
 
     }

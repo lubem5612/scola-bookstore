@@ -9,23 +9,24 @@ use Laravel\Sanctum\HasApiTokens;
 use Transave\ScolaBookstore\Database\Factories\JournalFactory;
 use Transave\ScolaBookstore\Helpers\UUIDHelper;
 
-class Journal extends Model
+class Report extends Model
 {
     use HasFactory, Notifiable, UUIDHelper, HasApiTokens;
     
-    protected $table = "journals";
+    protected $table = "reports";
 
     protected $guarded = ['id'];
     
     protected $casts = [
-        'editors' => 'json',
-        'editorial_board_members' => 'json',
+        'institutional_affiliations' => 'json',
+        'keywords' => 'json',
+        'contributors'=> 'json',
     ];
 
 
     protected static function newFactory()
     {
-        return JournalFactory::new();
+        return ReportFactory::new();
     }
 
     public function user()

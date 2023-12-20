@@ -30,6 +30,7 @@ class UpdateConferencePaper
             return $this->validateRequest()
                 ->setPaperId()
                 ->uploadFileIfExists()
+                ->uploadCoverIfExists()
                 ->updatePaper();
         }catch (\Exception $e) {
             return $this->sendServerError($e);
@@ -46,10 +47,23 @@ class UpdateConferencePaper
 
     private function uploadFileIfExists()
     {
-        if (isset($this->request['file']) && $this->request['file']) {
-            $response = $this->uploader->uploadOrReplaceFile($this->request['file'], 'scola-bookstore/Papers', $this->conferencePaper, 'file');
+        if (isset($this->request['file_path']) && $this->request['file_path']) {
+            $response = $this->uploader->uploadOrReplaceFile($this->request['file_path'], 'scola-bookstore/papers', $this->conferencePaper, 'file_path');
             if ($response['success']) {
-                $this->validatedInput['file'] = $response['upload_url'];
+                $this->validatedInput['file_path'] = $response['upload_url'];
+            }
+        }
+        return $this;
+    }
+
+
+
+    private function uploadCoverIfExists()
+    {
+        if (isset($this->request['cover_image']) && $this->request['cover_image']) {
+            $response = $this->uploader->uploadOrReplaceFile($this->request['cover_image'], 'scola-bookstore/papers', $this->conferencePaper, 'cover_image');
+            if ($response['success']) {
+                $this->validatedInput['cover_image'] = $response['upload_url'];
             }
         }
         return $this;
@@ -67,31 +81,27 @@ class UpdateConferencePaper
     private function validateRequest(): self
     {
         $data = $this->validate($this->request, [
-            'paper_id' => 'required|exists:conference_papers,id',
             'user_id' => 'required|exists:users,id',
-            'title' => 'sometimes|required|string|max:255',
+            'paper_id' => 'required|exists:conference_papers,id',
             'category_id' => 'sometimes|required|exists:categories,id',
-            'subtitle' => 'sometimes|required|string|max:255',
-            'abstract' => 'sometimes|required|string|max:255',
-            'primary_author' => 'sometimes|required|string|max:255',
-            'other_authors' => 'sometimes|required|json',
-            'file' => 'sometimes|required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
-            'conference_title'=> 'sometimes|required|string|max:225',
+            'conference_name'=> 'sometimes|required|string|max:255',
             'conference_date'=> 'sometimes|required|string|max:255',
-            'keywords' => 'sometimes|required|string|max:255|json',
-            'references' => 'sometimes|required|string|max:255|json',
-            'introduction' => 'sometimes|required|string|max:255',
-            'background' => 'sometimes|required|string|max:255',
-            'methodology' => 'sometimes|required|string|max:255',
-            'location' => 'sometimes|required|string|max:225',
-            'pages' => 'sometimes|required|string|max:225',
-            'conclusion' => 'sometimes|required|string|max:225',
-            'result' => 'sometimes|required|string|max:255',
+            'conference_year'=> 'sometimes|required|string|max:255',
+            'conference_location'=> 'sometimes|required|string|max:255',
+            'title' => 'sometimes|required|string|max:255',
+            'subtitle' => 'sometimes|required|string|max:255',
+            'abstract'=> 'sometimes|required|string|max:225',
+            'primary_author' => 'sometimes|required|string|max:255',
+            'contributors' => 'json|max:255',
+            'keywords' => 'sometimes|required|json|max:255',
+            'institutional_affiliations' => 'sometimes|required|json|max:255',
+            'file_path' => 'sometimes|required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
+            'cover_image' => 'sometimes|required|image|max:5000|mimes:png,jpeg,jpg,gif,webp',
             'price' => 'sometimes|required|integer',
-            'percentage_share' => 'sometimes|required',
+            'percentage_share' => 'sometimes|required|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
         return $this;
 
     }

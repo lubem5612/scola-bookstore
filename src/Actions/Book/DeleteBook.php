@@ -52,8 +52,8 @@ class DeleteBook
      */
     private function deleteFile() : self
     {
-        if (request()->hasFile('file')) {
-            $file = request()->file('file');
+        if (request()->hasFile('file_path')) {
+            $file = request()->file('file_path');
             $this->uploader->DeleteFile($file, 'local');
         }
         return $this;
@@ -65,8 +65,8 @@ class DeleteBook
      */
     private function deleteCover() : self
     {
-        if (request()->hasFile('cover')) {
-            $file = request()->file('cover');
+        if (request()->hasFile('cover_image')) {
+            $file = request()->file('cover_image');
             $this->uploader->DeleteFile($file, 'local');
         }
         return $this;

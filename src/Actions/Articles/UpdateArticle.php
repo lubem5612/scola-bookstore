@@ -67,31 +67,25 @@ class UpdateArticle
     private function validateRequest(): self
     {
         $data = $this->validate($this->request, [
-            'article_id' => 'sometimes|required|exists:articles,id',
-            'user_id' => 'sometimes|required|exists:users,id',
-            'category_id' => 'sometimes|required|exists:categories,id',
+            'article_id' => 'required|exists:articles,id',
+            'user_id' => 'required|exists:users,id|max:255',
+            'category_id' => 'sometimes|required|exists:categories,id|max:255',
+            'publisher_id' => 'sometimes|required|exists:publishers,id|max:255',
             'title' => 'sometimes|required|string|max:255',
-            'subtitle' => 'sometimes|required|string|max:255',
-            'primary_author' => 'sometimes|required|string|max:255',
-            'other_authors' => 'sometimes|required|json',
-            'publish_date' => 'sometimes|required|date',
-            'file' => 'sometimes|required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
-            'keywords' => 'sometimes|required|string|max:255|json',
-            'references' => 'sometimes|required|string|json',
-            'abstract' => 'sometimes|required|string|max:255',
-            'introduction' => 'sometimes|required|string|max:255',
-            'literature_review' => 'sometimes|required|string|max:255',
-            'price' => 'sometimes|required|integer',
-            'discussion' => 'sometimes|required|string|max:255',
-            'conclusion' => 'sometimes|required|string|max:255',
-            'percentage_share' => 'sometimes|required',
-            'methodology' => 'sometimes|required|max:255|string',
-            'result' => 'sometimes|required|string|max:255',
-            'pages' => 'sometimes|required|string|max:255',
-            'ISSN' => 'sometimes|required|string|max:255',
+            'subtitle' => 'string|max:255',
+            'abstract'=> 'string|max:225',
+            'primary_author' => 'sometimes|required|json|max:255',
+            'publication_date' => 'sometimes|required|string',
+            'contributors' => 'json|max:255',
+            'keywords' => 'json|max:255',
+            'file_path' => 'sometimes|required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
+            'price' => 'integer|max:255',
+            'pages' => 'string|max:255',
+            'percentage_share' => 'sometimes|required|max:255',
+            
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file']);
+        $this->validatedInput = Arr::except($data, ['file_path']);
         return $this;
 
     }

@@ -32,14 +32,17 @@ class GetArticle
             return $this->sendServerError($e);
         }
     }
+
+
+
     private function setArticle()
     {
-        $this->article = Article::query()
-            ->with(['user', 'category'])
-            ->find($this->request['id']);
-
+        $this->article = Article::query()->with(['user', 'category', 'publisher'])->find($this->request['id']);
         return $this;
     }
+
+
+    
 
     private function validateRequest(): self
     {

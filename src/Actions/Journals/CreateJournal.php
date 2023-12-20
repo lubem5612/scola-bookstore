@@ -32,7 +32,6 @@ class CreateJournal
             return $this->validateRequest()
                 ->setUser()
                 ->uploadFile()
-                ->uploadCover()
                 ->setPercentageShare()
                 ->createJournal();
         } catch (\Exception $e) {
@@ -41,32 +40,15 @@ class CreateJournal
     }
 
 
-
-    private function uploadCover(): self
-    {
-        if (request()->hasFile('cover')) {
-            $file = request()->file('cover');
-
-            $response = $this->uploader->uploadFile($file, 'journals', 'local');
-
-            if ($response['success']) {
-                $this->validatedInput['cover'] = $response['upload_url'];
-            }
-        }
-        return $this;
-    }
-
-
-
     private function uploadFile(): self
     {
-        if (request()->hasFile('file')) {
-            $file = request()->file('file');
+        if (request()->hasFile('file_path')) {
+            $file = request()->file('file_path');
 
             $response = $this->uploader->uploadFile($file, 'journals', 'local');
 
             if ($response['success']) {
-                $this->validatedInput['file'] = $response['upload_url'];
+                $this->validatedInput['file_path'] = $response['upload_url'];
             }
         }
         return $this;
@@ -96,31 +78,29 @@ class CreateJournal
         return $this;
     }
 
+
     private function validateRequest(): self
     {
         $data = $this->validate($this->request, [
             'user_id' => 'required|exists:users,id|max:255',
             'category_id' => 'required|exists:categories,id|max:255',
             'publisher_id' => 'nullable|exists:publisers,id|max:255',
-            'publish_date' => 'nullable|date',
             'title' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
-            'ISSN' => 'nullable|string|max:255',
-            'publisher'=> 'nullable|string|max:255',
-            'editors'=> 'nullable|json|max:255',
-            'website'=> 'nullable|string|max:255',
-            'table_of_contents'=> 'nullable|string|max:255',
-            'editorial'=> 'nullable|string|max:255',
-            'editorial_board_members'=> 'nullable|json|maax:255',
-            'articles'=> 'nullable|string|max:255',
-            'file' => 'required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
-            'cover' => 'nullable|image|max:5000|mimes:png,jpeg,jpg,gif,webp',
+            'subtitle' => 'string|max:255',
+            'publisher'=> 'string|max:255',
+            'publication_date' => 'string|max:255',
+            'editors'=> 'json|max:255',
+            'website'=> 'string|max:255',
+            'editorial'=> 'string|max:255',
+            'editorial_board_members'=> 'json|maax:255',
+            'file_path' => 'required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
             'conclusion' => 'nullable|string|max:255',
             'price' => 'required|integer',
             'percentage_share' => 'nullable',
+            
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file', 'cover']);
+        $this->validatedInput = Arr::except($data, ['file_path']);
         return $this;
 
     }

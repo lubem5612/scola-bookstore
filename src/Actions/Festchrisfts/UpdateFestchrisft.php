@@ -30,6 +30,7 @@ class UpdateFestchrisft
             return $this->validateRequest()
                 ->setFestchrisftId()
                 ->uploadFileIfExists()
+                ->uploadCoverIfExists()
                 ->updateFestchrisft();
         }catch (\Exception $e) {
             return $this->sendServerError($e);
@@ -46,10 +47,22 @@ class UpdateFestchrisft
 
     private function uploadFileIfExists()
     {
-        if (isset($this->request['file']) && $this->request['file']) {
-            $response = $this->uploader->uploadOrReplaceFile($this->request['file'], 'scola-bookstore/Articles', $this->festchrisft, 'file');
+        if (isset($this->request['file_path']) && $this->request['file_path']) {
+            $response = $this->uploader->uploadOrReplaceFile($this->request['file_path'], 'scola-bookstore/festchrisfts', $this->festchrisft, 'file_path');
             if ($response['success']) {
-                $this->validatedInput['file'] = $response['upload_url'];
+                $this->validatedInput['file_path'] = $response['upload_url'];
+            }
+        }
+        return $this;
+    }
+
+
+        private function uploadCoverIfExists()
+    {
+        if (isset($this->request['cover_image']) && $this->request['cover_image']) {
+            $response = $this->uploader->uploadOrReplaceFile($this->request['cover_image'], 'scola-bookstore/festchrisfts', $this->festchrisft, 'cover_image');
+            if ($response['success']) {
+                $this->validatedInput['cover_image'] = $response['upload_url'];
             }
         }
         return $this;
@@ -69,26 +82,24 @@ class UpdateFestchrisft
         $data = $this->validate($this->request, [
             'festchrisft_id' => 'required|exists:festchrisfts,id',
             'user_id' => 'required|exists:users,id|max:255',
-            'category_id' => 'required|exists:categories,id|max:255',
+            'category_id' => 'sometimes|required|exists:categories,id|max:255',
             'publisher_id' => 'sometimes|required|exists:publisers,id|max:255',
             'publisher'=> 'sometimes|required|string|max:255',
-            'publish_date' => 'sometimes|required|date',
             'title' => 'sometimes|required|string|max:255',
             'subtitle' => 'sometimes|required|string|max:255',
-            'abstract' => 'nullable|string|max:255',
-            'editors'=> 'nullable|json|max:255',
+            'abstract' => 'sometimes|required|string|max:255',
+            'publication_date' => 'sometimes|required|string|max:255',
+            'editors'=> 'sometimes|required|json|max:255',
             'keywords'=> 'sometimes|required|json|max:255', 
-            'table_of_contents'=> 'sometimes|required|string|max:255',
-            'file' => 'sometimes|required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
-            'cover' => 'sometimes|required|image|max:5000|mimes:png,jpeg,jpg,gif,webp',
-            'references'=> 'sometimes|required|json|max:255',
-            'dedicatees'=> 'sometimes|required|json|maax:255',
+            'file_path' => 'sometimes|required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
+            'cover_image' => 'sometimes|required|image|max:5000|mimes:png,jpeg,jpg,gif,webp', 
+            'dedicatees'=> 'sometimes|required|json|max:255', 
             'introduction'=> 'sometimes|required|string|max:255',
-            'price' => 'required|integer',
-            'percentage_share' => 'nullable',
+            'price' => 'sometimes|required|integer',
+            'percentage_share' => 'sometimes|required|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file', 'cover']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
         return $this;
 
     }

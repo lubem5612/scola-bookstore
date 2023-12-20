@@ -19,13 +19,13 @@ class CreateArticlesTable extends Migration
             $table->foreignUuid('category_id')->constrained('categories')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignUuid('publisher_id')->constrained('publishers')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('publisher')->nullable()->index();
-             $table->string('title')->index();
-            $table->text('abstract')->nullable();
-            $table->string('subtitle')->nullable()->index();
+            $table->string('title')->index();
+            $table->string('abstract')->nullable();
+            $table->string('subtitle')->nullable();
             $table->string('primary_author')->index();
             $table->json('contributors')->nullable()->index();
             $table->json('keywords')->index();
-            $table->date('publication_date')->index();
+            $table->string('publication_date')->index();
             $table->string('pages')->nullable();
             $table->string('file_path'); 
             $table->decimal('price', 15, 5)->index();

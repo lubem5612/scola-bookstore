@@ -28,27 +28,20 @@ class ArticleFactory extends Factory
         return [
             'user_id' => config('scola-bookstore.auth_model')::factory(),
             'category_id' => Category::factory(),
+            'publisher_id'=> Publisher::factory(),
+            'publisher' => $this->faker->company,
             'title' => $this->faker->name,
             'subtitle' => $this->faker->name,
             'abstract' => $this->faker->text,
             'primary_author' => $this->faker->name,
-            'other_authors' => json_encode([$this->faker->name, $this->faker->name]),
+            'contributors' => json_encode([$this->faker->name, $this->faker->name]),
             'keywords' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),
-            'introduction' => $this->faker->text,
-            'file' => $this->fake->word,
-            'publish_date' => $this->faker->date(),
-            'literature_review' => $this->faker->sentence,            
-            'discussion' => $this->faker->text,
-            'methodology' => $this->faker->paragraph,
-            'references' => json_encode([$this->faker->text]),
-            'conclusion' => $this->faker->sentence,
-            'result' => $this->faker->text,
+            'file_path' => $this->fake->word,
+            'publication_date' => $this->faker->date(),       
             'price' => $this->faker->randomNumber(2,9),
-            'ISSN' => "JHKI972",
             'percentage_share' => 50,
             'pages' => 20,
         ];
-
         
     }
 

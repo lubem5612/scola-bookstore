@@ -32,14 +32,16 @@ class GetConferencePaper
             return $this->sendServerError($e);
         }
     }
+
+
+
     private function setPaper()
     {
-        $this->conferencePaper = ConferencePaper::query()
-            ->with(['user', 'category'])
-            ->find($this->request['id']);
-
+        $this->conferencePaper = ConferencePaper::query()->with(['user', 'category'])->find($this->request['id']);
         return $this;
     }
+
+
 
     private function validateRequest(): self
     {

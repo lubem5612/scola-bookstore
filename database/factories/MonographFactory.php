@@ -3,11 +3,11 @@
 namespace Transave\ScolaBookstore\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Transave\ScolaBookstore\Http\Models\ConferencePaper;
+use Transave\ScolaBookstore\Http\Models\Monograph;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\User;
+use Transave\ScolaBookstore\Http\Models\Publisher;
 
-class ConferencePaperFactory extends Factory
+class MonographFactory extends Factory
 {
 
     /**
@@ -15,7 +15,8 @@ class ConferencePaperFactory extends Factory
      *
      * @var string
      */
-    protected $model = ConferencePaper::class;
+    protected $model = Monograph::class;
+
 
     /**
      * Define the model's default state.
@@ -25,22 +26,22 @@ class ConferencePaperFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->name,
-            'subtitle' => $this->faker->name,
             'user_id' => config('scola-bookstore.auth_model')::factory(),
             'category_id' => Category::factory(),
-            'conference_name'=> $this->faker->name,
-            'conference_date' => $this->faker->date(),
-            'conference_year' => $this->faker->date(),
+            'publisher_id' => Publisher::factory(),
+            'publisher' => $this->faker->company,
+            'title' => $this->faker->name,
+            'publication_date' => $this->faker->date(),
+            'subtitle' => $this->faker->name,
+            'abstract' => $this->faker->sentence,
             'primary_author' => $this->faker->name,
             'contributors' => json_encode([$this->faker->name, $this->faker->name]),
-            'conference_location' => $this->faker->address,
+            'keywords' => json_encode([$this->faker->word, $this->faker->word]),
+            'cover_image' => $this->faker->image,
             'file_path' => $this->fake->word,
-            'cover_image' => $this->fake->image,
-            'abstract' => $this->faker->text,
-            'institutional_affiliations' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
+            'ISBN' => $this->faker->unique()->isbn13,
+            'edition' => $this->faker->randomElement(['First Edition', 'Second Edition', 'Third Edition', 'Fourth Edition',]),
             'price' => $this->faker->randomNumber(2,9),
-            'keywords' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),
             'percentage_share' => 50,
         ];
     }

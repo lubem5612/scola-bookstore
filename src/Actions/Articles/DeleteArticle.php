@@ -21,6 +21,7 @@ class DeleteArticle
         $this->uploader = new UploadHelper();
     }
 
+
     /**
      * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
      */

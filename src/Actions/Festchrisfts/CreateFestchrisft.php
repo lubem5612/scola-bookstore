@@ -44,13 +44,13 @@ class CreateFestchrisft
 
     private function uploadCover(): self
     {
-        if (request()->hasFile('cover')) {
-            $file = request()->file('cover');
+        if (request()->hasFile('cover_image')) {
+            $file = request()->file('cover_image');
 
             $response = $this->uploader->uploadFile($file, 'festchrisfts', 'local');
 
             if ($response['success']) {
-                $this->validatedInput['cover'] = $response['upload_url'];
+                $this->validatedInput['cover_image'] = $response['upload_url'];
             }
         }
         return $this;
@@ -60,13 +60,13 @@ class CreateFestchrisft
 
     private function uploadFile(): self
     {
-        if (request()->hasFile('file')) {
-            $file = request()->file('file');
+        if (request()->hasFile('file_path')) {
+            $file = request()->file('file_path');
 
             $response = $this->uploader->uploadFile($file, 'festchrisfts', 'local');
 
             if ($response['success']) {
-                $this->validatedInput['file'] = $response['upload_url'];
+                $this->validatedInput['file_path'] = $response['upload_url'];
             }
         }
         return $this;
@@ -106,20 +106,18 @@ class CreateFestchrisft
             'title' => 'required|string|max:255',
             'subtitle' => 'nullable|string|max:255',
             'abstract' => 'nullable|string|max:255',
-            'publish_date' => 'nullable|date',
+            'publication_date' => 'nullable|string|max:255',
             'editors'=> 'nullable|json|max:255',
             'keywords'=> 'nullable|json|max:255', 
-            'table_of_contents'=> 'nullable|string|max:255',
-            'file' => 'nullable|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
-            'cover' => 'nullable|image|max:5000|mimes:png,jpeg,jpg,gif,webp', 
-            'references'=> 'nullable|json|max:255',
+            'file_path' => 'nullable|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
+            'cover_image' => 'nullable|image|max:5000|mimes:png,jpeg,jpg,gif,webp', 
             'dedicatees'=> 'nullable|json|max:255', 
             'introduction'=> 'nullable|string|max:255',
             'price' => 'required|integer',
-            'percentage_share' => 'nullable',
+            'percentage_share' => 'required|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file', 'cover']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
         return $this;
 
     }

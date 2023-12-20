@@ -17,8 +17,11 @@ class Festchrisft extends Model
 
     protected $guarded = ['id'];
     
-    protected $dates = ['publish_date'];
-
+    protected $casts = [
+        'keywords' => 'json',
+        'editors' => 'json',
+        'dedicatees' => 'json',
+    ];
 
 
     protected static function newFactory()
@@ -40,31 +43,5 @@ class Festchrisft extends Model
     {
         return $this->belongsTo(Publisher::class);
     }
-
-//         public function orders()
-//     {
-//         return $this->hasMany(Order::class);
-//     }
-
-//     public function carts()
-//     {
-//         return $this->hasMany(Cart::class);
-//     }
-
-
-//     public function saves()
-//     {
-//         return $this->hasMany(Save::class);
-//     }
-
-//     public function sales()
-//     {
-//         return $this->hasMany(Sale::class);
-//     }
-
-//     public function orderdetails()
-//     {
-//         return $this->hasMany(OrderDetail::class);
-//     }
 
 }

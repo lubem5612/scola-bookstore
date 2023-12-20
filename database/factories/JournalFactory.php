@@ -29,23 +29,20 @@ class JournalFactory extends Factory
             'user_id' => config('scola-bookstore.auth_model')::factory(),
             'category_id' => Category::factory(),
             'publisher_id' => Publisher::factory(),
+            'publisher' => $this->faker->company,
             'title' => $this->faker->name,
             'subtitle' => $this->faker->name,  
             'editors' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
-            'cover' => $this->fake->image, 
-            'file' => $this->fake->word,
-            'publish_date' => $this->faker->date(), 
-            'table_of_contents' => $this->faker->text,
+            'cover_image' => $this->fake->image, 
+            'file_path' => $this->fake->word,
+            'publication_date' => $this->faker->date(), 
             'editorial' => $this->faker->sentence,
             'editorial_board_members' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),   
             'website' => $this->faker->text, 
-            'articles' => $this->faker->text,
             'price' => $this->faker->randomNumber(2,9),
-            'ISSN' =>$this->faker->unique()->issn13,
             'percentage_share' => 50,
             'conclusion' => $this->faker->sentence,
         ];
-
         
     }
 

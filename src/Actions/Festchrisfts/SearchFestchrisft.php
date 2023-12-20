@@ -13,13 +13,13 @@ class SearchFestchrisft
         $search = $this->searchParam;
         $this->queryBuilder->where(function ($query) use ($search) {
             $query
-                ->where('title', 'like', "%$search%")
-                ->orWhere('subtitle', 'like', "%$search%")
+                ->where('publisher', 'like', "%$search%")
+                ->orWhere('title', 'like', "%$search%")
                 ->orWhere('editors', 'like', "%$search%")
-                ->orWhere('publish_date', 'like', "%$search%")
                 ->orWhere('keywords', 'like', "%$search%")
+                ->orWhere('publication_date', 'like', "%$search%")
+                ->orWhere('dedicatees', 'like', "%$search%")
                 ->orWhere('price', 'like', "%$search%")
-                ->orWhere('publisher', 'like', "%$search%")
                 ->orWhereHas('user', function ($query1) use ($search) {
                     $query1->where('first_name', 'like', "%$search%")
                         ->orWhere('last_name', 'like', "%$search%")

@@ -18,14 +18,10 @@ class Article extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'other_authors' => 'json',
         'keywords' => 'json',
-        'references' => 'json',
+        'contributors' => 'json',
     ];
     
-    protected $dates = ['publish_date'];
-
-
 
     protected static function newFactory()
     {
@@ -42,30 +38,10 @@ class Article extends Model
         return $this->belongsTo(Category::class);
     }
 
-    // public function orders()
-    // {
-    //     return $this->hasMany(Order::class);
-    // }
+        public function publisher()
+    {
+        return $this->belongsTo(Publisher::class);
+    }
 
-    // public function carts()
-    // {
-    //     return $this->hasMany(Cart::class);
-    // }
-
-
-    // public function saves()
-    // {
-    //     return $this->hasMany(Save::class);
-    // }
-
-    // public function sales()
-    // {
-    //     return $this->hasMany(Sale::class);
-    // }
-
-    // public function orderdetails()
-    // {
-    //     return $this->hasMany(OrderDetail::class);
-    // }
 
 }

@@ -31,6 +31,7 @@ class DeleteConferencePaper
                 ->validateRequest()
                 ->setPaper()
                 ->deleteFile()
+                ->deleteCover()
                 ->deletePaper();
         }catch (\Exception $e) {
             return $this->sendServerError($e);
@@ -51,9 +52,21 @@ class DeleteConferencePaper
      */
     private function deleteFile() : self
     {
-        if (request()->hasFile('file')) {
-            $file = request()->file('file');
-            $this->uploader->DeleteFile($file, 'local');
+        if (request()->hasFile('file_path')) {
+            $file = request()->file('file_path');
+            $this->uploader->deleteFile($file, 'local');
+        }
+        return $this;
+    }
+
+
+        /**
+     * @return $this
+     */
+    private function deleteCover() : self
+    {
+        if ($this->conferencePaper->cover_image) {
+            $this->uploader->deleteFile($this->conferencePaper->cover_image, 'local');
         }
         return $this;
     }

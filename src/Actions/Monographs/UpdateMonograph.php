@@ -30,6 +30,7 @@ class UpdateMonograph
             return $this->validateRequest()
                 ->setMonographId()
                 ->uploadFileIfExists()
+                ->uploadCoverIfExists()
                 ->updateMonograph();
         }catch (\Exception $e) {
             return $this->sendServerError($e);
@@ -45,15 +46,15 @@ class UpdateMonograph
 
 
 
-    private function uploadCover(): self
+    private function uploadCoverIfExists(): self
     {
-        if (request()->hasFile('cover')) {
-            $file = request()->file('cover');
+        if (request()->hasFile('cover_image')) {
+            $file = request()->file('cover_image');
 
             $response = $this->uploader->uploadFile($file, 'monographs', 'local');
 
             if ($response['success']) {
-                $this->validatedInput['cover'] = $response['upload_url'];
+                $this->validatedInput['cover_image'] = $response['upload_url'];
             }
         }
         return $this;
@@ -63,10 +64,10 @@ class UpdateMonograph
 
     private function uploadFileIfExists()
     {
-        if (isset($this->request['file']) && $this->request['file']) {
-            $response = $this->uploader->uploadOrReplaceFile($this->request['file'], 'scola-bookstore/Monographs', $this->monograph, 'file');
+        if (isset($this->request['file_path']) && $this->request['file_path']) {
+            $response = $this->uploader->uploadOrReplaceFile($this->request['file_path'], 'scola-bookstore/Monographs', $this->monograph, 'file_path');
             if ($response['success']) {
-                $this->validatedInput['file'] = $response['upload_url'];
+                $this->validatedInput['file_path'] = $response['upload_url'];
             }
         }
         return $this;
@@ -86,31 +87,25 @@ class UpdateMonograph
         $data = $this->validate($this->request, [
             'monograph_id' => 'required|exists:monographs,id',
             'user_id' => 'required|exists:users,id',
-            'category_id' => 'required|exists:categories,id',
-            'title' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
-            'abstract'=> 'nullable|string|max:225',
-            'primary_author' => 'required|string|max:255',
-            'other_authors' => 'nullable|max:255|json',
-            'publish_date' => 'required|date',
-            'publisher_id' => 'nullable|exists:publishers,id',
-            'publisher' => 'nullable|string|max:225',
-            'keywords' => 'required|max:255|json',
-            'references' => 'required|max:255|json',
-            'file' => 'file|max:10000|mimes:png,jpeg,jpg,gif,webp',
-            'cover' => 'file|max:5000|mimes:png,jpeg,jpg,gif,webp',
-            'conclusion' => 'nullable|string|max:225',
-            'price' => 'required|integer',
-            'percentage_share' => 'nullable',
-            'ISBN' => 'nullable|string|max:255',
-            'edition' => 'nullable|string|max:255',
-            'language' => 'nullable|string|max:255',
-            'acknowledgments' => 'nullable|string|max:255',
-            'table_of_contents' => 'nullable|string|max:255',
-            'license_info' => 'nullable|string|max:255',
+            'category_id' => 'sometimes|required|exists:categories,id',
+            'publisher_id' => 'sometimes|required|exists:publishers,id',
+            'publisher' => 'sometimes|required|string|max:225',
+            'title' => 'sometimes|required|string|max:255',
+            'subtitle' => 'sometimes|required|string|max:255',
+            'abstract'=> 'sometimes|required|string|max:225',
+            'primary_author' => 'sometimes|required|string|max:255',
+            'contributors' => 'json|max:255|sometimes|required',
+            'publication_date' => 'sometimes|required|string|max:255',
+            'keywords' => 'sometimes|required|max:255|json',
+            'file_path' => 'sometimes|required|file|max:10000|mimes:pdf,doc,docx,wps,webp',
+            'cover_image' => 'sometimes|required|image|max:5000|mimes:png,jpeg,jpg,gif,webp',
+            'price' => 'sometimes|required|integer',
+            'percentage_share' => 'sometimes|required|max:255',
+            'ISBN' => 'sometimes|required|string|max:255',
+            'edition' => 'sometimes|required|string|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file', 'cover']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
         return $this;
 
     }

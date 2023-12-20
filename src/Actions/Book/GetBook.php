@@ -32,14 +32,15 @@ class GetBook
             return $this->sendServerError($e);
         }
     }
+
+
     private function setBook()
     {
-        $this->book = Book::query()
-            ->with(['user', 'category', 'publisher'])
-            ->find($this->request['id']);
+        $this->book = Book::query()->with(['user', 'category', 'publisher'])->find($this->request['id']);
 
         return $this;
     }
+
 
     private function validateRequest(): self
     {
@@ -49,4 +50,7 @@ class GetBook
         $this->validatedInput = $id;
         return $this;
     }
+
+
+    
 }

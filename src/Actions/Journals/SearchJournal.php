@@ -14,11 +14,11 @@ class SearchJournal
         $this->queryBuilder->where(function ($query) use ($search) {
             $query
                 ->where('title', 'like', "%$search%")
-                ->orWhere('ISSN', 'like', "%$search%")
                 ->orWhere('editorial_board_members', 'like', "%$search%")
                 ->orWhere('website', 'like', "%$search%")
                 ->orWhere('editors', 'like', "%$search%")
-                ->orWhere('publish_date', 'like', "%$search%")
+                ->orWhere('editorial_board_members', 'like', "%$search%")
+                ->orWhere('publication_date', 'like', "%$search%")
                 ->orWhere('publisher', 'like', "%$search%")//during registration, user's enter new publisher if the publisher been searched is not registered/found.
                 ->orWhere('price', 'like', "%$search%")
                 ->orWhereHas('user', function ($query1) use ($search) {

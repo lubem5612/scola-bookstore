@@ -14,6 +14,7 @@ class CreateConferencePapersTable extends Migration
             $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignUuid('category_id')->constrained('categories')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('title')->index();
+            $table->string('subtitle')->nullable()->index();
             $table->string('primary_author')->index();
             $table->json('contributors')->nullable()->index();
             $table->string('abstract')->nullable();

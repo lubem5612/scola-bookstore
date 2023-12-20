@@ -67,7 +67,7 @@ class CreateArticle
     private function createArticle()
     {
         $article = Article::query()->create($this->validatedInput);
-        return $this->sendSuccess($article->load('user', 'category'), 'Article created successfully');
+        return $this->sendSuccess($article->load('user', 'category', 'publisher'), 'Article created successfully');
     }
 
 
@@ -84,29 +84,21 @@ class CreateArticle
         $data = $this->validate($this->request, [
             'user_id' => 'required|exists:users,id|max:255',
             'category_id' => 'required|exists:categories,id|max:255',
-            'discussion'=> 'nullable|string|max:225',
-            'literature_review'=> 'nullable|string|max:225',
+            'publisher_id' => 'required|exists:publishers,id|max:255',
             'title' => 'required|string|max:255',
             'subtitle' => 'string|max:255',
-            'abstract'=> 'required|string|max:225',
+            'abstract'=> 'string|max:225',
             'primary_author' => 'required|string|max:255',
-            'publish_date' => 'required|date',
-            'other_authors' => 'nullable|string|max:255|json',
-            'keywords' => 'required|string|max:255|json',
-            'references' => 'required|string|max:255|json',
-            'file' => 'sometimes|required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
-            'introduction' => 'nullable|string|max:255',
-            'methodology' => 'nullable|string|max:255',
-            'conclusion' => 'required|string|max:225',
-            'result' => 'nullable|string|max:255',
-            'price' => 'required|integer',
-            'pages' => 'nullable|string|max:255',
-            'percentage_share' => 'nullable',
-            'ISSN' => 'nullable|string|max:255',  
-
+            'publication_date' => 'required|string',
+            'contributors' => 'json|max:255',
+            'keywords' => 'json|max:255',
+            'file_path' => 'required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
+            'price' => 'integer|max:255',
+            'pages' => 'string|max:255',
+            'percentage_share' => 'nullable|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file']);
+        $this->validatedInput = Arr::except($data, ['file_path']);
         return $this;
 
     }

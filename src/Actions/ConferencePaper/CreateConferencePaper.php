@@ -32,6 +32,7 @@ class CreateConferencePaper
             return $this->validateRequest()
                 ->setUser()
                 ->uploadFile()
+                ->uploadCover()
                 ->setPercentageShare()
                 ->createPaper();
         } catch (\Exception $e) {
@@ -39,19 +40,30 @@ class CreateConferencePaper
         }
     }
 
-    private function uploadFile(): self
+    private function uploadFile():self
     {
-        if (request()->hasFile('file')) {
-            $file = request()->file('file');
-
-            $response = $this->uploader->uploadFile($file, 'papers', 'local');
-
+        if (array_key_exists('file_path', $this->request)) {
+            $response = $this->uploader->uploadFile($this->request['file_path'], 'papers');
             if ($response['success']) {
-                $this->validatedInput['file'] = $response['upload_url'];
+                $this->validatedInput['file_path'] = $response['upload_url'];
             }
         }
         return $this;
     }
+
+
+
+    private function uploadCover():self
+    {
+        if (array_key_exists('cover_image', $this->request)) {
+            $response = $this->uploader->uploadFile($this->request['cover_image'], 'papers');
+            if ($response['success']) {
+                $this->validatedInput['cover_image'] = $response['upload_url'];
+            }
+        }
+        return $this;
+    }
+
 
 
     private function setUser(): self
@@ -60,11 +72,14 @@ class CreateConferencePaper
         return $this;
     }
 
+
+
     private function createPaper()
     {
         $conferencePaper = ConferencePaper::query()->create($this->validatedInput);
         return $this->sendSuccess($conferencePaper->load('user', 'category'), 'Paper created successfully');
     }
+
 
 
     private function setPercentageShare(): self
@@ -79,30 +94,25 @@ class CreateConferencePaper
     {
         $data = $this->validate($this->request, [
             'user_id' => 'required|exists:users,id',
-            'conference_title'=> 'required|string|max:255',
-            'conference_date'=> 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
-            'abstract'=> 'required|string|max:225',
+            'conference_name'=> 'required|string|max:255',
+            'conference_date'=> 'required|string|max:255',
+            'conference_year'=> 'required|string|max:255',
+            'conference_location'=> 'required|string|max:255',
             'title' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:255',
+            'subtitle' => 'string|max:255',
+            'abstract'=> 'string|max:225',
             'primary_author' => 'required|string|max:255',
-            'other_authors' => 'string|max:255|json',
-            'keywords' => 'nullable|string|max:255|json',
-            'references' => 'nullable|max:255|string|json',
-            'file' => 'required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
-            'introduction' => 'nullable|string|max:255',
-            'background' => 'nullable|string|max:255',
-            'methodology' => 'nullable|string|max:255',
-            'conclusion' => 'nullable|string|max:225',
-            'result' => 'nullable|string|max:255',
-            'location' => 'required|string|max:255',
-            'pages' => 'nullable|string|max:255',
+            'contributors' => 'json|max:255',
+            'keywords' => 'json|max:255',
+            'institutional_affiliations' => 'json|max:255',
+            'file_path' => 'required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
+            'cover_image' => 'image|max:5000|mimes:png,jpeg,jpg,gif,webp',
             'price' => 'required|integer',
-            'percentage_share' => 'nullable',
+            'percentage_share' => 'required|max:255',
         ]);
 
-
-        $this->validatedInput = Arr::except($data, ['file']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
         return $this;
 
     }

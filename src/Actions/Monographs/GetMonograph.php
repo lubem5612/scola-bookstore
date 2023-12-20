@@ -34,10 +34,7 @@ class GetMonograph
     }
     private function getMonograph()
     {
-        $this->monograph = Monograph::query()
-            ->with(['user', 'category', 'publisher'])
-            ->find($this->request['id']);
-
+        $this->monograph = Monograph::query()->with(['user', 'category', 'publisher'])->find($this->request['id']);
         return $this;
     }
 

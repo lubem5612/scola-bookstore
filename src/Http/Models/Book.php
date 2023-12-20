@@ -12,12 +12,13 @@ use Transave\ScolaBookstore\Helpers\UUIDHelper;
 class Book extends Model
 {
     use HasFactory, Notifiable, UUIDHelper, HasApiTokens;
+
     protected $table = "books";
 
     protected $guarded = ['id'];
 
     protected $casts = [
-        'other_authors' => 'json',
+        'contributors' => 'json',
     ];
 
     protected static function newFactory()
@@ -40,32 +41,4 @@ class Book extends Model
         return $this->belongsTo(Publisher::class);
     }
 
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
-
-    public function carts()
-    {
-        return $this->hasMany(Cart::class);
-    }
-
-
-    public function saves()
-    {
-        return $this->hasMany(Save::class);
-    }
-
-    public function sales()
-    {
-        return $this->hasMany(Sale::class);
-    }
-
-    public function orderdetails()
-    {
-        return $this->hasMany(OrderDetail::class);
-    }
-
-
-    protected $dates = ['publish_date'];
 }

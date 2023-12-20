@@ -30,7 +30,6 @@ class DeleteJournal
             return $this
                 ->validateRequest()
                 ->setJournal()
-                ->deleteCover()
                 ->deleteFile()
                 ->deleteJournal();
         }catch (\Exception $e) {
@@ -52,22 +51,9 @@ class DeleteJournal
      */
     private function deleteFile() : self
     {
-        if (request()->hasFile('file')) {
-            $file = request()->file('file');
-            $this->uploader->DeleteFile($file, 'local');
-        }
-        return $this;
-    }
-
-
-    /**
-     * @return $this
-     */
-    private function deleteCover() : self
-    {
-        if (request()->hasFile('cover')) {
-            $file = request()->file('cover');
-            $this->uploader->DeleteFile($file, 'local');
+        if (request()->hasFile('file_path')) {
+            $file = request()->file('file_path');
+            $this->uploader->deleteFile($file, 'local');
         }
         return $this;
     }

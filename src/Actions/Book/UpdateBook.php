@@ -46,10 +46,10 @@ class UpdateBook
 
     private function uploadCoverIfExists()
     {
-        if (isset($this->request['cover']) && $this->request['cover']) {
-            $response = $this->uploader->uploadOrReplaceFile($this->request['cover'], 'scola-bookstore/Books', $this->book, 'cover');
+        if (isset($this->request['cover_image']) && $this->request['cover_image']) {
+            $response = $this->uploader->uploadOrReplaceFile($this->request['cover_image'], 'scola-bookstore/books', $this->book, 'cover_image');
             if ($response['success']) {
-                $this->validatedInput['cover'] = $response['upload_url'];
+                $this->validatedInput['cover_image'] = $response['upload_url'];
             }
         }
         return $this;
@@ -59,16 +59,15 @@ class UpdateBook
 
     private function uploadFileIfExists()
     {
-        if (isset($this->request['file']) && $this->request['file']) {
-            $response = $this->uploader->uploadOrReplaceFile($this->request['file'], 'scola-bookstore/Books', $this->book, 'file');
+        if (isset($this->request['file_path']) && $this->request['file_path']) {
+            $response = $this->uploader->uploadOrReplaceFile($this->request['file_path'], 'scola-bookstore/books', $this->book, 'file_path');
             if ($response['success']) {
-                $this->validatedInput['file'] = $response['upload_url'];
+                $this->validatedInput['file_path'] = $response['upload_url'];
             }
         }
         return $this;
     }
-
-
+    
 
     private function updateBook()
     {
@@ -83,27 +82,25 @@ class UpdateBook
             'book_id' => 'required|exists:books,id',
             'user_id' => 'required|max:255|exists:users,id',
             'category_id' => 'sometimes|required|max:255|exists:categories,id',
-            'publisher_id' => 'sometimes|required|max:255|exists:publishers,id',
+            'publisher_id' => 'sometimes|required|string|max:255|exists:publishers,id',
+            'publisher' => 'sometimes|required|string|max:255',
             'title' => 'sometimes|required|string|max:255',
-            'subtitle' => 'sometimes|string|max:255',
+            'subtitle' => 'sometimes|required|string|max:255',
+            'preface' => 'sometimes|required|string|max:255',
             'primary_author' => 'sometimes|required|string|max:255',
-            'other_authors' => 'sometimes|json',
-            "cover" => 'sometimes|file|max:5000|mimes:png,jpeg,jpg,gif,webp',
-            'file' => 'sometimes|required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
-            'publish_date' => 'sometimes|required|date|max:255',
-            'publisher' => 'sometimes|required|string|max:255|',
-            'edition' => 'sometimes|string|max:255',
-            'ISBN' => 'sometimes|string|max:255',
+            'contributors' => 'sometimes|required|json|max:255',
+            'ISBN' => 'sometimes|required|string|max:255|unique:books,ISBN',
+            "cover_image" => 'sometimes|required|file|max:5000|mimes:png,jpeg,jpg,gif,webp',
+            'file_path' => 'sometimes|required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
+            'publication_date' => 'string|max:255',
+            'edition' => 'sometimes|required|string|max:255',
             'price' => 'sometimes|required|integer',
-            'tags' => 'sometimes|string|max:255',
-            'summary' => 'sometimes|string|max:255',
+            'tags' => 'sometimes|required|string|max:255',
+            'summary' => 'sometimes|required|string|max:255',
             'percentage_share' => 'sometimes|required',
-            'introduction' => 'sometimes|string|max:255',
-            'language' => 'sometimes|string|max:255',
-            'table_of_contents' => 'sometimes|string|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['cover', 'file']);
+        $this->validatedInput = Arr::except($data, ['cover_image', 'file_path']);
         return $this;
 
     }

@@ -52,8 +52,8 @@ class DeleteFestchrisft
      */
     private function deleteFile() : self
     {
-        if (request()->hasFile('file')) {
-            $file = request()->file('file');
+        if (request()->hasFile('file_path')) {
+            $file = request()->file('file_path');
             $this->uploader->DeleteFile($file, 'local');
         }
         return $this;
@@ -65,9 +65,9 @@ class DeleteFestchrisft
      */
     private function deleteCover() : self
     {
-        if (request()->hasFile('cover')) {
-            $file = request()->file('cover');
-            $this->uploader->DeleteFile($file, 'local');
+        if (request()->hasFile('cover_image')) {
+            $file = request()->file('cover_image');
+            $this->uploader->deleteFile($file, 'local');
         }
         return $this;
     }
