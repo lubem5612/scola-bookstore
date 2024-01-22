@@ -1,6 +1,6 @@
 <?php
 
-namespace Transave\ScolaBookstore\Actions\Journal;
+namespace Transave\ScolaBookstore\Actions\Journals;
 
 use Transave\ScolaBookstore\Events\JournalViewed;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
@@ -27,13 +27,13 @@ class GetJournal
         try {
             return $this
                 ->validateRequest()
-                ->setJournal()
+                ->getJournal()
                 ->sendSuccess($this->journal, 'Journal fetched successfully');
         }catch (\Exception $e) {
             return $this->sendServerError($e);
         }
     }
-    private function setJournal()
+    private function getJournal()
     {
         $this->journal = Journal::query()
             ->with(['user', 'category', 'publisher'])

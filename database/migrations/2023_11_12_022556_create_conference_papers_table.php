@@ -19,12 +19,12 @@ class CreateConferencePapersTable extends Migration
             $table->json('contributors')->nullable()->index();
             $table->string('abstract')->nullable();
             $table->json('keywords')->nullable()->index();
-            $table->string('conference_name')->nullable()-index();
+            $table->string('conference_name')->nullable()->index();
             $table->string('conference_year')->nullable()->index();
             $table->string('conference_date')->nullable()->index();
             $table->string('conference_location')->nullable()->index();  
             $table->json('institutional_affiliations')->nullable()->index();
-            $table->string('file_path');
+            $table->string('file_path')->nullable();
             $table->string('cover_image')->nullable();
             $table->decimal('price', 15, 5)->index();
             $table->float('percentage_share', 5, 2)->default(50);

@@ -13,14 +13,14 @@ return new class extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignuuid('user_id');
-            $table->foreignuuid('book_id');
+            $table->uuid('resource_id');
             $table->Integer('quantity');
             $table->decimal('amount', 15,5);
             $table->decimal('total_amount', 15, 5);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
+            $table->enum('resource_type', ['Monograph', 'Report', 'Book', 'Journal', 'ResearchResource', 'Festchrisft', 'ConferencePaper', 'Article']);
         });
     }
 

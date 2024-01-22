@@ -74,7 +74,7 @@ class JournalController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $inputs = $request->merge(['Journal_id' => $id])->all();
+        $inputs = $request->merge(['journal_id' => $id])->all();
         return (new UpdateJournal($inputs))->execute();
     }
 

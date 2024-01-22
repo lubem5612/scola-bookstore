@@ -25,14 +25,16 @@ class CreateMonographsTable extends Migration
             $table->string('primary_author')->index();
             $table->json('contributors')->nullable()->index();
             $table->json('keywords')->nullable()->index();
+            $table->string('publication_year')->index();
             $table->string('publication_date')->nullable()->index();
             $table->string('ISBN')->nullable()->index();
             $table->string('edition')->nullable()->index();
             $table->string('cover_image')->nullable();
-            $table->string('file_path');
+            $table->string('file_path')->nullable();
             $table->decimal('price', 15, 5)->index();
             $table->float('percentage_share', 5, 2)->default(50);
             $table->timestamps();
+
         });
     }
 

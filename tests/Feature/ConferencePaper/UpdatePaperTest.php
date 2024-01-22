@@ -3,8 +3,8 @@
 namespace Transave\ScolaBookstore\Tests\Feature\ConferencePaper;
 
 use Faker\Factory;
-// use Illuminate\Http\UploadedFile;
-use Illuminate\Http\Testing\File;
+use Illuminate\Http\UploadedFile;
+
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Actions\ConferencePaper\UpdateConferencePaper;
 use Transave\ScolaBookstore\Http\Models\ConferencePaper;
@@ -50,37 +50,26 @@ class UpdatePaperTest extends TestCase
 
     private function testData()
     {
-        $file = File::image('file.jpg');
         $this->faker = Factory::create();
-        $conferencePaper = ConferencePaper::factory()->create([
-            'other_authors' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
-             'keywords' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),
-              'references' => json_encode([$this->faker->text]),
-        ]);
         $this->request = [
             'paper_id' => $this->conferencePaper->id,
-            'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id, 
-            'conference_title'=> $this->faker->name,
-            'conference_date' => $this->faker->date(),
-            'category_id' => Category::factory()->create()->id,
             'title' => $this->faker->name,
             'subtitle' => $this->faker->name,
+            'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id,
+            'category_id' => Category::factory()->create()->id,
+            'conference_name'=> $this->faker->name,
+            'conference_date' => $this->faker->date(),
+            'conference_year' => $this->faker->date(),
             'primary_author' => $this->faker->name,
-            'file' => $file,
-            'publisher' => $this->faker->name,
+            'contributors' => json_encode([$this->faker->name, $this->faker->name]),
+            'conference_location' => $this->faker->address,
+            'cover_image' => UploadedFile::fake()->image('cover.jpg'),
+            'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
             'abstract' => $this->faker->text,
-            'other_authors' => $conferencePaper->other_authors,
-            'introduction' => $this->faker->text,
-            'keywords' => $conferencePaper->keywords,
-            'background' => $this->faker->text,
-            'methodology' => $this->faker->paragraph,
-            'references' => $conferencePaper->references,
-            'conclusion' => $this->faker->sentence,
-            'result' => $this->faker->text,
+            'institutional_affiliations' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
             'price' => $this->faker->randomNumber(2,9),
+            'keywords' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),
             'percentage_share' => 50,
-            'location' => $this->faker->address,
-            'pages' => "100",
         ];
     }
 }

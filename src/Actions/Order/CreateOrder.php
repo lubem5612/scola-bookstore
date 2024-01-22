@@ -13,7 +13,7 @@ class CreateOrder
     private array $request;
     private array $validatedInput;
     private $user;
-    private $book;
+    private $resource;
     private $order;
 
 
@@ -56,7 +56,7 @@ class CreateOrder
     private function createOrder()
     {
         $order = Order::query()->create($this->validatedInput);
-        return $this->sendSuccess($order->load('user', 'book'), 'Order placed successfully');
+        return $this->sendSuccess($order->load('user', 'resource_id', 'resource_type'), 'Order placed successfully');
     }
 
     private function setUser(): self
@@ -69,9 +69,14 @@ class CreateOrder
     {
         $data = $this->validate($this->request, [
             'user_id' => 'required|exists:users,id',
-            'book_id' => 'required|exists:books,id',
-            'amount' => 'required',
-            'total_amount' => 'required',
+            'resource_id' => 'required|string|max:225',
+            'quantity' => 'required|integer|max:225',
+            'order_date' => 'required|max:225',
+            'unit_price' => 'required|max:225',
+            'total_amount' => 'required|max:225',
+            'invoice_no' => 'required|string|max:225',
+            'status' => 'required|string|max:225',
+            'resource_type' => 'required|string|max:225',
         ]);
         $this->validatedInput = $data;
         return $this;

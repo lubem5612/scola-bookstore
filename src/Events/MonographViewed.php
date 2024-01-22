@@ -16,6 +16,6 @@ class MonographViewed
     public function __construct(User $user, Monograph $monograph)
     {
         $this->user = $user;
-        $this->Monograph = $monograph;
+        $this->monograph = $monograph;
     }
 }

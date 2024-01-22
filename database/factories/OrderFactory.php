@@ -3,7 +3,6 @@
 namespace Transave\ScolaBookstore\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Transave\ScolaBookstore\Http\Models\Book;
 use Transave\ScolaBookstore\Http\Models\Order;
 
 class OrderFactory extends Factory
@@ -26,11 +25,14 @@ class OrderFactory extends Factory
     {
        return [
            'user_id' => config('scola-bookstore.auth_model')::factory(),
-           'book_id' => Book::factory(),
-           'amount' => $this->faker->randomNumber(4,9),
+           'resource_id' => \Illuminate\Support\Str::uuid(),
+           'quantity' => 2,
+           'order_date' => $this->faker->date(),
+           'unit_price' => $this->faker->randomNumber(4,9),
            'total_amount' => $this->faker->randomNumber(4,9),
-           'invoice_no' => 'INV-' . $this->faker->unique()->randomDigit(4),
+           'invoice_no' => 'INV-' . $this->faker->unique()->randomNumber(4,9),
            'status' => $this->faker->randomElement(['processing', 'on_the_way', 'arrived', 'delivered', 'cancelled']),
+           'resource_type' => $this->faker->randomElement(['Monograph', 'Report', 'Book', 'Journal', 'ResearchResource', 'Festchrisft', 'ConferencePaper', 'Article']),
         ];
     }
 }

@@ -11,6 +11,9 @@ use Transave\ScolaBookstore\Http\Controllers\ConferencePaperController;
 use Transave\ScolaBookstore\Http\Controllers\ArticleController;
 use Transave\ScolaBookstore\Http\Controllers\monographController;
 use Transave\ScolaBookstore\Http\Controllers\JournalController;
+use Transave\ScolaBookstore\Http\Controllers\ResearchResourceController;
+use Transave\ScolaBookstore\Http\Controllers\ReportController;
+use Transave\ScolaBookstore\Http\Controllers\FestchrisftController;
 
 $prefix = !empty(config('endpoints.prefix')) ? config('endpoints.prefix') : 'general';
 /**
@@ -95,11 +98,11 @@ Route::as('bookstore.')->group(function () {
 
         //festchrisfts Route
     Route::prefix('festchrisfts')->group(function () {
-        Route::get('/', [festchrisftController::class, 'index'])->name('index');
-        Route::post('/', [festchrisftController::class, 'store'])->name('store');
-        Route::get('/{id}', [festchrisftController::class, 'show'])->name('show');
-        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [festchrisftController::class, 'update'])->name('update');
-        Route::delete('/{id}', [festchrisftController::class, 'destroy'])->name('delete');
+        Route::get('/', [FestchrisftController::class, 'index'])->name('index');
+        Route::post('/', [FestchrisftController::class, 'store'])->name('store');
+        Route::get('/{id}', [FestchrisftController::class, 'show'])->name('show');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [FestchrisftController::class, 'update'])->name('update');
+        Route::delete('/{id}', [FestchrisftController::class, 'destroy'])->name('delete');
 
     });
 
@@ -122,6 +125,27 @@ Route::as('bookstore.')->group(function () {
         Route::get('/{id}', [MonographController::class, 'show'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [MonographController::class, 'update'])->name('update');
         Route::delete('/{id}', [MonographController::class, 'destroy'])->name('delete');
+
+    });
+
+
+    //Research Resource route
+        Route::prefix('research_resources')->group(function () {
+        Route::get('/', [ResearchResourceController::class, 'index'])->name('index');
+        Route::post('/', [ResearchResourceController::class, 'store'])->name('store');
+        Route::get('/{id}', [ResearchResourceController::class, 'show'])->name('show');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [ResearchResourceController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ResearchResourceController::class, 'destroy'])->name('delete');
+
+    });
+
+ //Report route
+        Route::prefix('reports')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->name('index');
+        Route::post('/', [ReportController::class, 'store'])->name('store');
+        Route::get('/{id}', [ReportController::class, 'show'])->name('show');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [ReportController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ReportController::class, 'destroy'])->name('delete');
 
     });
 

@@ -74,7 +74,7 @@ class UpdateArticle
             'title' => 'sometimes|required|string|max:255',
             'subtitle' => 'string|max:255',
             'abstract'=> 'string|max:225',
-            'primary_author' => 'sometimes|required|json|max:255',
+            'primary_author' => 'sometimes|required|max:255',
             'publication_date' => 'sometimes|required|string',
             'contributors' => 'json|max:255',
             'keywords' => 'json|max:255',

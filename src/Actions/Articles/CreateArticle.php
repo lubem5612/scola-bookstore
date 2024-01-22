@@ -92,7 +92,7 @@ class CreateArticle
             'publication_date' => 'required|string',
             'contributors' => 'json|max:255',
             'keywords' => 'json|max:255',
-            'file_path' => 'required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
+            'file_path' => 'file|max:10000|mimes:pdf,doc,wps,wpd,docx',
             'price' => 'integer|max:255',
             'pages' => 'string|max:255',
             'percentage_share' => 'nullable|max:255',

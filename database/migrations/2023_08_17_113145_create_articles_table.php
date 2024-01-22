@@ -27,7 +27,7 @@ class CreateArticlesTable extends Migration
             $table->json('keywords')->index();
             $table->string('publication_date')->index();
             $table->string('pages')->nullable();
-            $table->string('file_path'); 
+            $table->string('file_path')->nullable(); 
             $table->decimal('price', 15, 5)->index();
             $table->float('percentage_share', 5, 2)->default(50);
             $table->timestamps();

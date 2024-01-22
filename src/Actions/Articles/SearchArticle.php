@@ -10,7 +10,6 @@ class SearchArticle
 
     private function searchTerms()
     {
-        $table->uuid('id')->primary();
         $search = $this->searchParam;
         $this->queryBuilder->where(function ($query) use ($search) {
             $query

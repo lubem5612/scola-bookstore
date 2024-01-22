@@ -3,6 +3,7 @@
 namespace Transave\ScolaBookstore\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
 use Transave\ScolaBookstore\Http\Models\ConferencePaper;
 use Transave\ScolaBookstore\Http\Models\Category;
 use Transave\ScolaBookstore\Http\Models\User;
@@ -35,8 +36,8 @@ class ConferencePaperFactory extends Factory
             'primary_author' => $this->faker->name,
             'contributors' => json_encode([$this->faker->name, $this->faker->name]),
             'conference_location' => $this->faker->address,
-            'file_path' => $this->fake->word,
-            'cover_image' => $this->fake->image,
+            'cover_image' => UploadedFile::fake()->image('cover.jpg'),
+            'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
             'abstract' => $this->faker->text,
             'institutional_affiliations' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
             'price' => $this->faker->randomNumber(2,9),

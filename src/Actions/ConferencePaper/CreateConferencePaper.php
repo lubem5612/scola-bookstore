@@ -106,7 +106,7 @@ class CreateConferencePaper
             'contributors' => 'json|max:255',
             'keywords' => 'json|max:255',
             'institutional_affiliations' => 'json|max:255',
-            'file_path' => 'required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
+            'file_path' => 'file|max:10000|mimes:pdf,doc,wps,wpd,docx',
             'cover_image' => 'image|max:5000|mimes:png,jpeg,jpg,gif,webp',
             'price' => 'required|integer',
             'percentage_share' => 'required|max:255',

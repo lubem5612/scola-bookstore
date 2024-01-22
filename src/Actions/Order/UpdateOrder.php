@@ -60,11 +60,15 @@ class UpdateOrder
     {
         $data = $this->validate($this->request, [
             'order_id' => 'required|exists:orders,id',
-            'user_id' => 'sometimes|required|exists:users,id',
-            'book_id' => 'sometimes|required|exists:books,id',
-            'amount' => 'sometimes|required',
+            'user_id' => 'required|exists:users,id',
+            'resource_id' => 'sometimes|required|string|max:225',
+            'quantity' => 'sometimes|required',
+            'unit_price' => 'sometimes|required',
             'total_amount' => 'sometimes|required',
+            'order_date' => 'sometimes|required',
             'status' => 'sometimes|required|in:processing,on_the_way,arrived,delivered,cancelled',
+            'resource_type' => 'sometimes|required|in:Monograph, Report, Book, Journal, ResearchResource, Festchrisft, ConferencePaper, Article',
+
         ]);
         $this->validatedInput = $data;
         return $this;

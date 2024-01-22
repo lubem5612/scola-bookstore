@@ -42,7 +42,7 @@ class DeleteFestchrisft
 
     private function deleteFestchrisft()
     {
-        $this->journal->delete();
+        $this->festchrisft->delete();
         return $this->sendSuccess(null, 'festchrisft deleted successfully');
     }
 

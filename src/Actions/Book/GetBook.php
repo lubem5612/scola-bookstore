@@ -7,6 +7,7 @@ use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Book;
 
+
 class GetBook
 {
     use ValidationHelper, ResponseHelper;
@@ -31,6 +32,20 @@ class GetBook
         }catch (\Exception $e) {
             return $this->sendServerError($e);
         }
+    }
+
+
+    private function sendNotification()
+    {
+        try {
+            Notification::route('mail', $this->user->email)
+                ->notify(new WelcomeNotification([
+                    "token" => $this->validatedInput['token'],
+                    "user" => $this->user
+                ]));
+        } catch (\Exception $exception) {
+        }
+        return $this;
     }
 
 

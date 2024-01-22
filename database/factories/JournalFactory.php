@@ -4,6 +4,7 @@ namespace Transave\ScolaBookstore\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Transave\ScolaBookstore\Http\Models\Journal;
+use Illuminate\Http\UploadedFile;
 use Transave\ScolaBookstore\Http\Models\Category;
 use Transave\ScolaBookstore\Http\Models\Publisher;
 use Transave\ScolaBookstore\Http\Models\User;
@@ -33,9 +34,12 @@ class JournalFactory extends Factory
             'title' => $this->faker->name,
             'subtitle' => $this->faker->name,  
             'editors' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
-            'cover_image' => $this->fake->image, 
-            'file_path' => $this->fake->word,
-            'publication_date' => $this->faker->date(), 
+            'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
+            'publication_date' => $this->faker->date(),
+            'publication_year' => $this->faker->date(), 
+            'volume' => $this->faker->randomNumber(),
+            'page_start' => $this->faker->randomNumber(),
+            'page_end' => $this->faker->randomNumber(),
             'editorial' => $this->faker->sentence,
             'editorial_board_members' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),   
             'website' => $this->faker->text, 

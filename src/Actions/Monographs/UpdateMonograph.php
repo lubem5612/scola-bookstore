@@ -61,17 +61,20 @@ class UpdateMonograph
     }
 
 
-
-    private function uploadFileIfExists()
+        private function uploadFileIfExists(): self
     {
-        if (isset($this->request['file_path']) && $this->request['file_path']) {
-            $response = $this->uploader->uploadOrReplaceFile($this->request['file_path'], 'scola-bookstore/Monographs', $this->monograph, 'file_path');
+        if (request()->hasFile('file_path')) {
+            $file = request()->file('file_path');
+
+            $response = $this->uploader->uploadFile($file, 'monographs', 'local');
+
             if ($response['success']) {
                 $this->validatedInput['file_path'] = $response['upload_url'];
             }
         }
-        return $this;
+         return $this;
     }
+        
 
 
 
@@ -96,6 +99,7 @@ class UpdateMonograph
             'primary_author' => 'sometimes|required|string|max:255',
             'contributors' => 'json|max:255|sometimes|required',
             'publication_date' => 'sometimes|required|string|max:255',
+            'publication_year' => 'sometimes|required|string|max:255',
             'keywords' => 'sometimes|required|max:255|json',
             'file_path' => 'sometimes|required|file|max:10000|mimes:pdf,doc,docx,wps,webp',
             'cover_image' => 'sometimes|required|image|max:5000|mimes:png,jpeg,jpg,gif,webp',

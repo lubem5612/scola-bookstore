@@ -101,7 +101,7 @@ class CreateFestchrisft
         $data = $this->validate($this->request, [
             'user_id' => 'required|exists:users,id|max:255',
             'category_id' => 'required|exists:categories,id|max:255',
-            'publisher_id' => 'nullable|exists:publisers,id|max:255',
+            'publisher_id' => 'nullable|exists:publishers,id|max:255',
             'publisher'=> 'nullable|string|max:255',
             'title' => 'required|string|max:255',
             'subtitle' => 'nullable|string|max:255',

@@ -3,6 +3,7 @@
 namespace Transave\ScolaBookstore\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
 use Transave\ScolaBookstore\Http\Models\Book;
 use Transave\ScolaBookstore\Http\Models\Category;
 use Transave\ScolaBookstore\Http\Models\Publisher;
@@ -36,17 +37,17 @@ class BookFactory extends Factory
             'preface' => $this->faker->sentence,
             'primary_author' => $this->faker->name,
             'contributors' => json_encode([$this->faker->name, $this->faker->name]),
-            'cover_image' => $this->faker->image,
-            'file_path' => $this->fake->word,
+            'cover_image' => UploadedFile::fake()->image('cover.jpg'),
+            'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
             'ISBN' => $this->faker->unique()->isbn13,
             'edition' => $this->faker->randomElement(['First Edition', 'Second Edition', 'Third Edition', 'Fourth Edition',]),
             'price' => $this->faker->randomNumber(2,9),
             'tags' => $this->faker->words(3, true),
             'summary' => $this->faker->paragraph,
-            'table_of_contents' => $this->faker->paragraph,
             'percentage_share' => 50,
 
         ];
     }
 
 }
+

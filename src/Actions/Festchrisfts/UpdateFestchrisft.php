@@ -83,7 +83,7 @@ class UpdateFestchrisft
             'festchrisft_id' => 'required|exists:festchrisfts,id',
             'user_id' => 'required|exists:users,id|max:255',
             'category_id' => 'sometimes|required|exists:categories,id|max:255',
-            'publisher_id' => 'sometimes|required|exists:publisers,id|max:255',
+            'publisher_id' => 'sometimes|required|exists:publishers,id|max:255',
             'publisher'=> 'sometimes|required|string|max:255',
             'title' => 'sometimes|required|string|max:255',
             'subtitle' => 'sometimes|required|string|max:255',

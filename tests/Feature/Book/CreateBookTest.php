@@ -31,7 +31,6 @@ class CreateBookTest extends TestCase
     {
         $response = (new CreateBook($this->request))->execute();
         $array = json_decode($response->getContent(), true);
-                dd($array);
         $this->assertTrue($array['success']);
         $this->assertNotNull($array['data']);
     }
@@ -42,6 +41,8 @@ class CreateBookTest extends TestCase
     {
         $response = $this->json('POST', 'bookstore/books', $this->request, ['Accept' => 'application/json']);
         $response->assertStatus(200);
+        $array = json_decode($response->getContent(), true);
+        dd($array);
         $response->assertJsonStructure(["success", "message", "data"]);
         $this->assertEquals(true, $response['success']);
     }
@@ -49,34 +50,26 @@ class CreateBookTest extends TestCase
 
     private function testData()
     {
-        $file = UploadedFile::fake()->image('file.jpg');
         $this->faker = Factory::create();
-        $cover = UploadedFile::fake()->image('cover.png');
-        $book = Book::factory()->create([
-            'other_authors' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
-        ]);
         $this->request = [
             'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id,
             'category_id' => Category::factory()->create()->id,
             'publisher_id' => Publisher::factory()->create()->id,
-            'introduction' => $this->faker->name,
-            'abstract' => $this->faker->sentence,
+            'publisher' => $this->faker->company,
+            'publication_date' => $this->faker->date(),
             'title' => $this->faker->name,
             'subtitle' => $this->faker->name,
+            'preface' => $this->faker->sentence,
             'primary_author' => $this->faker->name,
-            'table_of_contents' => $this->faker->paragraph,
-            'cover' => $cover,
-            'file' => $file,
-            'publish_date' => $this->faker->date(),
-            'other_authors' => $book->other_authors,
-            'publisher' => $this->faker->company,
-            'edition' => $this->faker->randomElement(['First Edition', 'Second Edition', 'Third Edition', 'Fourth Edition']),
+            'contributors' => json_encode([$this->faker->name, $this->faker->name]),
+            'cover_image' => UploadedFile::fake()->image('cover.jpg'),
+            'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
             'ISBN' => $this->faker->unique()->isbn13,
-            'price' => $this->faker->randomNumber(2, 9),
+            'edition' => $this->faker->randomElement(['First Edition', 'Second Edition', 'Third Edition', 'Fourth Edition',]),
+            'price' => $this->faker->randomNumber(2,9),
             'tags' => $this->faker->words(3, true),
             'summary' => $this->faker->paragraph,
             'percentage_share' => 50,
-            'language' => $this->faker->name,
         ];
     }
 }

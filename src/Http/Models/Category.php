@@ -24,9 +24,39 @@ class Category extends Model
         return CategoryFactory::new();
     }
 
-    public function books()
+    public function book()
     {
         return $this->hasMany(Book::class);
+    }
+
+    public function report()
+    {
+        return $this->hasMany(Report::class);
+    }
+
+    public function monograph()
+    {
+        return $this->hasMany(Monograph::class);
+    }
+
+    public function article()
+    {
+        return $this->hasMany(Article::class);
+    }
+
+    public function conference_paper()
+    {
+        return $this->hasMany(ConferencePaper::class);
+    }
+
+    public function research_resource()
+    {
+        return $this->hasMany(ResearchResource::class);
+    }
+
+    public function festchrisft()
+    {
+        return $this->hasMany(Festchrisft::class);
     }
 
 }

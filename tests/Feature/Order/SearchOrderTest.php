@@ -2,9 +2,9 @@
 
 namespace Transave\ScolaBookstore\Tests\Feature\Order;
 
-use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Order;
+use Transave\ScolaBookstore\Http\Models\Book;
 use Transave\ScolaBookstore\Tests\TestCase;
 
 class SearchOrderTest extends TestCase
@@ -12,35 +12,23 @@ class SearchOrderTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        Order::factory()->count(5)->create();
+        Book::factory()->count(5)->create();
         $user = config('scola-bookstore.auth_model')::factory()->create(['role' => 'user']);
         Sanctum::actingAs($user);
     }
 
     /** @test */
-    function can_search_orders_using_query_parameters()
+    function can_get_an_order_with_specific_id()
     {
-
-        $searchTerm = 'delivered';
-        $this->testData($searchTerm);
-        $response = $this->json('GET', "/bookstore/orders?search={$searchTerm}");
-        $response->assertStatus(200);
-        $array = $response->json();
+        $order = Order::query()->inRandomOrder()->first();
+        $book = Book::query()->inRandomOrder()->first();
+        $response = $this->json('GET', "bookstore/orders/{$order->id}");
+        $array = json_decode($response->getContent(), true);
+        dd($array);
         $this->assertEquals(true, $array['success']);
         $this->assertNotNull($array['data']);
-    }
-
-
-    private function testData($search = null)
-    {
-        $faker = Factory::create();
-        Order::factory()
-            ->count(3)
-            ->for(config('scola-bookstore.auth_model')::factory()->state(['first_name' => $faker->name . ' ' . $search]))
-            ->create();
-
-        Order::factory()
-            ->count(3)
-            ->for(config('scola-bookstore.auth_model')::factory()->create())
-            ->create();
+        $this->assertEquals($array['data']['user_id'], $order->user_id);
+        $this->assertEquals($array['data']['resource_id'], $order->resource_id);
     }
 }

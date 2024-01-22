@@ -3,12 +3,13 @@
 namespace Transave\ScolaBookstore\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Transave\ScolaBookstore\Http\Models\Report;
+use Transave\ScolaBookstore\Http\Models\ResearchResource;
+use Illuminate\Http\UploadedFile;
 use Transave\ScolaBookstore\Http\Models\Category;
 use Transave\ScolaBookstore\Http\Models\Publisher;
 use Transave\ScolaBookstore\Http\Models\User;
 
-class ReportFactory extends Factory
+class ResearchResourceFactory extends Factory
 {
 
     /**
@@ -16,7 +17,7 @@ class ReportFactory extends Factory
      *
      * @var string
      */
-    protected $model = Report::class;
+    protected $model = ResearchResource::class;
 
     /**
      * Define the model's default state.
@@ -33,13 +34,17 @@ class ReportFactory extends Factory
                'publisher_id'=> Publisher::factory(),
                'publisher' => $this->faker->company,
                'publication_date' => $this->faker->date(),
+               'publication_year' => $this->faker->date(),
+               'source' => $this->faker->name,
+               'resource_url' => $this->faker->name,
+               'price' => $this->faker->randomNumber(2,9),
                'overview' => $this->faker->sentence,
                'resource_type'=> $this->faker->name,
                'primary_author' => $this->faker->name,          
                'contributors' => json_encode([$this->faker->name, $this->faker->name]),
                'keywords' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),
-               'file_path' => $this->fake->word,
-               'cover_image'=> $this->faker->image,
+               'cover_image' => UploadedFile::fake()->image('cover.jpg'),
+               'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
                'percentage_share' => 50,          
                'price' => $this->faker->randomNumber(2,9),
         ];

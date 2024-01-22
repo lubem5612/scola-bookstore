@@ -19,6 +19,7 @@ class SearchMonograph
                 ->orWhere('contributors', 'like', "%$search%")
                 ->orWhere('keywords', 'like', "%$search%")
                 ->orWhere('publication_date', 'like', "%$search%")
+                 ->orWhere('publication_year', 'like', "%$search%")
                 ->orWhere('ISBN', 'like', "%$search%")
                 ->orWhere('edition', 'like', "%$search%")
                 ->orWhere('keywords', 'like', "%$search%")

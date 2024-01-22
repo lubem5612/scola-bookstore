@@ -29,6 +29,8 @@ class UpdateJournal
         try {
             return $this->validateRequest()
                 ->setJournalId()
+                ->updateAbstract()
+                ->updateContent()
                 ->uploadFileIfExists()
                 ->updateJournal();
         }catch (\Exception $e) {
@@ -56,6 +58,26 @@ class UpdateJournal
     }
 
 
+    private function updateAbstract()
+    {
+        if (isset($this->request['abstract'])) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+        return $this;
+    }
+
+
+
+        private function updateContent()
+    {
+        if (isset($this->request['content'])) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
+        return $this;
+    }
+
+
+
 
     private function updateJournal()
     {
@@ -70,22 +92,28 @@ class UpdateJournal
             'journal_id' => 'required|exists:journals,id|max:255',
             'user_id' => 'required|exists:users,id|max:255',
             'category_id' => 'sometimes|required|exists:categories,id|max:255',
-            'publisher_id' => 'sometimes|required|exists:publisers,id|max:255',
+            'publisher_id' => 'nullable|exists:publishers,id|max:255',
             'title' => 'sometimes|required|string|max:255',
-            'subtitle' => 'sometimes|required|string|max:255',
-            'publisher'=> 'sometimes|required|string|max:255',
-            'publication_date' => 'sometimes|required|string|max:255',
-            'editors'=> 'sometimes|required|json|max:255',
-            'website'=> 'sometimes|required|string|max:255',
-            'editorial'=> 'sometimes|required|string|max:255',
-            'editorial_board_members'=> 'sometimes|required|json|maax:255',
-            'file_path' => 'sometimes|required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
-            'conclusion' => 'sometimes|required|string|max:255',
+            'volume' => 'sometimes|required|string|max:255',
             'price' => 'sometimes|required|integer',
-            'percentage_share' => 'sometimes|required|max:255',
+            'subtitle' => 'string|max:255',
+            'publisher'=> 'string|max:255',
+            'publication_date' => 'string|max:255',
+            'publication_year' => 'string|max:255',
+            'abstract' => 'string|max:255',
+            'content' => 'string|max:255', //the material
+            'page_start' => 'string|max:255',
+            'page_end' => 'string|max:255',
+            'editors'=> 'json|max:255',
+            'website'=> 'string|max:255',
+            'editorial'=> 'string|max:255',
+            'editorial_board_members'=> 'json|max:255',
+            'file_path' => 'file|max:10000|mimes:pdf,doc,wps,wpd,docx',
+            'conclusion' => 'string|max:255',
+            'percentage_share' => 'numeric',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file_path']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'content', 'abstract']);
         return $this;
 
     }

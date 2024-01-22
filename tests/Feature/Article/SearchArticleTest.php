@@ -25,7 +25,6 @@ class SearchArticleTest extends TestCase
         $this->testData($searchTerm);
         $response = $this->json('GET', "/bookstore/articles?search={$searchTerm}");
         $response->assertStatus(200);
-
         $array = $response->json();
         $this->assertEquals(true, $array['success']);
         $this->assertNotNull($array['data']);
@@ -39,9 +38,7 @@ class SearchArticleTest extends TestCase
         $end = Carbon::tomorrow()->toDateString();
         $this->testData();
         $response = $this->json("GET", "/bookstore/articles?start={$start}&end={$end}");
-
         $response->assertStatus(200);
-
         $array = $response->json();
         $this->assertEquals(true, $array['success']);
         $this->assertNotNull($array['data']);
@@ -54,9 +51,7 @@ class SearchArticleTest extends TestCase
         $perPage = 2;
         $this->testData();
         $response = $this->json("GET", "/bookstore/articles?per_page={$perPage}");
-
         $response->assertStatus(200);
-
         $array = $response->json();
         $this->assertEquals(true, $array['success']);
         $this->assertNotNull($array['data']);

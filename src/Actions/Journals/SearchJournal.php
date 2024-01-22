@@ -1,6 +1,6 @@
 <?php
 
-namespace Transave\ScolaBookstore\Actions\Journal;
+namespace Transave\ScolaBookstore\Actions\Journals;
 
 use Transave\ScolaBookstore\Helpers\SearchHelper;
 
@@ -19,6 +19,10 @@ class SearchJournal
                 ->orWhere('editors', 'like', "%$search%")
                 ->orWhere('editorial_board_members', 'like', "%$search%")
                 ->orWhere('publication_date', 'like', "%$search%")
+                ->orWhere('publication_year', 'like', "%$search%")
+                ->orWhere('volume', 'like', "%$search%")
+                ->orWhere('page_start', 'like', "%$search%")
+                ->orWhere('page_end', 'like', "%$search%")
                 ->orWhere('publisher', 'like', "%$search%")//during registration, user's enter new publisher if the publisher been searched is not registered/found.
                 ->orWhere('price', 'like', "%$search%")
                 ->orWhereHas('user', function ($query1) use ($search) {

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Transave\ScolaBookstore\Database\Factories\JournalFactory;
+use Transave\ScolaBookstore\Database\Factories\MonographFactory;
 use Transave\ScolaBookstore\Helpers\UUIDHelper;
 
 class Monograph extends Model
@@ -42,5 +42,10 @@ class Monograph extends Model
     {
         return $this->belongsTo(Publisher::class);
     }
+
+    // public function order()
+    // {
+    //     return $this->hasMany(Order::class, 'resource_id')->where('resource_type', 'Monograph');
+    // }
 
 }
