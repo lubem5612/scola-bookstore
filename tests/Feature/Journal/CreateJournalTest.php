@@ -55,12 +55,14 @@ class CreateJournalTest extends TestCase
         $this->faker = Factory::create(); 
         
         $this->request = [
-               'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id, 
-               'category_id' => Category::factory()->create()->id,
-               'publisher_id' => Publisher::factory()->create()->id,
+            'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id, 
+            'category_id' => Category::factory()->create()->id,
+            'publisher_id' => Publisher::factory()->create()->id,
             'publisher' => $this->faker->company,
             'title' => $this->faker->name,
             'subtitle' => $this->faker->name,  
+            'content'=>$this->faker->text, 
+            'abstract'=>$this->faker->text, 
             'editors' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
             'cover_image' => UploadedFile::fake()->image('cover.jpg'),
             'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),

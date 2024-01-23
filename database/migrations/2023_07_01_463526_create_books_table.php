@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('title')->index();
             $table->string('subtitle')->nullable();
             $table->string('preface')->nullable();
+            $table->text('abstract')->nullable();
+            $table->longText('content')->nullable(); //the materials
             $table->string('primary_author')->index();
             $table->json('contributors')->nullable()->index();
             $table->string('ISBN')->unique()->index();

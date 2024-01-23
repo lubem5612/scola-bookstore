@@ -39,6 +39,7 @@ class ConferencePaperFactory extends Factory
             'cover_image' => UploadedFile::fake()->image('cover.jpg'),
             'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
             'abstract' => $this->faker->text,
+            'content' => $this->faker->text,
             'institutional_affiliations' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
             'price' => $this->faker->randomNumber(2,9),
             'keywords' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),

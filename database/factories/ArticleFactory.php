@@ -34,6 +34,7 @@ class ArticleFactory extends Factory
             'title' => $this->faker->name,
             'subtitle' => $this->faker->name,
             'abstract' => $this->faker->text,
+            'content' => $this->faker->text,
             'primary_author' => $this->faker->name,
             'contributors' => json_encode([$this->faker->name, $this->faker->name]),
             'keywords' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),

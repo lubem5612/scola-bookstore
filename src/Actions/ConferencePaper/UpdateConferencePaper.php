@@ -29,6 +29,8 @@ class UpdateConferencePaper
         try {
             return $this->validateRequest()
                 ->setPaperId()
+                ->updateAbstractIfExists()
+                ->updateContentIfExists()
                 ->uploadFileIfExists()
                 ->uploadCoverIfExists()
                 ->updatePaper();
@@ -41,6 +43,25 @@ class UpdateConferencePaper
     private function setPaperId()
     {
         $this->conferencePaper = ConferencePaper::query()->find($this->validatedInput['paper_id']);
+        return $this;
+    }
+
+
+    private function updateAbstractIfExists()
+    {
+        if (isset($this->request['abstract'])) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+        return $this;
+    }
+
+
+
+    private function updateContentIfExists()
+    {
+        if (isset($this->request['content'])) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
         return $this;
     }
 
@@ -91,6 +112,7 @@ class UpdateConferencePaper
             'title' => 'sometimes|required|string|max:255',
             'subtitle' => 'sometimes|required|string|max:255',
             'abstract'=> 'sometimes|required|string|max:225',
+            'content'=> 'sometimes|required|string|max:225',
             'primary_author' => 'sometimes|required|string|max:255',
             'contributors' => 'json|max:255',
             'keywords' => 'sometimes|required|json|max:255',
@@ -101,7 +123,7 @@ class UpdateConferencePaper
             'percentage_share' => 'sometimes|required|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image', 'content', 'abstract']);
         return $this;
 
     }

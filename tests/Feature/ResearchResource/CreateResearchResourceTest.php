@@ -60,6 +60,8 @@ class CreateResearchResourceTest extends TestCase
                'publication_date' => $this->faker->date(),
                'publication_year' => $this->faker->date(),
                'source' => $this->faker->name,
+               'abstract' => $this->faker->text,
+               'content' => $this->faker->text,
                'resource_url' => $this->faker->name,
                'title' => $this->faker->name,
                'subtitle' => $this->faker->name, 

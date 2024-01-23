@@ -8,6 +8,7 @@ use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Festchrisft;
 use Transave\ScolaBookstore\Http\Models\User;
+use Illuminate\Support\Facades\Config;
 
 
 class CreateFestchrisft
@@ -18,7 +19,7 @@ class CreateFestchrisft
     private array $validatedInput;
     private $user;
     private $uploader;
-    private $festchrisft;
+
 
     public function __construct(array $request)
     {
@@ -31,6 +32,8 @@ class CreateFestchrisft
         try {
             return $this->validateRequest()
                 ->setUser()
+                ->createContent()
+                ->createAbstract()
                 ->uploadFile()
                 ->uploadCover()
                 ->setPercentageShare()
@@ -76,10 +79,30 @@ class CreateFestchrisft
 
     private function setUser(): self
     {
-        $this->user = config('scola-bookstore.auth_model')::query()->find($this->validatedInput['user_id']);
+        $this->user = Config::get('scola-bookstore.auth_model')::query()->find($this->validatedInput['user_id']);
         return $this;
     }
 
+
+    private function createContent(): self
+    {
+        if (array_key_exists('content', $this->request)) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
+
+        return $this;
+    }
+
+
+
+    private function createAbstract(): self
+    {
+        if (array_key_exists('abstract', $this->request)) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+
+        return $this;
+    }
 
     private function createFestchrisft()
     {
@@ -106,6 +129,7 @@ class CreateFestchrisft
             'title' => 'required|string|max:255',
             'subtitle' => 'nullable|string|max:255',
             'abstract' => 'nullable|string|max:255',
+            'content' => 'nullable|string|max:255',
             'publication_date' => 'nullable|string|max:255',
             'editors'=> 'nullable|json|max:255',
             'keywords'=> 'nullable|json|max:255', 
@@ -114,10 +138,10 @@ class CreateFestchrisft
             'dedicatees'=> 'nullable|json|max:255', 
             'introduction'=> 'nullable|string|max:255',
             'price' => 'required|integer',
-            'percentage_share' => 'required|max:255',
+            'percentage_share' => 'nullable|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image', 'content', 'abstract']);
         return $this;
 
     }

@@ -35,7 +35,7 @@ class CreateJournal
                 ->setUser()
                 ->uploadFile()
                 ->createContent()
-                ->handleAbstract()
+                ->createAbstract()
                 ->setPercentageShare()
                 ->createJournal();
         } catch (\Exception $e) {

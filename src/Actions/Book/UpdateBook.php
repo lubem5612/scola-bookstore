@@ -29,6 +29,8 @@ class UpdateBook
         try {
             return $this->validateRequest()
                 ->setBookId()
+                ->updateAbstract()
+                ->updateContent()
                 ->uploadCoverIfExists()
                 ->uploadFileIfExists()
                 ->updateBook();
@@ -67,6 +69,26 @@ class UpdateBook
         }
         return $this;
     }
+
+
+        private function updateAbstract()
+    {
+        if (isset($this->request['abstract'])) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+        return $this;
+    }
+
+
+
+        private function updateContent()
+    {
+        if (isset($this->request['content'])) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
+        return $this;
+    }
+
     
 
     private function updateBook()
@@ -87,6 +109,8 @@ class UpdateBook
             'title' => 'sometimes|required|string|max:255',
             'subtitle' => 'sometimes|required|string|max:255',
             'preface' => 'sometimes|required|string|max:255',
+            'abstract' => 'string|max:255',
+            'content' => 'string|max:255', //the material
             'primary_author' => 'sometimes|required|string|max:255',
             'contributors' => 'sometimes|required|json|max:255',
             'ISBN' => 'sometimes|required|string|max:255|unique:books,ISBN',
@@ -100,7 +124,7 @@ class UpdateBook
             'percentage_share' => 'sometimes|required',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['cover_image', 'file_path']);
+        $this->validatedInput = Arr::except($data, ['cover_image', 'file_path', 'content', 'abstract']);
         return $this;
 
     }

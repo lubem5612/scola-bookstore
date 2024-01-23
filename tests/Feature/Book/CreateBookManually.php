@@ -1,74 +1,77 @@
 <?php
 
-namespace Transave\ScolaBookstore\Tests\Feature\Article;
+namespace Transave\ScolaBookstore\Tests\Feature\Book;
 
 use Faker\Factory;
 use Illuminate\Http\UploadedFile;
+// use Illuminate\Http\Testing\File;
 use Laravel\Sanctum\Sanctum;
-use Transave\ScolaBookstore\Actions\Articles\UpdateArticle;
-use Transave\ScolaBookstore\Http\Models\Article;
+use Transave\ScolaBookstore\Actions\Book\CreateBook;
 use Transave\ScolaBookstore\Http\Models\Category;
 use Transave\ScolaBookstore\Http\Models\Publisher;
+use Transave\ScolaBookstore\Http\Models\Book;
 use Transave\ScolaBookstore\Tests\TestCase;
 
-class UpdateArticleTest extends TestCase
+class CreateBookManually extends TestCase
 {
     private $user;
-    private $article;
     private $request;
     private $faker;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->article = Article::factory()->create();
         $this->user = config('scola-bookstore.auth_model')::factory()->create(['role' => 'superAdmin']);
         Sanctum::actingAs($this->user);
         $this->testData();
     }
 
     /** @test */
-    public function test_can_update_article_via_action()
+    public function can_create_book_via_action()
     {
-        $response = (new UpdateArticle($this->request))->execute();
+        $response = (new CreateBook($this->request))->execute();
         $array = json_decode($response->getContent(), true);
         $this->assertTrue($array['success']);
         $this->assertNotNull($array['data']);
     }
-
 
 
     /** @test */
-    public function test_can_update_article_via_api()
+    public function can_create_book_via_api()
     {
-        $article = Article::query()->inRandomOrder()->first();
-        $response = $this->json('PUT', "bookstore/articles/{$article->id}", $this->request, ['Accept' => 'application/json']);
+        $response = $this->json('POST', 'bookstore/books', $this->request, ['Accept' => 'application/json']);
+        $response->assertStatus(200);
         $array = json_decode($response->getContent(), true);
-        $this->assertTrue($array['success']);
-        $this->assertNotNull($array['data']);
+        dd($array);
+        $response->assertJsonStructure(["success", "message", "data"]);
+        $this->assertEquals(true, $response['success']);
     }
+
 
     private function testData()
     {
         $this->faker = Factory::create();
         $this->request = [
-            'article_id' => $this->article->id,
-            'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id, 
+            'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id,
             'category_id' => Category::factory()->create()->id,
             'publisher_id' => Publisher::factory()->create()->id,
             'publisher' => $this->faker->company,
+            'publication_date' => $this->faker->date(),
             'title' => $this->faker->name,
             'subtitle' => $this->faker->name,
-            // 'abstract' => $this->faker->text,
-            // 'content' => $this->faker->text,
+            'preface' => $this->faker->sentence,
+            'content' => $this->faker->text,
+            'abstract' => $this->faker->text,
             'primary_author' => $this->faker->name,
             'contributors' => json_encode([$this->faker->name, $this->faker->name]),
-            'keywords' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),
-            'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
-            'publication_date' => $this->faker->date(),       
+            'cover_image' => UploadedFile::fake()->image('cover.jpg'),
+            // 'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
+            'ISBN' => $this->faker->unique()->isbn13,
+            'edition' => $this->faker->randomElement(['First Edition', 'Second Edition', 'Third Edition', 'Fourth Edition',]),
             'price' => $this->faker->randomNumber(2,9),
+            'tags' => $this->faker->words(3, true),
+            'summary' => $this->faker->paragraph,
             'percentage_share' => 50,
-            'pages' => "20",
         ];
     }
 }

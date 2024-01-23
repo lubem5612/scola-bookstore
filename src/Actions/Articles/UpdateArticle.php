@@ -29,6 +29,8 @@ class UpdateArticle
         try {
             return $this->validateRequest()
                 ->setArticleId()
+                ->updateAbstract()
+                ->updateContent()
                 ->uploadFileIfExists()
                 ->updateArticle();
         }catch (\Exception $e) {
@@ -57,6 +59,26 @@ class UpdateArticle
 
 
 
+    private function updateAbstract()
+    {
+        if (isset($this->request['abstract'])) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+        return $this;
+    }
+
+
+
+    private function updateContent()
+    {
+        if (isset($this->request['content'])) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
+        return $this;
+    }
+
+
+
     private function updateArticle()
     {
         $this->article->fill($this->validatedInput)->save();
@@ -74,6 +96,7 @@ class UpdateArticle
             'title' => 'sometimes|required|string|max:255',
             'subtitle' => 'string|max:255',
             'abstract'=> 'string|max:225',
+            'content'=> 'string|max:225',
             'primary_author' => 'sometimes|required|max:255',
             'publication_date' => 'sometimes|required|string',
             'contributors' => 'json|max:255',
@@ -85,7 +108,7 @@ class UpdateArticle
             
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file_path']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'abstract', 'content']);
         return $this;
 
     }

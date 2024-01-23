@@ -8,6 +8,8 @@ use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Journal;
 use Transave\ScolaBookstore\Http\Models\User;
+use Illuminate\Support\Facades\Config;
+
 
 
 class CreateReport
@@ -18,7 +20,7 @@ class CreateReport
     private array $validatedInput;
     private $user;
     private $uploader;
-    private $report;
+
 
     public function __construct(array $request)
     {
@@ -31,6 +33,8 @@ class CreateReport
         try {
             return $this->validateRequest()
                 ->setUser()
+                ->createContent()
+                ->createAbstract()
                 ->uploadFile()
                 ->uploadCover()
                 ->setPercentageShare()
@@ -76,7 +80,28 @@ class CreateReport
 
     private function setUser(): self
     {
-        $this->user = config('scola-bookstore.auth_model')::query()->find($this->validatedInput['user_id']);
+        $this->user = Config::get('scola-bookstore.auth_model')::query()->find($this->validatedInput['user_id']);
+        return $this;
+    }
+
+
+        private function createContent(): self
+    {
+        if (array_key_exists('content', $this->request)) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
+
+        return $this;
+    }
+
+
+
+    private function createAbstract(): self
+    {
+        if (array_key_exists('abstract', $this->request)) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+
         return $this;
     }
 
@@ -106,7 +131,8 @@ class CreateReport
             'publisher'=> 'string|max:255',
             'title' => 'required|string|max:255',
             'subtitle' => 'string|max:255',
-            'abstract'=> 'string|max:255',   
+            'abstract'=> 'string|max:255',
+            'content'=> 'string|max:255',   
             'publication_date' => 'string|max:255',
             'publication_year' => 'required|string|max:255',
             'report_number' => 'string|max:255',
@@ -125,7 +151,7 @@ class CreateReport
             
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image', 'abstract', 'content']);
         return $this;
 
     }

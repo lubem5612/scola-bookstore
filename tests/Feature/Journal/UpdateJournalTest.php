@@ -66,6 +66,8 @@ class UpdateJournalTest extends TestCase
             'publication_date' => $this->faker->date(), 
             'publication_year' => $this->faker->date(), 
             'volume' => "100",
+            'content'=>$this->faker->text, 
+            'abstract'=>$this->faker->text, 
             'page_start' => "50",
             'page_end' => "100",
             'editorial' => $this->faker->sentence,

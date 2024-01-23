@@ -16,7 +16,7 @@ class UpdateFestchrisft
     private array $validatedInput;
     private $user;
     private $uploader;
-    private $festchrisft;
+
 
     public function __construct(array $request)
     {
@@ -29,6 +29,8 @@ class UpdateFestchrisft
         try {
             return $this->validateRequest()
                 ->setFestchrisftId()
+                ->updateAbstractIfExists()
+                ->updateContentIfExists()
                 ->uploadFileIfExists()
                 ->uploadCoverIfExists()
                 ->updateFestchrisft();
@@ -43,6 +45,26 @@ class UpdateFestchrisft
         $this->festchrisft = Festchrisft::query()->find($this->validatedInput['festchrisft_id']);
         return $this;
     }
+    
+
+    private function updateAbstractIfExists()
+    {
+        if (isset($this->request['abstract'])) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+        return $this;
+    }
+
+
+
+    private function updateContentIfExists()
+    {
+        if (isset($this->request['content'])) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
+        return $this;
+    }
+    
 
 
     private function uploadFileIfExists()
@@ -88,6 +110,7 @@ class UpdateFestchrisft
             'title' => 'sometimes|required|string|max:255',
             'subtitle' => 'sometimes|required|string|max:255',
             'abstract' => 'sometimes|required|string|max:255',
+            'content' => 'sometimes|required|string|max:255',
             'publication_date' => 'sometimes|required|string|max:255',
             'editors'=> 'sometimes|required|json|max:255',
             'keywords'=> 'sometimes|required|json|max:255', 
@@ -99,7 +122,7 @@ class UpdateFestchrisft
             'percentage_share' => 'sometimes|required|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image', 'content', 'abstract']);
         return $this;
 
     }

@@ -17,7 +17,8 @@ class CreateConferencePapersTable extends Migration
             $table->string('subtitle')->nullable()->index();
             $table->string('primary_author')->index();
             $table->json('contributors')->nullable()->index();
-            $table->string('abstract')->nullable();
+            $table->text('abstract')->nullable();
+            $table->longText('content')->nullable();
             $table->json('keywords')->nullable()->index();
             $table->string('conference_name')->nullable()->index();
             $table->string('conference_year')->nullable()->index();

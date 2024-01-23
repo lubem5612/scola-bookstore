@@ -21,7 +21,8 @@ class CreateMonographsTable extends Migration
             $table->string('publisher')->nullable()->index();
             $table->string('title')->index();
             $table->string('subtitle')->nullable();
-            $table->string('abstract')->nullable();
+            $table->text('abstract')->nullable();
+            $table->longText('content')->nullable();
             $table->string('primary_author')->index();
             $table->json('contributors')->nullable()->index();
             $table->json('keywords')->nullable()->index();

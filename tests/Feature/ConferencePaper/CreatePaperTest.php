@@ -60,6 +60,7 @@ class CreatePaperTest extends TestCase
             'conference_location' => $this->faker->address,
             'cover_image' => UploadedFile::fake()->image('cover.jpg'),
             'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
+            'content' => $this->faker->text,
             'abstract' => $this->faker->text,
             'institutional_affiliations' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
             'price' => $this->faker->randomNumber(2,9),

@@ -8,6 +8,7 @@ use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Monograph;
 use Transave\ScolaBookstore\Http\Models\User;
+use Illuminate\Support\Facades\Config;
 
 
 class CreateMonograph
@@ -18,7 +19,7 @@ class CreateMonograph
     private array $validatedInput; 
     private $user;
     private $uploader;
-    private $monograph;
+
 
     public function __construct(array $request)
     {
@@ -31,6 +32,8 @@ class CreateMonograph
         try {
             return $this->validateRequest()
                 ->setUser()
+                ->createContent()
+                ->createAbstract()
                 ->uploadCover()
                 ->uploadFile()
                 ->setPercentageShare()
@@ -73,9 +76,32 @@ class CreateMonograph
 
     private function setUser(): self
     {
-        $this->user = config('scola-bookstore.auth_model')::query()->find($this->validatedInput['user_id']);
+        $this->user = Config::get('scola-bookstore.auth_model')::query()->find($this->validatedInput['user_id']);
         return $this;
     }
+
+
+        private function createContent(): self
+    {
+        if (array_key_exists('content', $this->request)) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
+
+        return $this;
+    }
+
+
+
+    private function createAbstract(): self
+    {
+        if (array_key_exists('abstract', $this->request)) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+
+        return $this;
+    }
+
+
 
     private function createMonograph()
     {
@@ -102,6 +128,7 @@ class CreateMonograph
             'title' => 'required|string|max:255',
             'subtitle' => 'string|max:255',
             'abstract'=> 'string|max:225',
+            'content'=> 'string|max:225',
             'primary_author' => 'required|string|max:255',
             'contributors' => 'json|max:255',
             'publication_date' => 'string|max:255',
@@ -110,12 +137,12 @@ class CreateMonograph
             'file_path' => 'nullable|file|max:10000|mimes:pdf,doc,docx,wps,webp',
             'cover_image' => 'nullable|image|max:5000|mimes:png,jpeg,jpg,gif,webp',
             'price' => 'required|integer',
-            'percentage_share' => 'required|max:255',
+            'percentage_share' => 'nullable|max:255',
             'ISBN' => 'string|max:255',
             'edition' => 'string|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image', 'content', 'abstract']);
         return $this;
 
     }

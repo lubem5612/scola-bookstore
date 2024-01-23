@@ -35,6 +35,8 @@ class BookFactory extends Factory
             'title' => $this->faker->name,
             'subtitle' => $this->faker->name,
             'preface' => $this->faker->sentence,
+            'abstract' => $this->faker->text,
+            'content' => $this->faker->text,
             'primary_author' => $this->faker->name,
             'contributors' => json_encode([$this->faker->name, $this->faker->name]),
             'cover_image' => UploadedFile::fake()->image('cover.jpg'),

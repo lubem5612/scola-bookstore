@@ -16,7 +16,7 @@ class UpdateMonograph
     private array $validatedInput;
     private $user;
     private $uploader;
-    private $monograph;
+
 
     public function __construct(array $request)
     {
@@ -29,6 +29,8 @@ class UpdateMonograph
         try {
             return $this->validateRequest()
                 ->setMonographId()
+                ->updateAbstractIfExists()
+                ->updateContentIfExists()
                 ->uploadFileIfExists()
                 ->uploadCoverIfExists()
                 ->updateMonograph();
@@ -44,6 +46,24 @@ class UpdateMonograph
         return $this;
     }
 
+
+    private function updateAbstractIfExists()
+    {
+        if (isset($this->request['abstract'])) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+        return $this;
+    }
+
+
+
+    private function updateContentIfExists()
+    {
+        if (isset($this->request['content'])) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
+        return $this;
+    }
 
 
     private function uploadCoverIfExists(): self
@@ -96,6 +116,7 @@ class UpdateMonograph
             'title' => 'sometimes|required|string|max:255',
             'subtitle' => 'sometimes|required|string|max:255',
             'abstract'=> 'sometimes|required|string|max:225',
+            'content'=> 'sometimes|required|string|max:225',
             'primary_author' => 'sometimes|required|string|max:255',
             'contributors' => 'json|max:255|sometimes|required',
             'publication_date' => 'sometimes|required|string|max:255',
@@ -109,7 +130,7 @@ class UpdateMonograph
             'edition' => 'sometimes|required|string|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image', 'content', 'abstract']);
         return $this;
 
     }

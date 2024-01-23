@@ -12,7 +12,7 @@ use Transave\ScolaBookstore\Http\Models\Publisher;
 use Transave\ScolaBookstore\Http\Models\Book;
 use Transave\ScolaBookstore\Tests\TestCase;
 
-class CreateBookTest extends TestCase
+class CreateBookByUpload extends TestCase
 {
     private $user;
     private $request;

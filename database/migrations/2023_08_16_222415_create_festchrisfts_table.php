@@ -20,7 +20,8 @@ class CreateFestchrisftsTable extends Migration
             $table->foreignUuid('publisher_id')->constrained('publishers')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('publisher')->nullable()->index();
             $table->string('title')->index();
-            $table->string('abstract')->nullable();
+            $table->text('abstract')->nullable();
+            $table->longText('content')->nullable();
             $table->string('subtitle')->nullable();
             $table->json('editors')->nullable()->index();
             $table->json('keywords')->index();

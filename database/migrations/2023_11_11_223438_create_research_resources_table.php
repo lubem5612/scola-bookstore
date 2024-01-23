@@ -22,6 +22,8 @@ class CreateResearchResourcesTable extends Migration
             $table->string('publication_date')->nullable()->index();
             $table->string('publication_year')->index();
             $table->string('source')->nullable()->index();
+            $table->text('abstract')->nullable();
+            $table->longText('content')->nullable();
             $table->string('resource_url')->index();
             $table->string('primary_author')->index();
             $table->json('contributors')->nullable()->index();

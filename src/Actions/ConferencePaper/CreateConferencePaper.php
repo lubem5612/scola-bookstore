@@ -8,6 +8,8 @@ use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\ConferencePaper;
 use Transave\ScolaBookstore\Http\Models\User;
+use Illuminate\Support\Facades\Config;
+
 
 
 class CreateConferencePaper
@@ -18,7 +20,7 @@ class CreateConferencePaper
     private array $validatedInput;
     private $user;
     private $uploader;
-    private $conferencePaper;
+
 
     public function __construct(array $request)
     {
@@ -31,6 +33,8 @@ class CreateConferencePaper
         try {
             return $this->validateRequest()
                 ->setUser()
+                ->createContent()
+                ->createAbstract()
                 ->uploadFile()
                 ->uploadCover()
                 ->setPercentageShare()
@@ -68,10 +72,30 @@ class CreateConferencePaper
 
     private function setUser(): self
     {
-        $this->user = config('scola-bookstore.auth_model')::query()->find($this->validatedInput['user_id']);
+        $this->user = Config::get('scola-bookstore.auth_model')::query()->find($this->validatedInput['user_id']);
         return $this;
     }
 
+
+    private function createContent(): self
+    {
+        if (array_key_exists('content', $this->request)) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
+
+        return $this;
+    }
+
+
+
+    private function createAbstract(): self
+    {
+        if (array_key_exists('abstract', $this->request)) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+
+        return $this;
+    }
 
 
     private function createPaper()
@@ -102,6 +126,7 @@ class CreateConferencePaper
             'title' => 'required|string|max:255',
             'subtitle' => 'string|max:255',
             'abstract'=> 'string|max:225',
+            'content'=> 'string|max:225',
             'primary_author' => 'required|string|max:255',
             'contributors' => 'json|max:255',
             'keywords' => 'json|max:255',
@@ -109,10 +134,10 @@ class CreateConferencePaper
             'file_path' => 'file|max:10000|mimes:pdf,doc,wps,wpd,docx',
             'cover_image' => 'image|max:5000|mimes:png,jpeg,jpg,gif,webp',
             'price' => 'required|integer',
-            'percentage_share' => 'required|max:255',
+            'percentage_share' => 'nullable|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image', 'abstract', 'content']);
         return $this;
 
     }

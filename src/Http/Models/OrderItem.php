@@ -9,10 +9,11 @@ use Laravel\Sanctum\HasApiTokens;
 use Transave\ScolaBookstore\Database\Factories\OrderDetailFactory;
 use Transave\ScolaBookstore\Helpers\UUIDHelper;
 
-class OrderDetail extends Model
+class OrderItem extends Model
 {
     use HasFactory, Notifiable, UUIDHelper, HasApiTokens;
-    protected $table = "order_details";
+    
+    protected $table = "order_items";
 
     protected $guarded = ['id'];
     protected static function newFactory()
@@ -26,8 +27,4 @@ class OrderDetail extends Model
         return $this->belongsTo(Order::class);
     }
 
-    // public function book()
-    // {
-    //     return $this->belongsTo(Book::class);
-    // }
 }

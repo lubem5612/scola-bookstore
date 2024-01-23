@@ -16,7 +16,7 @@ class UpdateResearchResource
     private array $validatedInput;
     private $user;
     private $uploader;
-    private $researchResource;
+
 
     public function __construct(array $request)
     {
@@ -29,6 +29,8 @@ class UpdateResearchResource
         try {
             return $this->validateRequest()
                 ->setResearchResourceId()
+                ->updateAbstractIfExists()
+                ->updateContentIfExists()
                 ->uploadFileIfExists()
                 ->uploadCoverIfExists()
                 ->updateResearchResource();
@@ -41,6 +43,25 @@ class UpdateResearchResource
     private function setResearchResourceId()
     {
         $this->researchResource = ResearchResource::query()->find($this->validatedInput['researchResource_id']);
+        return $this;
+    }
+
+
+        private function updateAbstractIfExists()
+    {
+        if (isset($this->request['abstract'])) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+        return $this;
+    }
+
+
+
+    private function updateContentIfExists()
+    {
+        if (isset($this->request['content'])) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
         return $this;
     }
 
@@ -96,6 +117,8 @@ class UpdateResearchResource
             'publication_date' => 'sometimes|required|string|max:255',
             'publication_year' => 'sometimes|required|string|max:255',
             'source' => 'sometimes|required|string|max:255',
+            'content' => 'sometimes|required|string|max:255',
+            'abstract' => 'sometimes|required|string|max:255',
             'resource_url' => 'sometimes|required|string|max:255',
             'primary_author'=> 'required|string|max:255',
             'contributors'=> 'sometimes|required|json|max:255',
@@ -110,7 +133,7 @@ class UpdateResearchResource
             'percentage_share' => 'sometimes|required|max:255',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image', 'abstract', 'content']);
         return $this;
 
     }

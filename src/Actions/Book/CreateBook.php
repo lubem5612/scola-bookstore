@@ -7,6 +7,9 @@ use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Book;
+use Transave\ScolaBookstore\Http\Models\User;
+use Illuminate\Support\Facades\Config;
+
 
 
 class CreateBook
@@ -17,13 +20,14 @@ class CreateBook
     private array $validatedInput;
     private $user;
     private $uploader;
-    private $book;
+
 
     public function __construct(array $request)
     {
         $this->request = $request;
         $this->uploader = new UploadHelper();
     }
+
 
     public function execute()
     {
@@ -32,6 +36,8 @@ class CreateBook
                 ->setUser()
                 ->uploadCover()
                 ->uploadFile()
+                ->createContent()
+                ->createAbstract()
                 ->setPercentageShare()
                 ->createBook();
         } catch (\Exception $e) {
@@ -67,7 +73,7 @@ class CreateBook
 
     private function setUser(): self
     {
-        $this->user = config('scola-bookstore.auth_model')::query()->find($this->validatedInput['user_id']);
+        $this->user = Config::get('scola-bookstore.auth_model')::query()->find($this->validatedInput['user_id']);
         return $this;
     }
 
@@ -77,6 +83,28 @@ class CreateBook
     {
         $book = Book::query()->create($this->validatedInput);
         return $this->sendSuccess($book->load('user', 'category', 'publisher'), 'Book created successfully');
+    }
+
+
+
+        private function createContent(): self
+    {
+        if (array_key_exists('content', $this->request)) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
+
+        return $this;
+    }
+
+
+
+    private function createAbstract(): self
+    {
+        if (array_key_exists('abstract', $this->request)) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+
+        return $this;
     }
 
 
@@ -100,6 +128,8 @@ class CreateBook
             'publisher' => 'string|max:255',
             'title' => 'required|string|max:255',
             'subtitle' => 'string|max:255',
+            'abstract' => 'string|max:255',
+            'content' => 'string|max:255', //the material
             'preface' => 'string|max:255',
             'primary_author' => 'required|string|max:255',
             'contributors' => 'json|max:255',
@@ -114,7 +144,7 @@ class CreateBook
             'percentage_share' => 'nullable',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['cover_image', 'file_path']);
+        $this->validatedInput = Arr::except($data, ['cover_image', 'file_path', 'abstract', 'content']);
         return $this;
 
     }

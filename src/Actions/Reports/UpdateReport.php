@@ -16,7 +16,7 @@ class UpdateReport
     private array $validatedInput;
     private $user;
     private $uploader;
-    private $report;
+
 
     public function __construct(array $request)
     {
@@ -29,6 +29,8 @@ class UpdateReport
         try {
             return $this->validateRequest()
                 ->setReportId()
+                ->updateAbstractIfExists()
+                ->updateContentIfExists()
                 ->uploadFileIfExists()
                 ->uploadCoverIfExists()
                 ->updateReport();
@@ -41,6 +43,25 @@ class UpdateReport
     private function setReportId()
     {
         $this->report = Report::query()->find($this->validatedInput['report_id']);
+        return $this;
+    }
+
+
+        private function updateAbstractIfExists()
+    {
+        if (isset($this->request['abstract'])) {
+            $this->validatedInput['abstract'] = $this->request['abstract'];
+        }
+        return $this;
+    }
+
+
+
+    private function updateContentIfExists()
+    {
+        if (isset($this->request['content'])) {
+            $this->validatedInput['content'] = $this->request['content'];
+        }
         return $this;
     }
 
@@ -93,6 +114,7 @@ class UpdateReport
             'title' => 'sometimes|required|string|max:255',
             'subtitle' => 'sometimes|required|string|max:255',
             'abstract'=> 'sometimes|required|string|max:255',   
+            'content'=> 'sometimes|required|string|max:255',   
             'publication_date' => 'sometimes|required|string|max:255',
             'publication_year' => 'sometimes|required|string|max:255',
             'report_number' => 'sometimes|required|string|max:255',
@@ -110,7 +132,7 @@ class UpdateReport
             'percentage_share' => 'sometimes|required|max:255|string',
         ]);
 
-        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image']);
+        $this->validatedInput = Arr::except($data, ['file_path', 'cover_image', 'content', 'abstract']);
         return $this;
 
     }

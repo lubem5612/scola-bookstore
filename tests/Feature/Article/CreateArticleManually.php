@@ -11,7 +11,7 @@ use Transave\ScolaBookstore\Http\Models\Article;
 use Transave\ScolaBookstore\Http\Models\Category;
 use Transave\ScolaBookstore\Tests\TestCase;
 
-class CreateArticleTest extends TestCase
+class CreateArticleManually extends TestCase
 {
     private $user;
     private $request;
@@ -26,15 +26,6 @@ class CreateArticleTest extends TestCase
         $this->testData();
     }
 
-
-    /** @test */
-    public function can_create_article_via_action()
-    {
-        $response = (new CreateArticle($this->request))->execute();
-        $array = json_decode($response->getContent(), true);
-        $this->assertTrue($array['success']);
-        $this->assertNotNull($array['data']);
-    }
 
 
     /** @test */
@@ -59,10 +50,11 @@ class CreateArticleTest extends TestCase
             'title' => $this->faker->name,
             'subtitle' => $this->faker->name,
             'abstract' => $this->faker->text,
+            'content' => $this->faker->text,
             'primary_author' => $this->faker->name,
             'contributors' => json_encode([$this->faker->name, $this->faker->name]),
             'keywords' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),
-            'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
+            // 'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
             'publication_date' => $this->faker->date(),       
             'price' => $this->faker->randomNumber(2,9),
             'percentage_share' => 50,

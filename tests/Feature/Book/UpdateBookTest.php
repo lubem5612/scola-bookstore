@@ -60,6 +60,8 @@ class UpdateBookTest extends TestCase
             'title' => $this->faker->name,
             'subtitle' => $this->faker->name,
             'preface' => $this->faker->sentence,
+            'content' => $this->faker->text,
+            'abstract' => $this->faker->text,
             'primary_author' => $this->faker->name,
             'contributors' => json_encode([$this->faker->name, $this->faker->name]),
             'cover_image' => UploadedFile::fake()->image('cover.jpg'),
