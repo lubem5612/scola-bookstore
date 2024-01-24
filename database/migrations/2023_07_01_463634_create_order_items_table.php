@@ -13,9 +13,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignuuid('order_id');
             $table->uuid('resource_id');
-            $table->decimal('quantity', 15, 5);
-            $table->decimal('total_price', 15, 5);
-            $table->decimal('discount', 8, 5)->nullable();
+            $table->integer('quantity');
+            $table->decimal('unit_price', 10, 2);
+            $table->decimal('total_amount', 10, 2);
+            $table->string('invoice_number');
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');

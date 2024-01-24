@@ -24,7 +24,7 @@ class GetCartItem
     {
         try {
             $this->validateRequest()
-                ->setUser();
+                ->getItems();
         } catch (\Exception $e) {
             return $this->sendServerError($e);
         }
@@ -32,23 +32,12 @@ class GetCartItem
 
 
     
-    private function setUser()
+    private function getItems()
     {
-        $this->user = Cart::query()->with([
-                    'user', 
-                    'report', 
-                    'monograph', 
-                    'journal', 
-                    'book', 
-                    'festchrisft', 
-                    'conference_paper', 
-                    'research_resource', 
-                    'article',
-            ])
-            ->find($this->validatedInput['user_id']);
-         return $this->sendSuccess($user, 'Cart items retrieved successfully');
+        $this->resources = Cart::query()->with(['report', 'monograph', 'journal', 'book', 'festchrisft', 'conference_paper', 'research_resource', 'article'])
+                    ->find($this->validatedInput['user_id']);
+         return $this->sendSuccess($resources, 'Cart items retrieved successfully');
     }
-
 
 
 

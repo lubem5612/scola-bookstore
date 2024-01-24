@@ -46,6 +46,7 @@ return new class extends Migration
             $table->index(['user_type']);
             $table->index(['specialization']);
             $table->index('phone');
+            $table->index('email');
         });
     }
 

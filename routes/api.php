@@ -158,4 +158,17 @@ Route::as('bookstore.')->group(function () {
         Route::get('/{id}', [OrderController::class, 'show'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [OrderController::class, 'update'])->name('update');
     });
+
+
+
+        //carts Route
+    Route::prefix('carts')->group(function (){
+        Route::get('/', [CartController::class, 'index'])->name('index');
+        Route::post('/', [CartController::class, 'store'])->name('store');
+        Route::get('/{userId}', [CartController::class, 'show'])->name('show');
+        Route::delete('/{cartItemId}', [CartController::class, 'destroy'])->name('remove');
+        Route::delete('clear/{userId}', [CartController::class, 'clearCart'])->name('clear');
+         Route::post('checkout', [CartController::class, 'checkout'])->name('checkout');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{cartItemId}', [CartController::class, 'update'])->name('update');
+    });
 });

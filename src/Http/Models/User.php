@@ -34,9 +34,47 @@ class User extends Authenticatable
     }
 
 
-    public function book()
+   public function book()
     {
         return $this->hasMany(Book::class);
+    }
+
+    public function report()
+    {
+        return $this->hasMany(Report::class);
+    }
+
+        public function journal()
+    {
+        return $this->hasMany(Journal::class);
+    }
+
+    public function festchrisft()
+    {
+        return $this->hasMany(Festchrisft::class);
+    }
+
+    public function conference_paper()
+    {
+        return $this->hasMany(ConferencePaper::class);
+        
+    }
+
+    public function research_resource()
+    {
+
+         return $this->hasMany(ResearchResource::class);
+    }
+
+
+    public function monograph()
+    {
+        return $this->hasMany(Monograph::class);
+    }
+
+    public function article()
+    {
+        return $this->hasMany(Article::class);
     }
 
     public function order()
@@ -49,10 +87,6 @@ class User extends Authenticatable
         return $this->hasMany(Cart::class);
     }
 
-    public function orderdetails()
-    {
-        return $this->hasMany(OrderDetail::class);
-    }
 
     public function school()
     {

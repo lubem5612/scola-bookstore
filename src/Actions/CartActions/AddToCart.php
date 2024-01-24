@@ -57,9 +57,9 @@ class AddToCart
         $this->validatedInput = $this->validate($this->request, [
             'user_id' => 'required|string|max:225|exists:users,id',
             'resource_id' => 'required|string|max:225',
-            'quantity' => 'required|max:225',
-            'unit_price' => 'required|max:225',
-            'cart_status' => 'required|max:225',
+            'resource_type' => 'required|max:225|string',
+            'quantity' => 'required|max:225|integer',
+            'unit_price' => 'required|max:225|numeric',
         ]);
 
         return $this;
