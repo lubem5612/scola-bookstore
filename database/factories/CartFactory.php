@@ -24,7 +24,7 @@ class CartFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => config('scola-bookstore.auth_model')::factory(),
+            'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id,
             'resource_id' => $this->faker->uuid,
             'quantity' => $this->faker->numberBetween(1, 10),
             'resource_type' => $this->faker->randomElement(['Book', 'Report', 'Journal', 'Festchrisft', 'ConferencePaper', 'ResearchResource', 'Monograph', 'Article']),

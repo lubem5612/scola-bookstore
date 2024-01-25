@@ -3,15 +3,12 @@
 namespace Transave\ScolaBookstore\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Transave\ScolaBookstore\Actions\CartActions\AddToCart;
-use Transave\ScolaBookstore\Actions\CartActions\CheckOut;
-use Transave\ScolaBookstore\Actions\CartActions\ClearCart;
-use Transave\ScolaBookstore\Actions\CartActions\GetCartItem;
-use Transave\ScolaBookstore\Actions\CartActions\RemoveItemFromCart;
-use Transave\ScolaBookstore\Actions\CartActions\UpdateCart;
-use Transave\ScolaBookstore\Actions\CartActions\SearchCart;
+use Transave\ScolaBookstore\Actions\Cart\RemoveItem;
+use Transave\ScolaBookstore\Actions\Cart\ClearCart;
+use Transave\ScolaBookstore\Actions\Cart\AddToCart;
+use Transave\ScolaBookstore\Actions\Cart\GetCartItem;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
-use Transave\ScolaBookstore\Http\Models\Cart;
+
 
 
 class CartController extends Controller
@@ -19,16 +16,21 @@ class CartController extends Controller
     use ResponseHelper;
 
 
+    /**
+     * AuthController constructor.
+     */
     public function __construct()
     {
         $this->middleware('auth:sanctum');
     }
 
 
+
     public function index()
     {
-        return (new SearchCart(Cart::class, ['user']))->execute();
+        return (new SearchBook(Book::class, ['user', 'category', 'publisher']))->execute();
     }
+
 
 
     public function store(Request $request)
@@ -37,35 +39,34 @@ class CartController extends Controller
     }
 
 
-    public function checkout(Request $request)
-    {
-        return (new CheckOut($request->all()))->execute();
-    }
-
 
     public function show($userId)
     {
-        return (new GetCartItem(['user_id' => $userId]))->execute();
+        return (new GetCartItem(['id' => $userId]))->execute();
     }
 
 
-    public function update(Request $request, $cartItemId)
+
+    public function update(Request $request, $id)
     {
-        $inputs = $request->merge(['cart_item_id' => $cartItemId])->all();
-        return (new UpdateCart($inputs))->execute();
+        $inputs = $request->merge(['book_id' => $id])->all();
+        return (new UpdateBook($inputs))->execute();
     }
 
 
 
-    public function clearCart($userId)
+   public function clearCart(ClearCart $clearCart, $userId)
     {
-        return (new ClearCart(['user_id' => $userId]))->execute();
+        return $clearCart->execute($userId);
     }
 
 
 
-    public function destroy($cartItemId)
+    public function removeItem($cartItemId)
     {
-        return (new RemoveItemFromCart(['cart_item_id' => $cartItemId]))->execute();
+        return (new RemoveItem(['id' => $cartItemId]))->execute();
     }
+
+
+
 }
