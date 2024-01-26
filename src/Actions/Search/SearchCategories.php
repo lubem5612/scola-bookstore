@@ -5,7 +5,8 @@ namespace Transave\ScolaBookstore\Actions\Search;
 use Transave\ScolaBookstore\Helpers\SearchHelper;
 
 class SearchCategories
-{ use SearchHelper;
+{ 
+    use SearchHelper;
 
     private function searchTerms()
     {

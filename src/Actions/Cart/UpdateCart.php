@@ -2,13 +2,13 @@
 
 // UpdateCartAction.php
 
-namespace Transave\ScolaBookstore\Actions\CartActions;
+namespace Transave\ScolaBookstore\Actions\Cart;
 
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Cart;
 
-class UpdateCartAction
+class UpdateCart
 {
     use ValidationHelper, ResponseHelper;
 
@@ -38,7 +38,7 @@ class UpdateCartAction
 
     private function setCartItemId(): self
     {
-        $this->cartItem = Cart::query()->find($this->validatedInput['cart_item_id']);
+        $this->cartItem = Cart::query()->find($this->request['cart_item_id']);
         return $this;
     }
 
@@ -55,8 +55,8 @@ class UpdateCartAction
     private function validateRequest(): self
     {
         $this->validatedInput = $this->validate($this->request, [
-            'cart_item_id' => 'required|string|max:225',
-            'quantity' => 'required|max:225',
+            'cart_item_id' => 'required|string|max:225|exists:carts,id',
+            'quantity' => 'required|max:225|integer',
         ]);
 
         return $this;

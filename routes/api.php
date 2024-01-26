@@ -77,10 +77,13 @@ Route::as('bookstore.')->group(function () {
 
         //Carts Route
     Route::prefix('carts')->group(function () {
+        Route::get('/', [ CartController::class, 'index'])->name('index');
         Route::post('/', [CartController::class, 'store'])->name('store');
-        Route::get('/{userId}', [CartController::class, 'show'])->name('show');
+        Route::get('/{id}', [CartController::class, 'show'])->name('show');
         Route::delete('/{cartItemId}', [CartController::class, 'removeItem'])->name('removeItem');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [CartController::class, 'update'])->name('update');
         Route::delete('clear/{userId}', [CartController::class, 'clearCart'])->name('clear');
+        Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
 
     });
 

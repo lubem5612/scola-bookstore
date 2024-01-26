@@ -2,11 +2,15 @@
 
 namespace Transave\ScolaBookstore\Helpers;
 
+
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
+use Transave\ScolaBookstore\Helpers\ResponseHelper;
 
 trait SearchHelper
 {
     use ResponseHelper;
+    
     private $output, $queryBuilder, $relationshipArray, $searchParam, $perPage, $startAt, $endAt, $id;
 
     public function __construct($model, array $relationshipArray=[], $id=null)
@@ -26,11 +30,11 @@ trait SearchHelper
             return
                 $this
                     ->modelHasRelationship()
-                    ->querySingleResource()
                     ->handleTimeStampQuery()
                     ->searchTerms()
                     ->groupedBy()
                     ->handlePagination()
+                    ->querySingleResource()
                     ->sendSuccess($this->output, 'query returned Ok');
 
         }catch (\Exception $ex) {
@@ -40,12 +44,14 @@ trait SearchHelper
 
     private function handleTimeStampQuery()
     {
-        if ($this->startAt!="null" || $this->endAt!="null" || $this->startAt!=null || $this->endAt!=null) {
-            if (isset($this->startAt) && isset($this->endAt)) {
-                $start = Carbon::parse($this->startAt);
-                $end = Carbon::parse($this->endAt);
-                $this->queryBuilder = $this->queryBuilder
-                    ->whereBetween('created_at', [$start, $end]);
+        if (is_null($this->id) && !isset($this->id)) {
+            if ($this->startAt!="null" || $this->endAt!="null" || $this->startAt!=null || $this->endAt!=null) {
+                if (isset($this->startAt) && isset($this->endAt)) {
+                    $start = Carbon::parse($this->startAt);
+                    $end = Carbon::parse($this->endAt);
+                    $this->queryBuilder = $this->queryBuilder
+                        ->whereBetween('created_at', [$start, $end]);
+                }
             }
         }
         return $this;
@@ -62,19 +68,19 @@ trait SearchHelper
     private function querySingleResource()
     {
         if (!is_null($this->id) || isset($this->id)) {
-            $result = $this->queryBuilder->find($this->id);
-            return $this->sendSuccess($result, 'result returned Ok');
+            $this->output = $this->queryBuilder->find($this->id);
         }
         return $this;
     }
 
     private function handlePagination()
     {
-        if (isset($this->perPage)) {
-            $this->output = $this->queryBuilder->paginate($this->perPage);
-        }else
-            $this->output = $this->queryBuilder->get();
-
+        if (is_null($this->id) && !isset($this->id)) {
+            if (isset($this->perPage)) {
+                $this->output = $this->queryBuilder->paginate($this->perPage);
+            }else
+                $this->output = $this->queryBuilder->get();
+        }
         return $this;
     }
 
@@ -86,7 +92,9 @@ trait SearchHelper
 
     private function groupedBy()
     {
-        $this->queryBuilder = $this->queryBuilder->orderBy("created_at", "DESC");
+        if (is_null($this->id) && !isset($this->id)) {
+            $this->queryBuilder = $this->queryBuilder->orderBy("created_at", "DESC");
+        }
         return $this;
     }
 
