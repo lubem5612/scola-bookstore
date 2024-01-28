@@ -4,9 +4,8 @@ namespace Transave\ScolaBookstore\Tests\Feature\Restful;
 
 use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
-use Transave\ScolaBookstore\Http\Models\Cart;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\OrderDetail;
+use Transave\ScolaBookstore\Http\Models\OrderItem;
 use Transave\ScolaBookstore\Http\Models\Publisher;
 use Transave\ScolaBookstore\Http\Models\Save;
 use Transave\ScolaBookstore\Http\Models\School;
@@ -27,47 +26,35 @@ class SearchResourceTest extends TestCase
 
     /** @test */
 
-    // public function can_get_categories()
-    // {
-    //     Category::factory()->count(10)->create();
-    //     $response = $this->json('GET', "bookstore/general/categories");
-    //     $response->assertStatus(200);
-
-    //     $arrayData = json_decode($response->getContent(), true);
-    //     $this->assertEquals(true, $arrayData['success']);
-    //     $this->assertNotNull($arrayData['data']);
-    // }
-
-    /** @test */
-    // public function can_get_publishers()
-    // {
-    //     Publisher::factory()->count(10)->create();
-    //     $response = $this->json('GET', "bookstore/general/publishers");
-    //     $response->assertStatus(200);
-
-    //     $arrayData = json_decode($response->getContent(), true);
-    //     $this->assertEquals(true, $arrayData['success']);
-    //     $this->assertNotNull($arrayData['data']);
-    // }
-
-    /** @test */
-    // public function can_get_carts()
-    // {
-    //     Cart::factory()->count(10)->create();
-    //     $response = $this->json('GET', "bookstore/general/carts");
-    //     $response->assertStatus(200);
-
-    //     $arrayData = json_decode($response->getContent(), true);
-    //     $this->assertEquals(true, $arrayData['success']);
-    //     $this->assertNotNull($arrayData['data']);
-    // }
-
-
-    /** @test */
-    public function can_get_orderdetails()
+    public function can_get_categories()
     {
-        OrderDetail::factory()->count(10)->create();
-        $response = $this->json('GET', "bookstore/general/orderdetails");
+        Category::factory()->count(10)->create();
+        $response = $this->json('GET', "bookstore/general/categories");
+        $response->assertStatus(200);
+
+        $arrayData = json_decode($response->getContent(), true);
+        $this->assertEquals(true, $arrayData['success']);
+        $this->assertNotNull($arrayData['data']);
+    }
+
+    /** @test */
+    public function can_get_publishers()
+    {
+        Publisher::factory()->count(10)->create();
+        $response = $this->json('GET', "bookstore/general/publishers");
+        $response->assertStatus(200);
+
+        $arrayData = json_decode($response->getContent(), true);
+        $this->assertEquals(true, $arrayData['success']);
+        $this->assertNotNull($arrayData['data']);
+    }
+
+
+    /** @test */
+    public function can_get_orderitems()
+    {
+        OrderItem::factory()->count(10)->create();
+        $response = $this->json('GET', "bookstore/general/orderitems");
         $response->assertStatus(200);
 
         $arrayData = json_decode($response->getContent(), true);
@@ -78,16 +65,16 @@ class SearchResourceTest extends TestCase
 
 
     /** @test */
-    // public function can_get_schools()
-    // {
-    //     School::factory()->count(10)->create();
-    //     $response = $this->json('GET', "bookstore/general/schools");
-    //     $response->assertStatus(200);
+    public function can_get_schools()
+    {
+        School::factory()->count(10)->create();
+        $response = $this->json('GET', "bookstore/general/schools");
+        $response->assertStatus(200);
 
-    //     $arrayData = json_decode($response->getContent(), true);
-    //     $this->assertEquals(true, $arrayData['success']);
-    //     $this->assertNotNull($arrayData['data']);
-    // }
+        $arrayData = json_decode($response->getContent(), true);
+        $this->assertEquals(true, $arrayData['success']);
+        $this->assertNotNull($arrayData['data']);
+    }
 
     /** @test */
     // public function can_get_saves()

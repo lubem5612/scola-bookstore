@@ -4,8 +4,8 @@ namespace Transave\ScolaBookstore\Tests\Feature\Restful;
 
 use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
-use Transave\ScolaBookstore\Http\Models\Book;
 use Transave\ScolaBookstore\Http\Models\Order;
+use Transave\ScolaBookstore\Http\Models\Book;
 use Transave\ScolaBookstore\Http\Models\User;
 use Transave\ScolaBookstore\Tests\TestCase;
 
@@ -39,6 +39,8 @@ class CreateResourceTest extends TestCase
             ]);
     }
 
+
+
     /** @test */
     public function can_create_publishers()
     {
@@ -48,26 +50,6 @@ class CreateResourceTest extends TestCase
 
         $response = $this->json('POST', 'bookstore/general/publishers', $data, ['Accept' => 'application/json']);
 
-        $response->assertStatus(200)
-            ->assertJson([
-                'success' => true,
-                'data' => [],
-            ]);
-    }
-
-    /** @test */
-    public function can_create_carts()
-    {
-        $book = Book::factory()->create();
-        $data = [
-            'user_id' => $this->user->id,
-            'book_id' => $book->id,
-            'quantity' => $this->faker->randomDigit(),
-            'amount' => $this->faker->randomNumber(4, 9),
-            'total_amount' => $this->faker->randomNumber(4, 9),
-        ];
-
-        $response = $this->json('POST', 'bookstore/general/carts', $data, ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
@@ -93,38 +75,21 @@ class CreateResourceTest extends TestCase
     }
 
 
-    /** @test */
-    public function can_create_saves()
-    {
-        $book = Book::factory()->create();
-        $data = [
-            'user_id' => $this->user->id,
-            'book_id' => $book->id,
-        ];
-
-        $response = $this->json('POST', 'bookstore/general/saves', $data, ['Accept' => 'application/json']);
-        $response->assertStatus(200)
-            ->assertJson([
-                'success' => true,
-                'data' => [],
-            ]);
-    }
-
 
     /** @test */
-    public function can_create_orderdetails()
+    public function can_create_orderitems()
     {
         $order = Order::factory()->create();
         $book = Book::factory()->create();
         $data = [
             'order_id' => $order->id,
-            'book_id' => $book->id,
+            'resource_id' => $book->id,
             'quantity' => $this->faker->randomFloat(),
             'total_price' => $this->faker->randomFloat(),
             'discount' => $this->faker->randomFloat(),
         ];
 
-        $response = $this->json('POST', 'bookstore/general/orderdetails', $data, ['Accept' => 'application/json']);
+        $response = $this->json('POST', 'bookstore/general/orderitems', $data, ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,

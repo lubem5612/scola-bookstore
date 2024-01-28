@@ -6,46 +6,42 @@ use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Order;
 
-class GetOrder
+class DeleteOrder
 {
     use ValidationHelper, ResponseHelper;
 
     private array $request;
     private array $validatedInput;
-    private Order $order;
-
 
     public function __construct(array $request)
     {
         $this->request = $request;
     }
 
-
     public function execute()
     {
         try {
-            return $this
-                ->validateRequest()
-                ->setOrder()
-                ->sendSuccess($this->order, 'order fetched successfully');
-        }catch (\Exception $e) {
+            return $this->validateRequest()
+                ->deleteOrder()
+                ->sendSuccess(null, 'Order and associated items deleted successfully');
+        } catch (\Exception $e) {
             return $this->sendServerError($e);
         }
     }
 
-
-    private function setOrder(): self
+    private function deleteOrder(): self
     {
-        $this->order = Order::query()->with(['user', 'book'])->find($this->request['id']);
+        Order::findOrFail($this->validatedInput['order_id'])->delete();
+
         return $this;
     }
 
     private function validateRequest(): self
     {
-        $id = $this->validate($this->request, [
-            'id' => 'required|exists:orders,id'
+        $this->validatedInput = $this->validate($this->request, [
+            'order_id' => 'required|exists:orders,id',
         ]);
-        $this->validatedInput = $id;
+
         return $this;
     }
 }

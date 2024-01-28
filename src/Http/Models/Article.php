@@ -43,10 +43,7 @@ class Article extends Model
         return $this->belongsTo(Publisher::class);
     }
 
-    //     public function order()
-    // {
-    //     return $this->hasMany(Order::class, 'resource_id')->where('resource_type', 'Article');
-    // }
+
 
 
 }

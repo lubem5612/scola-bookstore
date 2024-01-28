@@ -17,62 +17,32 @@ class BookController extends Controller
     use ResponseHelper;
 
 
-
-    /**
-     * AuthController constructor.
-     */
     public function __construct()
     {
         $this->middleware('auth:sanctum');
     }
 
 
-    /**
-     * Get a listing of Books
-     *
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
+
     public function index()
     {
         return (new SearchBook(Book::class, ['user', 'category', 'publisher']))->execute();
     }
 
 
-
-
-    /**
-     * create a book
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function store(Request $request)
     {
         return (new CreateBook($request->all()))->execute();
     }
 
 
-
-    /**
-     * Get a specified book
-     *
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function show($id)
     {
-        return (new GetBook(['id' => $id]))->execute();
+        return (new SearchBook(Book::class, ['user', 'category', 'publisher'], $id))->execute();
     }
 
 
 
-    /**
-     * Update a specified book
-     *
-     * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function update(Request $request, $id)
     {
         $inputs = $request->merge(['book_id' => $id])->all();
@@ -80,12 +50,6 @@ class BookController extends Controller
     }
 
 
-    /**
-     * Delete a specified Book
-     *
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function destroy($id)
     {
         return (new DeleteBook(['id' => $id]))->execute();

@@ -36,10 +36,9 @@ Route::prefix($prefix)->as('bookstore.')->group(function () {
 Route::prefix('general')->as('bookstore.')->group(function () {
     Route::get('categories', [SearchController::class, 'indexCategories'])->name('categories');
     Route::get('publishers', [SearchController::class, 'indexPublishers'])->name('publishers');
-    Route::get('carts', [SearchController::class, 'indexCarts'])->name('carts');
     Route::get('schools', [SearchController::class, 'indexSchools'])->name('schools');
     Route::get('saves', [SearchController::class, 'indexSaves'])->name('saves');
-    Route::get('orderdetails', [SearchController::class, 'indexOrderDetails'])->name('orderdetails');
+    Route::get('orderitems', [SearchController::class, 'indexOrderItems'])->name('orderitems');
 });
 
 
@@ -79,11 +78,10 @@ Route::as('bookstore.')->group(function () {
     Route::prefix('carts')->group(function () {
         Route::get('/', [ CartController::class, 'index'])->name('index');
         Route::post('/', [CartController::class, 'store'])->name('store');
-        Route::get('/{id}', [CartController::class, 'show'])->name('show');
+        Route::get('/{userId}', [CartController::class, 'show'])->name('show');
         Route::delete('/{cartItemId}', [CartController::class, 'removeItem'])->name('removeItem');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [CartController::class, 'update'])->name('update');
         Route::delete('clear/{userId}', [CartController::class, 'clearCart'])->name('clear');
-        Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
 
     });
 
@@ -169,8 +167,12 @@ Route::as('bookstore.')->group(function () {
     Route::prefix('orders')->group(function (){
         Route::get('/', [OrderController::class, 'index'])->name('index');
         Route::post('/', [OrderController::class, 'store'])->name('store');
-        Route::get('/{id}', [OrderController::class, 'show'])->name('show');
-        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [OrderController::class, 'update'])->name('update');
+        Route::get('/{invoiceNumber}', [OrderController::class, 'show'])->name('show');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [OrderController::class, 'update'])->name('update'); 
+        Route::delete('delete_order/{id}', [OrderController::class, 'deleteOrder'])->name('delete_order');
+        Route::delete('delete_item/{id}', [OrderController::class, 'deleteOrderItem'])->name('delete_item');    
+
+
     });
 
 });

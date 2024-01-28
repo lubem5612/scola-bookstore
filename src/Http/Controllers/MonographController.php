@@ -26,11 +26,6 @@ class MonographController extends Controller
     }
 
 
-    /**
-     * Get a listing of Monograph;
-     *
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function index()
     {
         return (new SearchMonograph(Monograph::class, ['user', 'category', 'publisher']))->execute();
@@ -38,40 +33,18 @@ class MonographController extends Controller
 
 
 
-
-    /**
-     * create Monograph;
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function store(Request $request)
     {
         return (new CreateMonograph($request->all()))->execute();
     }
 
 
-
-    /**
-     * Get a specified Monograph;
-     *
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function show($id)
     {
-        return (new GetMonograph(['id' => $id]))->execute();
+        return (new SearchMonograph(Monograph::class, ['user', 'category', 'publisher'], $id))->execute();
     }
 
 
-
-    /**
-     * Update a specified Monograph;
-     *
-     * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function update(Request $request, $id)
     {
         $inputs = $request->merge(['monograph_id' => $id])->all();
@@ -79,12 +52,6 @@ class MonographController extends Controller
     }
 
 
-    /**
-     * Delete a specified Monograph;
-     *
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function destroy($id)
     {
         return (new DeleteMonograph(['id' => $id]))->execute();

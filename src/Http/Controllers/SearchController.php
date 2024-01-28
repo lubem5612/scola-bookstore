@@ -2,15 +2,14 @@
 
 namespace Transave\ScolaBookstore\Http\Controllers;
 
-use Transave\ScolaBookstore\Actions\Search\SearchCarts;
 use Transave\ScolaBookstore\Actions\Search\SearchCategories;
-use Transave\ScolaBookstore\Actions\Search\SearchOrderDetails;
+use Transave\ScolaBookstore\Actions\Search\SearchOrderItems;
 use Transave\ScolaBookstore\Actions\Search\SearchPublishers;
 use Transave\ScolaBookstore\Actions\Search\SearchSaves;
 use Transave\ScolaBookstore\Actions\Search\SearchSchools;
 use Transave\ScolaBookstore\Http\Models\Cart;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\OrderDetail;
+use Transave\ScolaBookstore\Http\Models\OrderItem;
 use Transave\ScolaBookstore\Http\Models\Publisher;
 use Transave\ScolaBookstore\Http\Models\Save;
 use Transave\ScolaBookstore\Http\Models\School;
@@ -33,10 +32,6 @@ class SearchController extends Controller
         return (new SearchPublishers(Publisher::class, []))->execute();
     }
 
-    public function indexCarts()
-    {
-        return (new SearchCarts(Cart::class, []))->execute();
-    }
 
     public function indexSchools()
     {
@@ -48,8 +43,8 @@ class SearchController extends Controller
         return (new SearchSaves(Save::class, []))->execute();
     }
 
-    public function indexOrderDetails()
+    public function indexOrderItems()
     {
-        return (new SearchOrderDetails(OrderDetail::class, []))->execute();
+        return (new SearchOrderItems(OrderItem::class, []))->execute();
     }
 }

@@ -26,52 +26,25 @@ class ReportController extends Controller
     }
 
 
-    /**
-     * Get a listing of Report;
-     *
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function index()
     {
         return (new SearchReport(Report::class, ['user', 'category', 'publisher']))->execute();
     }
 
 
-
-
-    /**
-     * create Report;
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function store(Request $request)
     {
         return (new CreateReport($request->all()))->execute();
     }
 
 
-
-    /**
-     * Get a specified Report;
-     *
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function show($id)
     {
-        return (new GetReport(['id' => $id]))->execute();
+        return (new SearchReport(Report::class, ['user', 'category', 'publisher'], $id))->execute();
     }
 
 
 
-    /**
-     * Update a specified Report;
-     *
-     * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function update(Request $request, $id)
     {
         $inputs = $request->merge(['report_id' => $id])->all();
@@ -79,12 +52,7 @@ class ReportController extends Controller
     }
 
 
-    /**
-     * Delete a specified Report;
-     *
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
+
     public function destroy($id)
     {
         return (new DeleteReport(['id' => $id]))->execute();

@@ -43,16 +43,9 @@ class CartController extends Controller
 
 
 
-    public function checkout(Request $request)
+    public function show($userId)
     {
-        return (new CheckOut($request->all()))->execute();
-    }
-
-
-
-    public function show($id)
-    {
-        return (new SearchCart(Cart::class, ['user'], $id))->execute();
+        return (new SearchCart(Cart::class, ['user'], $userId))->execute();
     }
 
 

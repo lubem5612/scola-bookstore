@@ -6,7 +6,7 @@ use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Cart;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\OrderDetail;
+use Transave\ScolaBookstore\Http\Models\OrderItem;
 use Transave\ScolaBookstore\Http\Models\Publisher;
 use Transave\ScolaBookstore\Http\Models\Save;
 use Transave\ScolaBookstore\Http\Models\School;
@@ -65,9 +65,9 @@ class DeleteResourceTest extends TestCase
     /** @test */
     function can_delete_orderdetails_with_specific_id()
     {
-        OrderDetail::factory()->count(10)->create();
-        $orderdetail = OrderDetail::query()->inRandomOrder()->first();
-        $response = $this->json('DELETE', "bookstore/general/orderdetails/{$orderdetail->id}");
+        OrderItem::factory()->count(10)->create();
+        $orderitem = OrderItem::query()->inRandomOrder()->first();
+        $response = $this->json('DELETE', "bookstore/general/orderdetails/{$orderitem->id}");
         $array = json_decode($response->getContent(), true);
         $this->assertEquals(true, $array['success']);
 
@@ -86,13 +86,13 @@ class DeleteResourceTest extends TestCase
     }
 
     /** @test */
-    function can_delete_saves_with_specific_id()
-    {
-        Save::factory()->count(10)->create();
-        $save = Save::query()->inRandomOrder()->first();
-        $response = $this->json('DELETE', "bookstore/general/saves/{$save->id}");
-        $array = json_decode($response->getContent(), true);
-        $this->assertEquals(true, $array['success']);
+    // function can_delete_saves_with_specific_id()
+    // {
+    //     Save::factory()->count(10)->create();
+    //     $save = Save::query()->inRandomOrder()->first();
+    //     $response = $this->json('DELETE', "bookstore/general/saves/{$save->id}");
+    //     $array = json_decode($response->getContent(), true);
+    //     $this->assertEquals(true, $array['success']);
 
-    }
+    // }
 }

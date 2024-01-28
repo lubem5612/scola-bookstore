@@ -27,11 +27,6 @@ class UserController extends Controller
     }
 
 
-    /**
-     * Get a listing of users
-     *
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function index()
     {
         return (new SearchUser(User::class, ['school']))->execute();
@@ -39,26 +34,13 @@ class UserController extends Controller
 
 
 
-    /**
-     * Show a specified user
-     *
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function show($id)
     {
-        return (new GetUser(['id' => $id]))->execute();
+        return (new SearchUser(User::class, ['school'], $id))->execute();
     }
 
 
 
-    /**
-     * Update a specified user
-     *
-     * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function update(Request $request, $id)
     {
         $inputs = $request->merge(['user_id' => $id])->all();
@@ -66,14 +48,6 @@ class UserController extends Controller
     }
 
 
-
-        /**
-     * Update a specified user
-     *
-     * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function becomeReviewer(Request $request, $id)
     {
         $inputs = $request->merge(['user_id' => $id])->all();
@@ -81,12 +55,6 @@ class UserController extends Controller
     }
 
 
-    /**
-     * Delete a specified user
-     *
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Transave\ScolaBookstore\Helpers\Response
-     */
     public function destroy($id)
     {
         return (new DeleteUser(['id' => $id]))->execute();
