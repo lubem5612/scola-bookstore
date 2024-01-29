@@ -5,12 +5,15 @@ namespace Transave\ScolaBookstore\Actions\Order;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Actions\Order\PaystackInitialization;
+use Illuminate\Support\Facades\Mail;
+use Transave\ScolaBookstore\Actions\Mail\PaymentReceipt;
 use Transave\ScolaBookstore\Http\Models\Order;
 use Transave\ScolaBookstore\Http\Models\Cart;
 use Illuminate\Support\Facades\Config;
 use Transave\ScolaBookstore\Http\Models\OrderItem;
 use Carbon\Carbon;
 use Paystack\Paystack;
+
 
 class CreateOrder
 {
@@ -20,6 +23,7 @@ class CreateOrder
     private array $validatedInput;
     private $user;
     private $order;
+    private $orderItem;
 
 
     public function __construct(array $request)
@@ -38,6 +42,7 @@ class CreateOrder
                 ->createOrder()
                 ->initializePaystackTransaction()
                 ->verifyPaystackPayment()
+                ->sendReceiptEmail()
                 ->clearUserCart()
                 ->handleSuccess();
         } catch (\Exception $e) {
@@ -93,7 +98,7 @@ class CreateOrder
             if (is_array($value) && isset($value['resource_id'])) {
                 $totalAmount = $value['quantity'] * $value['unit_price'];
 
-                OrderItem::create([
+                $this->orderItem = OrderItem::create([
                     'order_id' => $this->order->id,
                     'resource_id' => $value['resource_id'],
                     'resource_type' => $value['resource_type'],
@@ -140,6 +145,18 @@ class CreateOrder
         return $this;
     }
 
+
+
+    protected function sendReceiptEmail()
+    {
+        try {
+            Mail::to($this->user->email)->send(new PaymentReceipt($this->order));
+        } catch (\Exception $e) {
+            // Handle email sending error (log, etc.)
+        }
+        return $this;
+    }
+    
 
     private function clearCart(): self
     {

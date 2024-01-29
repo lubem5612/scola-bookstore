@@ -23,7 +23,7 @@ class SearchOrderItems
                         ->orWhereHas('user', function ($query11) use ($search) {
                             $query11->where('first_name', 'like', "%$search%")
                                     ->orWhere('last_name', 'like', "%$search%")
-                                    ->orWhere('email', 'like', "%$search%")
+                                    - n   >orWhere('email', 'like', "%$search%")
                                     ->orWhere('phone', 'like', "%$search%");
                             });
                     }); 
