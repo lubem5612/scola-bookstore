@@ -42,7 +42,8 @@ class UpdateOrder
     private function updateOrder(): self
     {
         $orderDetails = [
-            'status' => $this->validatedInput['status'],
+            'order_status' => $this->validatedInput['order_status'] ?? $this->order->order_status,
+            'delivery_status' => $this->validatedInput['delivery_status'] ?? $this->order->delivery_status,
         ];
 
         $this->order->update($orderDetails);
@@ -50,32 +51,34 @@ class UpdateOrder
         return $this;
     }
 
+
     private function updateOrderItems(): self
     {
-        $orderItemsData = $this->validatedInput['order_items'] ?? [];
-
-        foreach ($orderItemsData as $itemData) {
-            $orderItem = OrderItem::findOrFail($this->validatedInput['order_id']);
+       foreach ($this->validatedInput as $key => $itemData) {
+            $orderItem = OrderItem::findOrFail($this->validatedInput['order_item_id']);
+            $totalAmount = ($itemData['unit_price'] ?? $orderItem->unit_price) * ($itemData['quantity'] ?? $orderItem->quantity);
 
             $orderItem->update([
                 'quantity' => $itemData['quantity'] ?? $orderItem->quantity,
                 'unit_price' => $itemData['unit_price'] ?? $orderItem->unit_price,
-                'total_amount' => $itemData['total_amount'] ?? ($itemData['unit_price'] ?? $orderItem->unit_price) * ($itemData['quantity'] ?? $orderItem->quantity),
+                'total_amount' => $totalAmount,
             ]);
         }
 
         return $this;
     }
 
+
+
     private function validateRequest(): self
     {
         $this->validatedInput = $this->validate($this->request, [
             'order_id' => 'required|exists:orders,id',
             'status' => 'sometimes|required|string|max:225',
-            'order_items.*.id' => 'required|exists:order_items,id',
-            'order_items.*.quantity' => 'sometimes|required|integer|max:225',
-            'order_items.*.unit_price' => 'sometimes|required|max:225|numeric',
-            'order_items.*.total_amount' => 'sometimes|required|max:225|numeric',
+            'order_item_id' => 'required|exists:order_items,id',
+            'quantity' => 'sometimes|required|integer|max:225',
+            'unit_price' => 'sometimes|required|max:225|numeric',
+            'total_amount' => 'sometimes|required|max:225|numeric',
         ]);
 
         return $this;

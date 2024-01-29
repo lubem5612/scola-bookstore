@@ -14,7 +14,8 @@
     "require": {
         "illuminate/contracts": "7.* || ^8.15 || 9.0 - 9.34 || ^9.36 || ^10.0",
         "ext-json": "*",
-        "unicodeveloper/laravel-paystack": "^1.1"
+        "unicodeveloper/laravel-paystack": "^1.1",
+        "guzzlehttp/guzzle": "^7.8"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.6",
@@ -35,7 +36,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Transave\\ScolaBookstore\\ScolaBookstoreServiceProvider"
+                "Transave\\ScolaBookstore\\ScolaBookstoreServiceProvider",
+                "Transave\\ScolaBookstore\\PaystackServiceProvider"
             ],
             "aliases": {
                 "ScolaBookstore": "Transave\\ScolaBookstore\\Facades\\ScolaBookstore"

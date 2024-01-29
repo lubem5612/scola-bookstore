@@ -13,7 +13,10 @@ class CreateOrdersTable extends Migration
             $table->string('invoice_number')->unique()->index();
             $table->string('order_date')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->enum('status', ['processing', 'on_the_way', 'arrived', 'delivered', 'cancelled'])->default('processing')->index();
+            $table->enum('delivery_status', ['processing', 'on_the_way', 'arrived', 'delivered', 'cancelled'])->default('processing')->index();
+            $table->enum('order_status', ['success', 'failed'])->default('success')->index();
+            $table->string('payment_status')->nullable();
+            $table->string('payment_reference')->nullable();
             $table->timestamps();
 
         });
