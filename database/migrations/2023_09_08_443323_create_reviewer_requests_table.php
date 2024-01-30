@@ -11,10 +11,10 @@ class CreateReviewerRequestsTable extends Migration
         Schema::create('reviewer_requests', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('specialization');
-            $table->string('status')->nullable();
+            $table->string('specialization')->index();
+            $table->enum('status', ['approved', 'not_approved'])->default('approve')->index();
             $table->json('previous_projects');
-            $table->integer('year_of_project');
+            $table->integer('year_of_project')->index();
             $table->timestamps();
         });
     }

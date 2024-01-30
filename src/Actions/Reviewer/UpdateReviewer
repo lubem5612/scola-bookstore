@@ -1,0 +1,66 @@
+<?php
+
+namespace Transave\ScolaBookstore\Actions\Reviewer;
+
+use Transave\ScolaBookstore\Helpers\ResponseHelper;
+use Transave\ScolaBookstore\Helpers\ValidationHelper;
+use Transave\ScolaBookstore\Http\Models\ReviewerRequest;
+
+
+class UpdateReviewer
+{
+    use ValidationHelper, ResponseHelper;
+
+    private array $request;
+    private array $validatedInput;
+    private ?ReviewerRequest $reviewer;
+
+    public function __construct(array $request)
+    {
+        $this->request = $request;
+    }
+
+    public function execute()
+    {
+        try {
+            return $this
+                ->validateRequest()
+                ->findReviewer()
+                ->updateReviewerRequest();
+        } catch (\Exception $e) {
+            return $this->sendServerError($e);
+        }
+    }
+
+
+    private function findReviewer(): self
+    {
+        $this->reviewer = ReviewerRequest::find($this->validatedInput['reviewer_id']);
+
+        if (!$this->reviewer) {
+            $this->sendError('Reviewer not found', [], 404);
+        }
+
+        return $this;
+    }
+
+    private function updateReviewerRequest()
+    {
+        $this->reviewer->update($this->validatedInput);
+
+        return $this->sendSuccess($this->reviewer->refresh(), 'Reviewer Data updated successfully', 200);
+    }
+
+        private function validateRequest(): self
+    {
+        $this->validatedInput = $this->validate($this->request, [
+            'reviewer_id' => 'required|exists:reviewer_requests,id',
+            'specialization' => 'required|string',
+            'previous_projects' => 'required|array',
+            'status.*' => 'required|string',
+            'year_of_project' => 'required|integer',
+        ]);
+
+        return $this;
+    }
+}

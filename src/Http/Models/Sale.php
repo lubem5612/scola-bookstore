@@ -22,10 +22,10 @@ class Sale
         return SaleFactory::new();
     }
 
-    public function user()
+    public function order()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Order::class, 'order_id');
     }
 
-
 }
+

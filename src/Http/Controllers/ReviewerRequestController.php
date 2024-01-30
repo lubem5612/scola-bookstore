@@ -3,9 +3,9 @@
 namespace Transave\ScolaBookstore\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Transave\ScolaBookstore\Actions\User\BecomeReviewer;
+use Transave\ScolaBookstore\Actions\Reviewer\BecomeReviewer;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
-use Transave\ScolaBookstore\Http\Models\Report;
+use Transave\ScolaBookstore\Http\Models\ReviewerRequest;
 
 
 class ReportController extends Controller
@@ -24,33 +24,34 @@ class ReportController extends Controller
 
     public function index()
     {
-        return (new SearchReport(Report::class, ['user', 'category', 'publisher']))->execute();
+        return (new SearchReviewer(ReviewerRequest::class, ['user']))->execute();
     }
 
 
     public function store(Request $request)
     {
-        return (new CreateReport($request->all()))->execute();
+        return (new BecomeReviewer($request->all()))->execute();
     }
 
 
     public function show($id)
     {
-        return (new SearchReport(Report::class, ['user', 'category', 'publisher'], $id))->execute();
+        return (new SearchReviewer(ReviewerRequest::class, ['user'], $id))->execute();
     }
 
 
 
     public function update(Request $request, $id)
     {
-        $inputs = $request->merge(['report_id' => $id])->all();
-        return (new UpdateReport($inputs))->execute();
+        $inputs = $request->merge(['reviewer_id' => $id])->all();
+        return (new UpdateReviewer($inputs))->execute();
     }
 
 
 
     public function destroy($id)
     {
-        return (new DeleteReport(['id' => $id]))->execute();
+        return (new DeleteReviewer(['reviewer_id' => $id]))->execute();
     }
+
 }

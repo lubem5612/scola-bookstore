@@ -59,8 +59,17 @@ Route::as('bookstore.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::get('/{id}', [UserController::class, 'show'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [UserController::class, 'update'])->name('update');
-        Route::patch('user-type/{id}',  [UserController::class, 'becomeReviewer'])->name('user-type');
+        Route::patch('change-role/{id}',  [UserController::class, 'changeRole'])->name('change-role'); 
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('delete');
+    });
+
+
+
+    Route::prefix('reviewer_requests')->group(function () {
+        Route::get('/', [ReviewerRequestController::class, 'index'])->name('index');
+        Route::get('/{id}', [ReviewerRequestController::class, 'show'])->name('show');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [ReviewerRequestController::class, 'update'])->name('update');
+        Route::delete('/{id}', [ReviewerRequestController::class, 'destroy'])->name('delete');
     });
 
 

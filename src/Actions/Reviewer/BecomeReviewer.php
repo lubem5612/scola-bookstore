@@ -73,7 +73,6 @@ class BecomeReviewer
             'user_id' => 'required|exists:users,id',
             'specialization' => 'required|string',
             'previous_projects' => 'required|array',
-            'previous_projects.*' => 'required|string',
             'year_of_project' => 'required|integer',
         ]);
         return $this;

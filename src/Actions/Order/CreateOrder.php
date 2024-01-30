@@ -43,6 +43,7 @@ class CreateOrder
                 ->initializePaystackTransaction()
                 ->verifyPaystackPayment()
                 ->sendReceiptEmail()
+                ->createSale()
                 ->clearUserCart()
                 ->handleSuccess();
         } catch (\Exception $e) {
@@ -140,6 +141,19 @@ class CreateOrder
         if ($verification['payment_status'] !== 'success') {
             $this->sendError('Payment verification failed', [], 401);
         }
+
+        return $this;
+    }
+
+
+    protected function createSale(): self
+    {
+        $totalAmount = $this->order->orderItems()->sum('total_amount');
+        Sale::create([
+            'order_id' => $this->order->id,
+            'total_amount' => $totalAmount,
+            'created_at' => Carbon::now(),
+        ]);
 
         return $this;
     }

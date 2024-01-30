@@ -4,6 +4,7 @@ namespace Transave\ScolaBookstore\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Transave\ScolaBookstore\Actions\User\CreateUser;
+use Transave\ScolaBookstore\Actions\User\ChangeUserRole;
 use Transave\ScolaBookstore\Actions\User\DeleteUser;
 use Transave\ScolaBookstore\Actions\User\GetUser;
 use Transave\ScolaBookstore\Actions\User\SearchUser;
@@ -42,17 +43,17 @@ class UserController extends Controller
 
 
     public function update(Request $request, $id)
-    {
+    {     
         $inputs = $request->merge(['user_id' => $id])->all();
         return (new UpdateUser($inputs))->execute();
     }
 
 
-    public function becomeReviewer(Request $request, $id)
+     public function changeRole(Request $request, $id)
     {
         $inputs = $request->merge(['user_id' => $id])->all();
-        return (new BecomeReviewer($inputs))->execute();
-    }
+        return (new ChangeUserRole($inputs))->execute();
+    } 
 
 
     public function destroy($id)
