@@ -84,7 +84,6 @@ class CreateOrder
     }
 
 
-
     protected function createOrder(): self 
     {
         $this->order = Order::create([
@@ -100,10 +99,10 @@ class CreateOrder
 
                 $this->orderItem = OrderItem::create([
                     'order_id' => $this->order->id,
-                    'resource_id' => $value['resource_id'],
-                    'resource_type' => $value['resource_type'],
-                    'quantity' => $value['quantity'],
-                    'unit_price' => $value['unit_price'],
+                    'resource_id' => $this->cart->resource_type,
+                    'resource_type' => $this->cart->resource_type,
+                    'quantity' => $this->cart->quantity,
+                    'unit_price' => $this->cart->unit_price,
                     'total_amount' => $totalAmount,
                 ]);
             }
@@ -156,7 +155,7 @@ class CreateOrder
         }
         return $this;
     }
-    
+
 
     private function clearCart(): self
     {

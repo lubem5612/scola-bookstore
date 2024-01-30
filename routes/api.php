@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Transave\ScolaBookstore\Http\Controllers\AuthController;
+use Transave\ScolaBookstore\Http\Controllers\ReviewerRequestController;
 use Transave\ScolaBookstore\Http\Controllers\BookController;
 use Transave\ScolaBookstore\Http\Controllers\OrderController;
 use Transave\ScolaBookstore\Http\Controllers\RestfulAPIController;

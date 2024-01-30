@@ -102,4 +102,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Sale::class);
     }
+
+    public function reviewerRequest()
+    {
+        return $this->hasMany(ReviewerRequest::class);
+    }
 }
