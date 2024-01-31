@@ -70,6 +70,8 @@ class CreateBookManually extends TestCase
             'edition' => $this->faker->randomElement(['First Edition', 'Second Edition', 'Third Edition', 'Fourth Edition',]),
             'price' => $this->faker->randomNumber(2,9),
             'tags' => $this->faker->words(3, true),
+            "faculty" => $this->faker->word,
+            "department" => $this->faker->word,
             'summary' => $this->faker->paragraph,
             'percentage_share' => 50,
         ];

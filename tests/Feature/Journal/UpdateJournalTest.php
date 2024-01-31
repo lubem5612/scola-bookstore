@@ -75,6 +75,8 @@ class UpdateJournalTest extends TestCase
             'website' => $this->faker->text, 
             'price' => $this->faker->randomNumber(2,9),
             'percentage_share' => 50,
+            "faculty" => $this->faker->word,
+            "department" => $this->faker->word,
             'conclusion' => $this->faker->sentence,
                ];
     }

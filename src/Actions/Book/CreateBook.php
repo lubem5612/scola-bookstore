@@ -140,6 +140,8 @@ class CreateBook
             'edition' => 'string|max:255',
             'price' => 'required|integer',
             'tags' => 'string|max:255',
+            'faculty' => 'string|max:255',
+            'department' => 'string|max:255',
             'summary' => 'string|max:255',
             'percentage_share' => 'nullable',
         ]);

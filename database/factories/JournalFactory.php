@@ -46,6 +46,8 @@ class JournalFactory extends Factory
             'editorial_board_members' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),   
             'website' => $this->faker->text, 
             'price' => $this->faker->randomNumber(2,9),
+            "faculty" => $this->faker->word,
+            "department" => $this->faker->word,
             'percentage_share' => 50,
             'conclusion' => $this->faker->sentence,
         ];

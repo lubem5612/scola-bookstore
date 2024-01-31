@@ -47,6 +47,8 @@ class ReportFactory extends Factory
                'cover_image'=> $this->faker->image,
                'funding_information'=> $this->faker->sentence,
                'license_information'=> $this->faker->sentence,
+                "faculty" => $this->faker->word,
+               "department" => $this->faker->word,
                'percentage_share' => 50,          
                'price' => $this->faker->randomNumber(2,9),
         ];

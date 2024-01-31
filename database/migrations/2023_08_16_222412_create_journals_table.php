@@ -34,6 +34,8 @@ class CreateJournalsTable extends Migration
             $table->string('editorial')->nullable();
             $table->json('editorial_board_members')->nullable()->index();
             $table->string('file_path')->nullable();
+            $table->string('faculty')->nullable();
+            $table->string('department')->nullable();
             $table->string('conclusion')->nullable();
             $table->decimal('price', 15, 5)->index();
             $table->float('percentage_share', 5, 2)->default(50);

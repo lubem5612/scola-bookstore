@@ -137,6 +137,8 @@ class CreateFestchrisft
             'cover_image' => 'nullable|image|max:5000|mimes:png,jpeg,jpg,gif,webp', 
             'dedicatees'=> 'nullable|json|max:255', 
             'introduction'=> 'nullable|string|max:255',
+            'faculty' => 'string|max:255',
+            'department' => 'string|max:255',
             'price' => 'required|integer',
             'percentage_share' => 'nullable|max:255',
         ]);

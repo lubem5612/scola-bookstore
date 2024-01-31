@@ -110,6 +110,8 @@ class UpdateJournal
             'editorial_board_members'=> 'json|max:255',
             'file_path' => 'file|max:10000|mimes:pdf,doc,wps,wpd,docx',
             'conclusion' => 'string|max:255',
+            'faculty' => 'string|max:255',
+            'department' => 'string|max:255',
             'percentage_share' => 'numeric',
         ]);
 

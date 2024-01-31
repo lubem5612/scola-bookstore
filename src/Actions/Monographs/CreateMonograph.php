@@ -139,6 +139,8 @@ class CreateMonograph
             'price' => 'required|integer',
             'percentage_share' => 'nullable|max:255',
             'ISBN' => 'string|max:255',
+            'faculty' => 'string|max:255',
+            'department' => 'string|max:255',
             'edition' => 'string|max:255',
         ]);
 

@@ -22,6 +22,8 @@ class SearchJournal
                 ->orWhere('publication_year', 'like', "%$search%")
                 ->orWhere('volume', 'like', "%$search%")
                 ->orWhere('page_start', 'like', "%$search%")
+                ->orWhere('department', 'like', "%$search%")
+                ->orWhere('faculty', 'like', "%$search%")
                 ->orWhere('page_end', 'like', "%$search%")
                 ->orWhere('publisher', 'like', "%$search%")//during registration, user's enter new publisher if the publisher been searched is not registered/found.
                 ->orWhere('price', 'like', "%$search%")

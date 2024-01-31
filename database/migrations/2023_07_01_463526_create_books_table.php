@@ -28,6 +28,8 @@ return new class extends Migration
             $table->string('edition')->nullable()->index();
             $table->string('cover_image')->nullable();
             $table->string('file_path')->nullable();
+            $table->string('faculty')->nullable();
+            $table->string('department')->nullable();
             $table->decimal('price', 15, 5);
             $table->string('tags')->nullable();
             $table->string('summary')->nullable();

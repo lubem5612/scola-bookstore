@@ -71,6 +71,8 @@ class CreateFestchrisftTest extends TestCase
             'dedicatees'=>json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
             'price' => $this->faker->randomNumber(2,9),
             'percentage_share' => 50,
+            "faculty" => $this->faker->word,
+            "department" => $this->faker->word,
                ];
     }
 

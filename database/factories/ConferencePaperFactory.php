@@ -42,6 +42,8 @@ class ConferencePaperFactory extends Factory
             'content' => $this->faker->text,
             'institutional_affiliations' => json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
             'price' => $this->faker->randomNumber(2,9),
+            "faculty" => $this->faker->word,
+            "department" => $this->faker->word,
             'keywords' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),
             'percentage_share' => 50,
         ];

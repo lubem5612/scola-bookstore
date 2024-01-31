@@ -22,7 +22,8 @@ class SearchMonograph
                  ->orWhere('publication_year', 'like', "%$search%")
                 ->orWhere('ISBN', 'like', "%$search%")
                 ->orWhere('edition', 'like', "%$search%")
-                ->orWhere('keywords', 'like', "%$search%")
+                ->orWhere('department', 'like', "%$search%")
+                ->orWhere('faculty', 'like', "%$search%")
                 ->orWhere('price', 'like', "%$search%")
                 ->orWhereHas('user', function ($query1) use ($search) {
                     $query1->where('first_name', 'like', "%$search%")

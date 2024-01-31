@@ -120,6 +120,8 @@ class UpdateBook
             'edition' => 'sometimes|required|string|max:255',
             'price' => 'sometimes|required|integer',
             'tags' => 'sometimes|required|string|max:255',
+            'faculty' => 'string|max:255',
+            'department' => 'string|max:255',
             'summary' => 'sometimes|required|string|max:255',
             'percentage_share' => 'sometimes|required',
         ]);

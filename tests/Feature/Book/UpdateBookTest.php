@@ -71,6 +71,8 @@ class UpdateBookTest extends TestCase
             'price' => $this->faker->randomNumber(2,9),
             'tags' => $this->faker->words(3, true),
             'summary' => $this->faker->paragraph,
+            "faculty" => $this->faker->word,
+            "department" => $this->faker->word,
             'percentage_share' => 50,
         ];
     }

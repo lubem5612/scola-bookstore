@@ -35,6 +35,8 @@ class CreateReportsTable extends Migration
             $table->string('funding_information')->nullable();
             $table->string('cover_image')->nullable();
             $table->string('file_path');
+            $table->string('faculty')->nullable();
+            $table->string('department')->nullable();
             $table->string('license_information')->nullable();
             $table->decimal('price', 15, 5)->index();
             $table->float('percentage_share', 5, 2)->default(50);

@@ -68,6 +68,8 @@ class UpdateArticleTest extends TestCase
             'publication_date' => $this->faker->date(),       
             'price' => $this->faker->randomNumber(2,9),
             'percentage_share' => 50,
+            "faculty" => $this->faker->word,
+            "department" => $this->faker->word,
             'pages' => "20",
         ];
     }

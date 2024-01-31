@@ -104,6 +104,8 @@ class UpdateArticle
             'file_path' => 'sometimes|required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
             'price' => 'integer|max:255',
             'pages' => 'string|max:255',
+            'faculty' => 'string|max:255',
+            'department' => 'string|max:255',
             'percentage_share' => 'sometimes|required|max:255',
             
         ]);

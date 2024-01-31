@@ -74,6 +74,8 @@ class UpdateMonographTest extends TestCase
                'edition' => $this->faker->randomElement(['First Edition', 'Second Edition', 'Third Edition', 'Fourth Edition',]),
                'price' => $this->faker->randomNumber(2,9),
                'percentage_share' => 50,
+               "faculty" => $this->faker->word,
+               "department" => $this->faker->word,
                ];
     }
 

@@ -127,6 +127,8 @@ class UpdateMonograph
             'price' => 'sometimes|required|integer',
             'percentage_share' => 'sometimes|required|max:255',
             'ISBN' => 'sometimes|required|string|max:255',
+            'faculty' => 'string|max:255',
+            'department' => 'string|max:255',
             'edition' => 'sometimes|required|string|max:255',
         ]);
 

@@ -71,6 +71,8 @@ class UpdatePaperTest extends TestCase
             'price' => $this->faker->randomNumber(2,9),
             'keywords' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),
             'percentage_share' => 50,
+            "faculty" => $this->faker->word,
+            "department" => $this->faker->word,
         ];
     }
 }

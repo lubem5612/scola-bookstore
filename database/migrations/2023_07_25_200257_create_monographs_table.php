@@ -32,6 +32,8 @@ class CreateMonographsTable extends Migration
             $table->string('edition')->nullable()->index();
             $table->string('cover_image')->nullable();
             $table->string('file_path')->nullable();
+            $table->string('faculty')->nullable();
+            $table->string('department')->nullable();
             $table->decimal('price', 15, 5)->index();
             $table->float('percentage_share', 5, 2)->default(50);
             $table->timestamps();

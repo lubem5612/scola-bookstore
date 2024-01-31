@@ -45,6 +45,8 @@ class MonographFactory extends Factory
             'ISBN' => $this->faker->unique()->isbn13,
             'edition' => $this->faker->randomElement(['First Edition', 'Second Edition', 'Third Edition', 'Fourth Edition',]),
             'price' => $this->faker->randomNumber(2,9),
+            "faculty" => $this->faker->word,
+            "department" => $this->faker->word,
             'percentage_share' => 50,
         ];
     }

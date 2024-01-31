@@ -64,6 +64,8 @@ class CreateArticleByUpload extends TestCase
             'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
             'publication_date' => $this->faker->date(),       
             'price' => $this->faker->randomNumber(2,9),
+            "faculty" => $this->faker->word,
+            "department" => $this->faker->word,
             'percentage_share' => 50,
             'pages' => "20",
         ];

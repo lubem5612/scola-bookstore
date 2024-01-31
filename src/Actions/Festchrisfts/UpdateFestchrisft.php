@@ -119,6 +119,8 @@ class UpdateFestchrisft
             'dedicatees'=> 'sometimes|required|json|max:255', 
             'introduction'=> 'sometimes|required|string|max:255',
             'price' => 'sometimes|required|integer',
+            'faculty' => 'string|max:255',
+            'department' => 'string|max:255',
             'percentage_share' => 'sometimes|required|max:255',
         ]);
 

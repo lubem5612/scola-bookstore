@@ -147,6 +147,8 @@ class CreateReport
             'cover_image' => 'nullable|image|max:5000|mimes:png,jpeg,jpg,gif,webp',
             'license_information' => 'nullable|string|max:255',
             'price' => 'required|integer',
+            'faculty' => 'string|max:255',
+            'department' => 'string|max:255',
             'percentage_share' => 'required|max:255',
             
         ]);

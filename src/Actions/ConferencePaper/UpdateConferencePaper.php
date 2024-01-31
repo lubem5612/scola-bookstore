@@ -120,6 +120,8 @@ class UpdateConferencePaper
             'file_path' => 'sometimes|required|file|max:10000|mimes:pdf,doc,wps,wpd,docx',
             'cover_image' => 'sometimes|required|image|max:5000|mimes:png,jpeg,jpg,gif,webp',
             'price' => 'sometimes|required|integer',
+            'faculty' => 'string|max:255',
+            'department' => 'string|max:255',
             'percentage_share' => 'sometimes|required|max:255',
         ]);
 

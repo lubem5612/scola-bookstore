@@ -22,6 +22,8 @@ class SearchReport
                 ->orWhere('institutional_affiliations', 'like', "%$search%")
                 ->orWhere('primary_author', 'like', "%$search%")
                 ->orWhere('contributors', 'like', "%$search%")
+                 ->orWhere('faculty', 'like', "%$search%")
+                 ->orWhere('department', 'like', "%$search%")
                 ->orWhere('keywords', 'like', "%$search%")
                 ->orWhere('price', 'like', "%$search%")
                 ->orWhereHas('user', function ($query1) use ($search) {

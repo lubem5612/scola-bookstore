@@ -145,6 +145,8 @@ class CreateResearchResource
             'file_path' => 'file|max:10000|mimes:pdf,doc,wps,wpd,docx',
             'cover_image' => 'nullable|image|max:5000|mimes:png,jpeg,jpg,gif,webp',
             'price' => 'required|integer',
+             'faculty' => 'string|max:255',
+            'department' => 'string|max:255',
             'percentage_share' => 'nullable|max:255',
             
         ]);

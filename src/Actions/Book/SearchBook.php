@@ -18,7 +18,9 @@ class SearchBook
                 ->orWhere('contributors', 'like', "%$search%")
                 ->orWhere('ISBN', 'like', "%$search%")
                 ->orWhere('publication_date', 'like', "%$search%")
-                ->orWhere('publisher', 'like', "%$search%")//during registration, user's enter new publisher if the publisher been searched is not registered/found.
+                ->orWhere('publisher', 'like', "%$search%")
+                ->orWhere('department', 'like', "%$search%")
+                ->orWhere('faculty', 'like', "%$search%")
                 ->orWhere('edition', 'like', "%$search%")
                 ->orWhereHas('user', function ($query1) use ($search) {
                     $query1->where('first_name', 'like', "%$search%")

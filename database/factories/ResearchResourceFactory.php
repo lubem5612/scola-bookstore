@@ -47,7 +47,9 @@ class ResearchResourceFactory extends Factory
                'keywords' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),
                'cover_image' => UploadedFile::fake()->image('cover.jpg'),
                'file_path' => UploadedFile::fake()->create('file.pdf', '500', 'application/pdf'),
-               'percentage_share' => 50,          
+               'percentage_share' => 50,
+                "faculty" => $this->faker->word,
+               "department" => $this->faker->word,
                'price' => $this->faker->randomNumber(2,9),
         ];
     }

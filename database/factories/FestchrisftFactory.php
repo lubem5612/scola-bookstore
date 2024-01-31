@@ -43,6 +43,8 @@ class FestchrisftFactory extends Factory
             'introduction'=> $this->faker->sentence,
             'dedicatees'=>json_encode([$this->faker->name, $this->faker->name, $this->faker->name]),
             'price' => $this->faker->randomNumber(2,9),
+            "faculty" => $this->faker->word,
+            "department" => $this->faker->word,
             'percentage_share' => 50,
         ];
         
