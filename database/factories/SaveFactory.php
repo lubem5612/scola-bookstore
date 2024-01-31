@@ -3,7 +3,6 @@
 namespace Transave\ScolaBookstore\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Transave\ScolaBookstore\Http\Models\Book;
 use Transave\ScolaBookstore\Http\Models\Save;
 
 class SaveFactory extends Factory
@@ -25,7 +24,8 @@ class SaveFactory extends Factory
     {
         return [
             'user_id' => config('scola-bookstore.auth_model')::factory(),
-            'book_id' => Book::factory(),
+            'resource_id' => $this->faker->uuid,
+            'resource_type' => $this->faker->randomElement(['Book', 'Report', 'Journal', 'Festchrisft', 'ConferencePaper', 'ResearchResource', 'Monograph', 'Article']),
         ];
     }
 }

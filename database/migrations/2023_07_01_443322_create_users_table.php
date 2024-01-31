@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('email', 100)->unique();
             $table->string('password');
             $table->enum('role', ['superAdmin', 'admin', 'publisher', 'user']);
-            $table->enum('user_type', ['normal', 'reviewer'])->default('normal');
             $table->boolean('is_verified')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('bio')->nullable();
@@ -43,7 +42,6 @@ return new class extends Migration
             $table->index(['last_name']);
             $table->index(['is_verified']);
             $table->index(['role']);
-            $table->index(['user_type']);
             $table->index(['specialization']);
             $table->index('phone');
             $table->index('email');

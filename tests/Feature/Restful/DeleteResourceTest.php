@@ -51,27 +51,6 @@ class DeleteResourceTest extends TestCase
         $this->assertEquals(true, $arrayData['success']);
     }
 
-    /** @test */
-    function can_delete_cart_with_specific_id()
-    {
-        Cart::factory()->count(10)->create();
-        $cart = Cart::query()->inRandomOrder()->first();
-        $response = $this->json('DELETE', "bookstore/general/carts/{$cart->id}");
-        $array = json_decode($response->getContent(), true);
-        $this->assertEquals(true, $array['success']);
-
-    }
-
-    /** @test */
-    function can_delete_orderdetails_with_specific_id()
-    {
-        OrderItem::factory()->count(10)->create();
-        $orderitem = OrderItem::query()->inRandomOrder()->first();
-        $response = $this->json('DELETE', "bookstore/general/orderdetails/{$orderitem->id}");
-        $array = json_decode($response->getContent(), true);
-        $this->assertEquals(true, $array['success']);
-
-    }
 
 
     /** @test */
@@ -82,17 +61,16 @@ class DeleteResourceTest extends TestCase
         $response = $this->json('DELETE', "bookstore/general/schools/{$school->id}");
         $array = json_decode($response->getContent(), true);
         $this->assertEquals(true, $array['success']);
-
     }
 
     /** @test */
-    // function can_delete_saves_with_specific_id()
-    // {
-    //     Save::factory()->count(10)->create();
-    //     $save = Save::query()->inRandomOrder()->first();
-    //     $response = $this->json('DELETE', "bookstore/general/saves/{$save->id}");
-    //     $array = json_decode($response->getContent(), true);
-    //     $this->assertEquals(true, $array['success']);
+    function can_delete_saves_with_specific_id()
+    {
+        Save::factory()->count(10)->create();
+        $save = Save::query()->inRandomOrder()->first();
+        $response = $this->json('DELETE', "bookstore/general/saves/{$save->id}");
+        $array = json_decode($response->getContent(), true);
+        $this->assertEquals(true, $array['success']);
 
-    // }
+    }
 }

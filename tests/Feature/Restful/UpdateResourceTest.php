@@ -5,10 +5,7 @@ namespace Transave\ScolaBookstore\Tests\Feature\Restful;
 use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Book;
-use Transave\ScolaBookstore\Http\Models\Cart;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\Order;
-use Transave\ScolaBookstore\Http\Models\OrderDetail;
 use Transave\ScolaBookstore\Http\Models\Publisher;
 use Transave\ScolaBookstore\Http\Models\Save;
 use Transave\ScolaBookstore\Http\Models\School;
@@ -61,58 +58,6 @@ class UpdateResourceTest extends TestCase
         $this->assertNotNull($arrayData['data']);
     }
 
-
-    /** @test */
-    // function can_update_specified_cart()
-    // {
-    //     $book = Book::factory()->create();
-    //     $cart = Cart::factory()->create();
-    //     $data = [
-    //         'cart_id' => $cart->id,
-    //         'user_id' => $this->user->id,
-    //         'book_id' => $book->id,
-    //         'quantity' => $this->faker->randomDigit(),
-    //         'amount' => $this->faker->randomNumber(4, 9),
-    //         'total_amount' => $this->faker->randomNumber(4, 9),
-    //     ];
-
-    //     Cart::factory()->count(10)->create();
-    //     $cart = Cart::query()->inRandomOrder()->first();
-    //     $response = $this->json('POST', "/bookstore/general/carts/{$cart->id}", $data, ['Accept' => 'application/json']);
-    //     $response->assertStatus(200);
-
-    //     $arrayData = json_decode($response->getContent(), true);
-    //     $this->assertEquals(true, $arrayData['success']);
-    //     $this->assertNotNull($arrayData['data']);
-    // }
-
-
-    /** @test */
-    function can_update_specified_orderdetails()
-    {
-        $book = Book::factory()->create();
-        $order = Order::factory()->create();
-        $orderitem = OrderItem::factory()->create();
-        $data = [
-            'orderdetail_id' => $orderitem->id,
-            'book_id' => $book->id,
-            'order_id' => $order->id,
-            'quantity' => $this->faker->randomDigit(),
-            'amount' => $this->faker->randomNumber(4, 9),
-            'total_amount' => $this->faker->randomNumber(4, 9),
-        ];
-
-        OrderItem::factory()->count(5)->create();
-        $orderitem = OrderItem::query()->inRandomOrder()->first();
-        $response = $this->json('POST', "/bookstore/general/orderitems/{$orderitem->id}", $data, ['Accept' => 'application/json']);
-        $response->assertStatus(200);
-
-        $arrayData = json_decode($response->getContent(), true);
-        $this->assertEquals(true, $arrayData['success']);
-        $this->assertNotNull($arrayData['data']);
-    }
-
-
     /** @test */
     function can_update_specified_school()
     {
@@ -133,23 +78,24 @@ class UpdateResourceTest extends TestCase
     }
 
     /** @test */
-    // function can_update_specified_save()
-    // {
-    //     $book = Book::factory()->create();
-    //     $save = Save::factory()->create();
-    //     $data = [
-    //         'save_id' => $save->id,
-    //         'user_id' => $this->user->id,
-    //         'book_id' => $book->id,
-    //     ];
+    function can_update_specified_save()
+    {
+        $book = Book::factory()->create();
+        $save = Save::factory()->create();
+        $data = [
+            'save_id' => $save->id,
+            'user_id' => $this->user->id,
+            'resource_id' => $this->faker->uuid,
+            'resource_type' => $this->faker->randomElement(['Book', 'Report', 'Journal', 'Festchrisft', 'ConferencePaper', 'ResearchResource', 'Monograph', 'Article']),
+        ];
 
-    //     Save::factory()->count(10)->create();
-    //     $save = Save::query()->inRandomOrder()->first();
-    //     $response = $this->json('POST', "/bookstore/general/saves/{$save->id}", $data, ['Accept' => 'application/json']);
-    //     $response->assertStatus(200);
+        Save::factory()->count(10)->create();
+        $save = Save::query()->inRandomOrder()->first();
+        $response = $this->json('POST', "/bookstore/general/saves/{$save->id}", $data, ['Accept' => 'application/json']);
+        $response->assertStatus(200);
 
-    //     $arrayData = json_decode($response->getContent(), true);
-    //     $this->assertEquals(true, $arrayData['success']);
-    //     $this->assertNotNull($arrayData['data']);
-    // }
+        $arrayData = json_decode($response->getContent(), true);
+        $this->assertEquals(true, $arrayData['success']);
+        $this->assertNotNull($arrayData['data']);
+    }
 }

@@ -1,11 +1,12 @@
 <?php
 
-namespace Transave\ScolaBookstore\Tests\Feature\User;
+namespace Transave\ScolaBookstore\Tests\Feature\Reviewer;
 
 use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
-use Transave\ScolaBookstore\Actions\User\BecomeReviewer;
+use Transave\ScolaBookstore\Actions\Reviewer\BecomeReviewer;
 use Transave\ScolaBookstore\Http\Models\User;
+use Transave\ScolaBookstore\Http\Models\ReviewerRequest;
 use Transave\ScolaBookstore\Tests\TestCase;
 
 class BecomeReviewerTest extends TestCase
@@ -17,7 +18,6 @@ class BecomeReviewerTest extends TestCase
     {
         parent::setUp();
         $this->user = config('scola-bookstore.auth_model')::factory()->create();
-        $this->user = User::factory()->create(['id' => $this->user->id, 'user_type' => 'reviewer']);
         Sanctum::actingAs($this->user);
         $this->testData();
 
@@ -37,7 +37,7 @@ class BecomeReviewerTest extends TestCase
         /** @test */
     public function can_become_reviewer_via_api()
     {
-        $response = $this->json('PATCH', "bookstore/users/user-type/{$this->user->id}", $this->request, ['Accept' => 'application/json']);
+        $response = $this->json('POST', "bookstore/reviewer_requests", $this->request, ['Accept' => 'application/json']);
 
                // Ensure the response status code is 200 (OK).
         $response->assertStatus(200);
@@ -58,7 +58,9 @@ class BecomeReviewerTest extends TestCase
     {
         $this->request = [
             'user_id' => $this->user->id,
-            'user_type' => $this->user->user_type,
+            'specialization' => $this->faker->company,
+            'year_of_project' => $this->faker->date(),
+            'previous_projects' => json_encode([$this->faker->words, $this->faker->words, $this->faker->words]),
         ];
     }
 }

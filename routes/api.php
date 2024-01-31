@@ -39,7 +39,6 @@ Route::prefix('general')->as('bookstore.')->group(function () {
     Route::get('publishers', [SearchController::class, 'indexPublishers'])->name('publishers');
     Route::get('schools', [SearchController::class, 'indexSchools'])->name('schools');
     Route::get('saves', [SearchController::class, 'indexSaves'])->name('saves');
-    Route::get('orderitems', [SearchController::class, 'indexOrderItems'])->name('orderitems');
 });
 
 
@@ -67,6 +66,7 @@ Route::as('bookstore.')->group(function () {
 
     Route::prefix('reviewer_requests')->group(function () {
         Route::get('/', [ReviewerRequestController::class, 'index'])->name('index');
+        Route::post('/', [ReviewerRequestController::class, 'store'])->name('store');
         Route::get('/{id}', [ReviewerRequestController::class, 'show'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [ReviewerRequestController::class, 'update'])->name('update');
         Route::delete('/{id}', [ReviewerRequestController::class, 'destroy'])->name('delete');
@@ -181,7 +181,6 @@ Route::as('bookstore.')->group(function () {
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [OrderController::class, 'update'])->name('update'); 
         Route::delete('delete_order/{id}', [OrderController::class, 'deleteOrder'])->name('delete_order');
         Route::delete('delete_item/{id}', [OrderController::class, 'deleteOrderItem'])->name('delete_item');    
-
 
     });
 

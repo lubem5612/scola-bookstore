@@ -19,33 +19,6 @@ return [
             'relationships' => [],
         ],
 
-        'carts' => [
-            'model' => \Transave\ScolaBookstore\Http\Models\Cart::class,
-            'rules' => [
-                'store' => [
-                    'user_id' => 'required|exists:users,id',
-                    'book_id' => 'required|exists:books,id',
-                    'quantity' => 'required|integer',
-                    'amount' => 'required|integer',
-                    'total_amount' => 'required|integer',
-                ],
-                'update' => [
-                    'cart_id' => 'required|exists:carts,id',
-                    'user_id' => 'sometimes|required|exists:users,id',
-                    'book_id' => 'sometimes|required|exists:books,id',
-                    'quantity' => 'sometimes|required|integer',
-                    'amount' => 'sometimes|required|integer',
-                    'total_amount' => 'sometimes|required|integer',
-                ]
-            ],
-            'order' => [
-                'column' => 'created_at',
-                'pattern' => 'DESC',
-            ],
-            'relationships' => ['user', 'book'],
-        ],
-
-
         'schools' => [
             'model' => \Transave\ScolaBookstore\Http\Models\School::class,
             'rules' => [
@@ -71,46 +44,22 @@ return [
             'rules' => [
                 'store' => [
                     'user_id' => 'required|exists:users,id',
-                    'book_id' => 'required|exists:books,id',
+                    'resource_id' => 'required',
+                    'resource_type' => 'sometimes|string|max:60',
                 ],
                 'update' => [
                     'save_id' => 'required|exists:saves,id',
                     'user_id' => 'sometimes|required|exists:users,id',
-                    'book_id' => 'sometimes|required|exists:books,id',
+                    'resource_id' => 'sometimes|required',
+                    'resource_type' => 'sometimes|string|max:60',
                 ]
             ],
             'order' => [
                 'column' => 'created_at',
                 'pattern' => 'DESC',
             ],
-            'relationships' => ['user', 'book'],
+            'relationships' => ['user', 'book', 'report', 'journal', 'festchrisft', 'conference_paper', 'research_resource', 'monograph', 'article'],
         ],
-
-        'order_details' => [
-            'model' => \Transave\ScolaBookstore\Http\Models\OrderDetail::class,
-            'rules' => [
-                'store' => [
-                    'order_id' => 'required|exists:orders,id',
-                    'book_id' => 'required|exists:books,id',
-                    'quantity' => 'required|numeric',
-                    'total_price' => 'required|numeric',
-                    'discount' => 'nullable|numeric',
-                ],
-                'update' => [
-                    'order_id' => 'sometimes|required|exists:orders,id',
-                    'book_id' => 'sometimes|required|exists:books,id',
-                    'quantity' => 'sometimes|required|numeric',
-                    'total_price' => 'sometimes|required|numeric',
-                    'discount' => 'sometimes|nullable|numeric',
-                ]
-            ],
-            'order' => [
-                'column' => 'created_at',
-                'pattern' => 'DESC',
-            ],
-            'relationships' => ['order', 'book'],
-        ],
-
 
         'publishers' => [
             'model' => \Transave\ScolaBookstore\Http\Models\Publisher::class,

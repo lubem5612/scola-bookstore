@@ -5,7 +5,6 @@ namespace Transave\ScolaBookstore\Tests\Feature\Restful;
 use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Order;
-use Transave\ScolaBookstore\Http\Models\Book;
 use Transave\ScolaBookstore\Http\Models\User;
 use Transave\ScolaBookstore\Tests\TestCase;
 
@@ -39,8 +38,6 @@ class CreateResourceTest extends TestCase
             ]);
     }
 
-
-
     /** @test */
     public function can_create_publishers()
     {
@@ -56,6 +53,8 @@ class CreateResourceTest extends TestCase
                 'data' => [],
             ]);
     }
+
+
 
 
     /** @test */
@@ -75,27 +74,21 @@ class CreateResourceTest extends TestCase
     }
 
 
-
     /** @test */
-    public function can_create_orderitems()
+    public function can_create_saves()
     {
-        $order = Order::factory()->create();
-        $book = Book::factory()->create();
         $data = [
-            'order_id' => $order->id,
-            'resource_id' => $book->id,
-            'quantity' => $this->faker->randomFloat(),
-            'total_price' => $this->faker->randomFloat(),
-            'discount' => $this->faker->randomFloat(),
+            'user_id' => $this->user->id,
+            'resource_id' => $this->faker->uuid,
+            'resource_type' => $this->faker->randomElement(['Book', 'Report', 'Journal', 'Festchrisft', 'ConferencePaper', 'ResearchResource', 'Monograph', 'Article']),
         ];
 
-        $response = $this->json('POST', 'bookstore/general/orderitems', $data, ['Accept' => 'application/json']);
+        $response = $this->json('POST', 'bookstore/general/saves', $data, ['Accept' => 'application/json']);
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
                 'data' => [],
             ]);
     }
-
 
 }

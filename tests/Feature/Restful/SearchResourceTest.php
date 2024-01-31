@@ -51,20 +51,6 @@ class SearchResourceTest extends TestCase
 
 
     /** @test */
-    public function can_get_orderitems()
-    {
-        OrderItem::factory()->count(10)->create();
-        $response = $this->json('GET', "bookstore/general/orderitems");
-        $response->assertStatus(200);
-
-        $arrayData = json_decode($response->getContent(), true);
-        dd($arrayData);
-        $this->assertEquals(true, $arrayData['success']);
-        $this->assertNotNull($arrayData['data']);
-    }
-
-
-    /** @test */
     public function can_get_schools()
     {
         School::factory()->count(10)->create();
@@ -77,13 +63,13 @@ class SearchResourceTest extends TestCase
     }
 
     /** @test */
-    // public function can_get_saves()
-    // {
-    //     Save::factory()->count(10)->create();
-    //     $response = $this->json('GET', "bookstore/general/saves");
-    //     $response->assertStatus(200);
-    //     $arrayData = json_decode($response->getContent(), true);
-    //     $this->assertEquals(true, $arrayData['success']);
-    //     $this->assertNotNull($arrayData['data']);
-    // }
+    public function can_get_saves()
+    {
+        Save::factory()->count(10)->create();
+        $response = $this->json('GET', "bookstore/general/saves");
+        $response->assertStatus(200);
+        $arrayData = json_decode($response->getContent(), true);
+        $this->assertEquals(true, $arrayData['success']);
+        $this->assertNotNull($arrayData['data']);
+    }
 }

@@ -56,4 +56,5 @@ class AddItemToCartTest extends TestCase
             'unit_price' => $this->faker->randomFloat(2, 10, 100),
         ];
     }
+
 }

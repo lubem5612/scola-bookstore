@@ -14,7 +14,7 @@ class SearchReport
         $this->queryBuilder->where(function ($query) use ($search) {
             $query
                 ->where('title', 'like', "%$search%")
-                ->orWhere('publisher', 'like', "%$search%") //during registration, user's enter new publisher if the publisher been searched is not registered/found.
+                ->orWhere('publisher', 'like', "%$search%") 
                 ->orWhere('organization', 'like', "%$search%") 
                 ->orWhere('publication_date', 'like', "%$search%")
                 ->orWhere('publication_year', 'like', "%$search%")

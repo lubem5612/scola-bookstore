@@ -4,9 +4,7 @@ namespace Transave\ScolaBookstore\Tests\Feature\Restful;
 
 use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
-use Transave\ScolaBookstore\Http\Models\Cart;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\OrderItem;
 use Transave\ScolaBookstore\Http\Models\Publisher;
 use Transave\ScolaBookstore\Http\Models\Save;
 use Transave\ScolaBookstore\Http\Models\School;
@@ -55,34 +53,6 @@ class GetResourceTest extends TestCase
 
 
     /** @test */
-    function can_get_cart_with_specific_id()
-    {
-        Cart::factory()->count(10)->create();
-        $cart = Cart::query()->inRandomOrder()->first();
-        $response = $this->json('GET', "bookstore/general/carts/{$cart->id}");
-        $array = json_decode($response->getContent(), true);
-        $this->assertEquals(true, $array['success']);
-        $this->assertNotNull($array['data']);
-        $this->assertEquals($array['data']['user_id'], $cart->user_id);
-        $this->assertEquals($array['data']['book_id'], $cart->book_id);
-    }
-
-
-    /** @test */
-    function can_get_orderdetails_with_specific_id()
-    {
-        OrderItem::factory()->count(10)->create();
-        $orderitem = OrderItem::query()->inRandomOrder()->first();
-        $response = $this->json('GET', "bookstore/general/orderdetails/{$orderitem->id}");
-        $array = json_decode($response->getContent(), true);
-        $this->assertEquals(true, $array['success']);
-        $this->assertNotNull($array['data']);
-        $this->assertEquals($array['data']['order_id'], $orderitem->order_id);
-        $this->assertEquals($array['data']['resource_id'], $orderitem->resource_id);
-    }
-
-
-    /** @test */
     public function can_get_specified_school()
     {
         School::factory()->count(10)->create();
@@ -95,15 +65,15 @@ class GetResourceTest extends TestCase
     }
 
     /** @test */
-    // function can_get_saves_with_specific_id()
-    // {
-    //     Save::factory()->count(10)->create();
-    //     $save = Save::query()->inRandomOrder()->first();
-    //     $response = $this->json('GET', "bookstore/general/saves/{$save->id}");
-    //     $array = json_decode($response->getContent(), true);
-    //     $this->assertEquals(true, $array['success']);
-    //     $this->assertNotNull($array['data']);
-    //     $this->assertEquals($array['data']['user_id'], $save->user_id);
-    //     $this->assertEquals($array['data']['book_id'], $save->book_id);
-    // }
+    function can_get_saves_with_specific_id()
+    {
+        Save::factory()->count(10)->create();
+        $save = Save::query()->inRandomOrder()->first();
+        $response = $this->json('GET', "bookstore/general/saves/{$save->id}");
+        $array = json_decode($response->getContent(), true);
+        $this->assertEquals(true, $array['success']);
+        $this->assertNotNull($array['data']);
+        $this->assertEquals($array['data']['user_id'], $save->user_id);
+        $this->assertEquals($array['data']['resource_id'], $save->resource_id);
+    }
 }
