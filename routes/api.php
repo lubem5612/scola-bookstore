@@ -40,6 +40,8 @@ Route::prefix('general')->as('bookstore.')->group(function () {
     Route::get('publishers', [SearchController::class, 'indexPublishers'])->name('publishers');
     Route::get('schools', [SearchController::class, 'indexSchools'])->name('schools');
     Route::get('saves', [SearchController::class, 'indexSaves'])->name('saves');
+    Route::get('banks', [SearchController::class, 'indexBanks'])->name('saves');
+    Route::get('bank-details', [SearchController::class, 'indexBankDetails'])->name('bank-details');
 });
 
 

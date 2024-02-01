@@ -19,6 +19,55 @@ return [
             'relationships' => [],
         ],
 
+
+        'banks' => [
+            'model' => \Transave\ScolaBookstore\Http\Models\Bank::class,
+            'rules' => [
+                'store' => [
+                    'name' => 'required|string|max:225',
+                    'code' => 'required|string|max:225',
+                    'country' => 'required|string|max:225',
+                ],
+                'update' => [
+                    'bank_id' => 'required|exists:banks,id',
+                    'name' => 'sometimes|required|string|max:225',
+                    'code' => 'sometimes|required|string|max:225',
+                    'country' => 'sometimes|required|string|max:225',
+                ]
+            ],
+            'order' => [
+                'column' => 'created_at',
+                'pattern' => 'DESC',
+            ],
+            'relationships' => [],
+        ],
+
+      
+      'bank_details' => [
+            'model' => \Transave\ScolaBookstore\Http\Models\BankDetail::class,
+            'rules' => [
+                'store' => [
+                    'user_id' => 'required|exists:users,id',
+                    'bank_id' => 'required|exists:banks,id',
+                    'account_number' => 'required|integer|max:225',
+                    'account_name' => 'required|string|max:225',
+                ],
+                'update' => [
+                    'bank_detail_id' => 'required|exists:bank_details,id',
+                    'user_id' => 'sometimes|required|exists:users,id',
+                    'bank_id' => 'sometimes|required|exists:banks,id',
+                    'account_number' => 'sometimes|required|integer|max:225',
+                    'account_name' => 'sometimes|required|string|max:225',
+                ]
+            ],
+            'order' => [
+                'column' => 'created_at',
+                'pattern' => 'DESC',
+            ],
+            'relationships' => ['user', 'bank'],
+        ],
+
+
         'schools' => [
             'model' => \Transave\ScolaBookstore\Http\Models\School::class,
             'rules' => [
