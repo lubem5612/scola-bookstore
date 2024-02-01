@@ -5,8 +5,7 @@ use Transave\ScolaBookstore\Http\Controllers\AuthController;
 use Transave\ScolaBookstore\Http\Controllers\ReviewerRequestController;
 use Transave\ScolaBookstore\Http\Controllers\BookController;
 use Transave\ScolaBookstore\Http\Controllers\OrderController;
-use Transave\ScolaBookstore\Http\Controllers\RestfulAPIController;
-use Transave\ScolaBookstore\Http\Controllers\SearchController;
+use Transave\ScolaBookstore\Http\Controllers\ResourceController;
 use Transave\ScolaBookstore\Http\Controllers\UserController;
 use Transave\ScolaBookstore\Http\Controllers\ConferencePaperController;
 use Transave\ScolaBookstore\Http\Controllers\ArticleController;
@@ -18,31 +17,26 @@ use Transave\ScolaBookstore\Http\Controllers\FestchrisftController;
 use Transave\ScolaBookstore\Http\Controllers\CartController;
 use Transave\ScolaBookstore\Http\Controllers\SalesController;
 
+// use Transave\ScolaBookstore\Http\Controllers\RestfulAPIController;
+// use Transave\ScolaBookstore\Http\Controllers\SearchController;
+
 $prefix = !empty(config('endpoints.prefix')) ? config('endpoints.prefix') : 'general';
 /**
  * |
- * | General routes for RestFul Controller
+ * | General routes for Resource Controller
  * | Examples: GET:/bookstore/general/categories, GET:/bookstore/general/categories/1, POST:/bookstore/general/categories,
  * | PATCH:/bookstore/general/categories/3, DELETE:/bookstore/general/categories/2
  * |
  */
 
 Route::prefix($prefix)->as('bookstore.')->group(function () {
-    Route::get('{endpoint}', [RestfulAPIController::class, 'index']);
-    Route::get('{endpoint}/{id}', [RestfulAPIController::class, 'show']);
-    Route::post('{endpoint}', [RestfulAPIController::class, 'store']);
-    Route::match(['post', 'put', 'patch'], '{endpoint}/{id}', [RestfulAPIController::class, 'update']);
-    Route::delete('{endpoint}/{id}', [RestfulAPIController::class, 'destroy']);
+    Route::get('{endpoint}', [ResourceController::class, 'index'])->name('index');
+    Route::post('{endpoint}', [ResourceController::class, 'store'])->name('show');
+    Route::get('{endpoint}/{id}', [ResourceController::class, 'show'])->name('show');
+    Route::match(['post', 'put', 'patch'], '{endpoint}/{id}', [ResourceController::class, 'update'])->name('update');
+    Route::delete('{endpoint}/{id}', [ResourceController::class, 'destroy'])->name('delete');
 });
 
-Route::prefix('general')->as('bookstore.')->group(function () {
-    Route::get('categories', [SearchController::class, 'indexCategories'])->name('categories');
-    Route::get('publishers', [SearchController::class, 'indexPublishers'])->name('publishers');
-    Route::get('schools', [SearchController::class, 'indexSchools'])->name('schools');
-    Route::get('saves', [SearchController::class, 'indexSaves'])->name('saves');
-    Route::get('banks', [SearchController::class, 'indexBanks'])->name('saves');
-    Route::get('bank-details', [SearchController::class, 'indexBankDetails'])->name('bank-details');
-});
 
 
 Route::as('bookstore.')->group(function () {
@@ -195,5 +189,16 @@ Route::as('bookstore.')->group(function () {
         Route::delete('delete_item/{id}', [OrderController::class, 'deleteOrderItem'])->name('delete_item');    
 
     });
+
+
+
+    // Route::prefix('general')->as('bookstore.')->group(function () {
+//     Route::get('categories', [SearchController::class, 'indexCategories'])->name('categories');
+//     Route::get('publishers', [SearchController::class, 'indexPublishers'])->name('publishers');
+//     Route::get('schools', [SearchController::class, 'indexSchools'])->name('schools');
+//     Route::get('saves', [SearchController::class, 'indexSaves'])->name('saves');
+//     Route::get('banks', [SearchController::class, 'indexBanks'])->name('saves');
+//     Route::get('bank-details', [SearchController::class, 'indexBankDetails'])->name('bank-details');
+// });
 
 });

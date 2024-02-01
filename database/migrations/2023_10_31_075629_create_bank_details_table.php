@@ -1,10 +1,11 @@
 <?php
 
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBanksTable extends Migration
+class CreateBankDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +14,14 @@ class CreateBanksTable extends Migration
      */
     public function up()
     {
-        Schema::create('banks', function (Blueprint $table) {
+        Schema::create('bank_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name')->index();
-            $table->string('code', 10)->unique()->index();
-            $table->foreignUuid('country_id')->constrained('countries')->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignUuid('bank_id')->constrained('banks')->cascadeOnDelete();
+            $table->integer('account_number')->index();
+            $table->string('account_name')->index();
             $table->timestamps();
+
         });
     }
 
@@ -29,6 +32,6 @@ class CreateBanksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('banks');
+        Schema::dropIfExists('bank_details');
     }
 }

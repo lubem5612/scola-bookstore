@@ -4,6 +4,7 @@ namespace Transave\ScolaBookstore\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Transave\ScolaBookstore\Http\Models\Bank;
+use Transave\ScolaBookstore\Http\Models\Country;
 
 
 class BankFactory extends Factory
@@ -25,9 +26,9 @@ class BankFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->company,
+            'name' => $this->faker->name,
             'code' => $this->faker->unique()->numerify('#########'),
-            'country' => $this->faker->country,
+            'country_id' => Country::factory(),
         ];
     }
 

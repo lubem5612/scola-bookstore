@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Transave\ScolaBookstore\Database\Factories\BankFactory;
 use Transave\ScolaBookstore\Helpers\UUIDHelper;
 
@@ -23,6 +25,10 @@ class Bank extends Model
         return BankFactory::new();
     }
 
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 
     public function bank_details()
     {

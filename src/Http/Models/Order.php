@@ -30,6 +30,11 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function pickup_details()
+    {
+        return $this->hasMany(PickupDetail::class);
+    }
+    
 
     public function sales()
     {

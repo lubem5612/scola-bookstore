@@ -11,6 +11,7 @@ use Transave\ScolaBookstore\Http\Models\Order;
 use Transave\ScolaBookstore\Http\Models\Cart;
 use Illuminate\Support\Facades\Config;
 use Transave\ScolaBookstore\Http\Models\OrderItem;
+use Transave\ScolaBookstore\Http\Models\PickupDetail;
 use Carbon\Carbon;
 use Paystack\Paystack;
 
@@ -24,6 +25,7 @@ class CreateOrder
     private $user;
     private $order;
     private $orderItem;
+    private $pickupDetail;
 
 
     public function __construct(array $request)
@@ -40,6 +42,7 @@ class CreateOrder
                 ->checkCart()
                 ->setDeliveryStatus()
                 ->createOrder()
+                ->createPickup()
                 ->initializePaystackTransaction()
                 ->verifyPaystackPayment()
                 ->sendReceiptEmail()
@@ -159,6 +162,24 @@ class CreateOrder
     }
 
 
+    private function createPickup(): self
+    {
+        $this->pickupDetail = Pickup::create([
+            'order_id' => $this->order->id,
+            'address' => $this->validatedInput['pickup_address'],
+            'country_id' => $this->validatedInput['country_id'],
+            'state_id' => $this->validatedInput['state_id'],
+            'lg_id' => $this->validatedInput['lg_id'],
+            'postal_code' => $this->validatedInput['postal_code'],
+            'recipient_first_name' => $this->validatedInput['recipient_first_name'],
+            'recipient_last_name' => $this->validatedInput['recipient_last_name'],
+            'email' => $this->validatedInput['email'],
+            'alternative_phone' => $this->validatedInput['alternative_phone'],
+        ]);
+
+        return $this;
+    }
+
 
     protected function sendReceiptEmail()
     {
@@ -208,6 +229,15 @@ class CreateOrder
                 'payment_status' => 'string|max:255',
                 'delivery_status' => 'required|string|max:255',
                 'payment_reference' => 'string|max:255',
+                'state_id' => 'required|exists:states,id',
+                'lg_id' => 'required|exists:lgs,id',
+                'country_id' => 'required|exists:countries,id',
+                'address' => 'required|string|max:255',
+                'postal_code' => 'required|string|max:255',
+                'recipient_first_name' => 'required|string|max:255',
+                'recipient_last_name' => 'required|string|max:255',
+                'email' => 'required|string|max:255',
+                'alternative_phone' => 'string|max:255',
         ]);
 
         return $this;

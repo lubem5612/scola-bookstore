@@ -29,7 +29,7 @@ class BankDetailFactory extends Factory
             'user_id' => config('scola-bookstore.auth_model')::factory(),
             'bank_id' => Bank::factory(),
             'account_number' => $this->faker->unique()->randomNumber(9),
-            'account_name' => $this->faker->optional()->firstName,
+            'account_name' => $this->faker->name,
         ];
     }
 
