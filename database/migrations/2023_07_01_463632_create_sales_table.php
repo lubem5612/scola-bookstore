@@ -13,7 +13,7 @@ class CreateSalesTable extends Migration
             $table->foreignuuid('order_id');
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->string('invoice_number')->unique()->index();
-            $table->decimal('amount', 10, 2);
+            $table->decimal('total_amount', 10, 2);
             $table->timestamps();
         });
     }

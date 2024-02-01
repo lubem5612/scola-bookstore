@@ -16,6 +16,7 @@ use Transave\ScolaBookstore\Http\Controllers\ResearchResourceController;
 use Transave\ScolaBookstore\Http\Controllers\ReportController;
 use Transave\ScolaBookstore\Http\Controllers\FestchrisftController;
 use Transave\ScolaBookstore\Http\Controllers\CartController;
+use Transave\ScolaBookstore\Http\Controllers\SalesController;
 
 $prefix = !empty(config('endpoints.prefix')) ? config('endpoints.prefix') : 'general';
 /**
@@ -64,6 +65,15 @@ Route::as('bookstore.')->group(function () {
 
 
 
+    //Sales Route
+    Route::prefix('sales')->group(function () {
+        Route::get('/', [SalesController::class, 'index'])->name('index');
+        Route::get('/{id}', [SalesController::class, 'show'])->name('show');
+        Route::get('purchase/{id}', [SalesController::class, 'userPurchase'])->name('purchase');
+    });
+
+
+ //Become a Reviewer Route
     Route::prefix('reviewer_requests')->group(function () {
         Route::get('/', [ReviewerRequestController::class, 'index'])->name('index');
         Route::post('/', [ReviewerRequestController::class, 'store'])->name('store');

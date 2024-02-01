@@ -4,6 +4,7 @@ namespace Transave\ScolaBookstore\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Transave\ScolaBookstore\Actions\Order\CreateOrder;
+use Transave\ScolaBookstore\Actions\Order\UserOrder;
 use Transave\ScolaBookstore\Actions\Order\DeleteOrder;
 use Transave\ScolaBookstore\Actions\Order\DeleteOrderItem;
 use Transave\ScolaBookstore\Actions\Order\SearchOrder;
@@ -34,7 +35,6 @@ class OrderController extends Controller
     }
 
 
-
     public function update(Request $request, $id)
     {
         $inputs = $request->merge(['order_id' => $id])->all();
@@ -46,6 +46,14 @@ class OrderController extends Controller
     {
         $request = ['order_id' => $id];
         $action = new DeleteOrder($request);
+        return $action->execute();
+    }
+
+
+        public function userOrder($id)
+    {
+        $request = ['user_id' => $id];
+        $action = new UserOrder($request);
         return $action->execute();
     }
 
