@@ -6,11 +6,11 @@ namespace Transave\ScolaBookstore\Http\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Transave\ScolaBookstore\Database\Factories\PickupDetailFactory;
+use Transave\ScolaBookstore\Database\Factories\PickupFactory;
 use Transave\ScolaBookstore\Helpers\UUIDHelper;
 use Illuminate\Notifications\Notifiable;
 
-class Country extends Model
+class Pickup extends Model
 {
     use HasFactory, Notifiable, UUIDHelper;
 
@@ -18,7 +18,7 @@ class Country extends Model
         "id"
     ];
 
-    protected $table = "pickup_details";
+    protected $table = "pickups";
 
     public function state()
     {
@@ -44,7 +44,7 @@ class Country extends Model
     
     protected static function newFactory()
     {
-        return PickupDetailFactory::new();
+        return PickupFactory::new();
     }
 
 }

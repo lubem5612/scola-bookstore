@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePickupDetailsTable extends Migration
+class CreatePickupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreatePickupDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pickup_details', function (Blueprint $table) {
+        Schema::create('pickups', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('order_id')->constrained('orders')->cascadeOnDelete()->cascadeOnUpdate();
             $table->text('address')->index();
@@ -38,6 +38,6 @@ class CreatePickupDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pickup_details');
+        Schema::dropIfExists('pickups');
     }
 }

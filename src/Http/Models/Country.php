@@ -26,9 +26,9 @@ class Country extends Model
         return $this->hasMany(State::class);
     }
 
-    public function pickup_details()
+    public function pickup()
     {
-        return $this->hasMany(PickupDetail::class);
+        return $this->hasMany(Pickup::class);
     }
     
 

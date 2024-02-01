@@ -31,27 +31,31 @@ class SearchPickup
                     $queryLg->where('name', 'like', "%$search%")
                            ->orWhereHas('state', function ($queryState) use ($search) {
                                $queryState->where('name', 'like', "%$search%") 
-                                           ->orWhere('capital', 'like', "%$search%"); 
+                                        ->orWhere('capital', 'like', "%$search%")
+                                          ->orWhereHas('country', function ($querycountry) use ($search) { 
+                                             $querycountry->where('name', 'like', "%$search%")
+                                               ->orWhere('code', 'like', "%$search%");
+                                               }); 
                                });
                })
-                 ->orWhereHas('country', function ($querycountry) use ($search) { 
+               ->orWhereHas('country', function ($querycountry) use ($search) { 
                         $querycountry->where('name', 'like', "%$search%")
                                      ->orWhere('code', 'like', "%$search%");
                  })
-                ->orWhereHas('order', function ($query1) use ($search) {
-                    $query1
+                ->orWhereHas('order', function ($queryorder) use ($search) {
+                    $queryorder
                         ->where('invoice_number', 'like', "%$search%")
                         ->orWhere('order_date', 'like', "%$search%")
                         ->orWhere('delivery_status', 'like', "%$search%")
                         ->orWhere('payment_status', 'like', "%$search%")
                         ->orWhere('payment_reference', 'like', "%$search%")
-                        ->orWhereHas('user', function ($query11) use ($search) {
-                            $query11
+                          ->orWhereHas('user', function ($queryuser) use ($search) {
+                            $queryuser
                                 ->where('first_name', 'like', "%$search%")
                                 ->orWhere('last_name', 'like', "%$search%")
                                 ->orWhere('email', 'like', "%$search%")
                                 ->orWhere('phone', 'like', "%$search%");
-                        });
+                          }); 
                 });
         });
 

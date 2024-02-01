@@ -11,7 +11,7 @@ use Transave\ScolaBookstore\Http\Models\Order;
 use Transave\ScolaBookstore\Http\Models\Cart;
 use Illuminate\Support\Facades\Config;
 use Transave\ScolaBookstore\Http\Models\OrderItem;
-use Transave\ScolaBookstore\Http\Models\PickupDetail;
+use Transave\ScolaBookstore\Http\Models\Pickup;
 use Carbon\Carbon;
 use Paystack\Paystack;
 
@@ -25,7 +25,7 @@ class CreateOrder
     private $user;
     private $order;
     private $orderItem;
-    private $pickupDetail;
+    private $pickup;
 
 
     public function __construct(array $request)
@@ -164,7 +164,7 @@ class CreateOrder
 
     private function createPickup(): self
     {
-        $this->pickupDetail = Pickup::create([
+        $this->pickup = Pickup::create([
             'order_id' => $this->order->id,
             'address' => $this->validatedInput['pickup_address'],
             'country_id' => $this->validatedInput['country_id'],

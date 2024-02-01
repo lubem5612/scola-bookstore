@@ -1,12 +1,12 @@
 <?php
 
-namespace Transave\ScolaBookstore\Actions\PickupDetails;
+namespace Transave\ScolaBookstore\Actions\Pickup;
 
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
-use Transave\ScolaBookstore\Http\Models\PickupDetail;
+use Transave\ScolaBookstore\Http\Models\Pickup;
 
-class UpdateDetails
+class UpdatePickup
 {
     use ValidationHelper, ResponseHelper;
 
@@ -24,50 +24,24 @@ class UpdateDetails
         try {
             return $this->validateRequest()
                 ->findPickup()
-                ->updatePickup()
-                ->handleSuccess();
+                ->updatePickup();
         } catch (\Exception $e) {
-            return $this->handleError($e);
+             return $this->sendServerError($e);
         }
     }
 
     private function findPickup(): self
     {
-        $this->pickup = PickupDetail::find($this->validatedInput['pickup_id']);
-
-        if (!$this->pickup) {
-            $this->sendError('Pickup not found', [], 404);
-        }
-
+        $this->pickup = Pickup::find($this->validatedInput['pickup_id']);
         return $this;
     }
 
-    private function updatePickup(): self
+        private function updatePickup()
     {
-        $this->pickup->update([
-            'address' => $this->validatedInput['address'],
-            'country_id' => $this->validatedInput['country_id'],
-            'state_id' => $this->validatedInput['state_id'],
-            'lg_id' => $this->validatedInput['lg_id'],
-            'postal_code' => $this->validatedInput['postal_code'],
-            'recipient_first_name' => $this->validatedInput['recipient_first_name'],
-            'recipient_last_name' => $this->validatedInput['recipient_last_name'],
-            'email' => $this->validatedInput['email'],
-            'alternative_phone' => $this->validatedInput['alternative_phone'],
-        ]);
-
-        return $this;
+        $this->pickup->fill($this->validatedInput)->save();
+        return $this->sendSuccess($this->pickup->refresh(), 'Pickup Contacts updated');
     }
 
-    private function handleSuccess()
-    {
-        return $this->sendSuccess('Pickup updated successfully.');
-    }
-
-    private function handleError(\Exception $e)
-    {
-        return $this->sendError($e->getMessage());
-    }
 
     private function validateRequest(): self
     {

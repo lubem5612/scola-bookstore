@@ -22,7 +22,10 @@ class UpdateOrderTest extends TestCase
             'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id,
             'order_date' => $this->faker->date(),
             'invoice_number' => 'INV-' . $this->faker->unique()->randomNumber(4,9),
-            'status' => $this->faker->randomElement(['processing', 'on_the_way', 'arrived', 'delivered', 'cancelled']),
+           'delivery_status' => $this->faker->randomElement(['processing', 'on_the_way', 'arrived', 'delivered', 'cancelled']),
+           'order_status' => $this->faker->randomElement(['success', 'failed']),
+           'payment_status' => $this->faker->randomElement(['Paid', 'Pending']),
+           'payment_reference' => $this->faker->unique()->randomNumber(4,9),
         ];
 
         $orderItemsData = [

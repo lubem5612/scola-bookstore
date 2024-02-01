@@ -16,6 +16,7 @@ use Transave\ScolaBookstore\Http\Controllers\ReportController;
 use Transave\ScolaBookstore\Http\Controllers\FestchrisftController;
 use Transave\ScolaBookstore\Http\Controllers\CartController;
 use Transave\ScolaBookstore\Http\Controllers\SalesController;
+use Transave\ScolaBookstore\Http\Controllers\PickupController;
 
 // use Transave\ScolaBookstore\Http\Controllers\RestfulAPIController;
 // use Transave\ScolaBookstore\Http\Controllers\SearchController;
@@ -66,6 +67,14 @@ Route::as('bookstore.')->group(function () {
         Route::get('/', [SalesController::class, 'index'])->name('index');
         Route::get('/{id}', [SalesController::class, 'show'])->name('show');
         Route::get('purchase/{id}', [SalesController::class, 'userPurchase'])->name('purchase');
+    });
+
+
+    //Pickups Route
+    Route::prefix('pickups')->group(function () {
+        Route::get('/', [PickupController::class, 'index'])->name('index');
+        Route::get('/{id}', [PickupController::class, 'show'])->name('show');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [PickupController::class, 'update'])->name('update');
     });
 
 

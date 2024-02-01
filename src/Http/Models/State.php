@@ -32,9 +32,9 @@ class State extends Model
         return $this->hasMany(Lg::class);
     }
 
-        public function pickup_details()
+    public function pickup()
     {
-        return $this->hasMany(PickupDetail::class);
+        return $this->hasMany(Pickup::class);
     }
     
 
