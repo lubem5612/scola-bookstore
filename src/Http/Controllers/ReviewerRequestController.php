@@ -8,7 +8,7 @@ use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Http\Models\ReviewerRequest;
 
 
-class ReportController extends Controller
+class ReviewerRequestController extends Controller
 {
     use ResponseHelper;
 
