@@ -32,7 +32,7 @@ $prefix = !empty(config('endpoints.prefix')) ? config('endpoints.prefix') : 'gen
 
 Route::prefix($prefix)->as('bookstore.')->group(function () {
     Route::get('{endpoint}', [ResourceController::class, 'index'])->name('index');
-    Route::post('{endpoint}', [ResourceController::class, 'store'])->name('show');
+    Route::post('{endpoint}', [ResourceController::class, 'store'])->name('store');
     Route::get('{endpoint}/{id}', [ResourceController::class, 'show'])->name('show');
     Route::match(['post', 'put', 'patch'], '{endpoint}/{id}', [ResourceController::class, 'update'])->name('update');
     Route::delete('{endpoint}/{id}', [ResourceController::class, 'destroy'])->name('delete');
