@@ -12,7 +12,7 @@ class CreateReviewerRequestsTable extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('specialization')->index();
-            $table->enum('status', ['approved', 'not_approved'])->default('approve')->index();
+            $table->string('status')->default('approve')->index();
             $table->json('previous_projects');
             $table->integer('year_of_project')->index();
             $table->timestamps();

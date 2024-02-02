@@ -12,9 +12,9 @@ return new class extends Migration
         if (Schema::hasTable('books')) return;
         Schema::create('books', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('category_id')->constrained('categories')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('publisher_id')->constrained('publishers')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('category_id')->constrained('categories')->cascadeOnDelete();
+             $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
+             $table->foreignUuid('publisher_id')->constrained('publishers')->cascadeOnDelete();
             $table->string('publisher')->index();           
             $table->string('title')->index();
             $table->string('subtitle')->nullable();
