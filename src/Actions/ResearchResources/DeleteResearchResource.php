@@ -5,7 +5,7 @@ namespace Transave\ScolaBookstore\Actions\ResearchResources;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
-use Transave\ScolaBookstore\Http\Models\ResearchResource;
+use Transave\ScolaBookstore\Http\Models\ResourceCategory;
 
 class DeleteResearchResource
 {
@@ -13,7 +13,7 @@ class DeleteResearchResource
     private array $request;
     private array $validatedInput;
     private $uploader;
-    private ResearchResource $researchResource;
+    private ResourceCategory $researchResource;
 
     public function __construct(array $request)
     {
@@ -79,7 +79,7 @@ class DeleteResearchResource
      */
     private function setResearchResource() :self
     {
-        $this->researchResource = ResearchResource::query()->find($this->validatedInput['id']);
+        $this->researchResource = ResourceCategory::query()->find($this->validatedInput['id']);
         return $this;
     }
 

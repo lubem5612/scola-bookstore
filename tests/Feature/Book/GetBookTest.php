@@ -1,7 +1,7 @@
 <?php
 
 use Laravel\Sanctum\Sanctum;
-use Transave\ScolaBookstore\Http\Models\Book;
+use Transave\ScolaBookstore\Http\Models\Resource;
 use Transave\ScolaBookstore\Tests\TestCase;
 
 class GetBookTest extends TestCase
@@ -10,7 +10,7 @@ class GetBookTest extends TestCase
     {
         parent::setUp();
         // Create five book records for testing.
-        Book::factory()->count(5)->create();
+        Resource::factory()->count(5)->create();
 
         // Create a user with the role 'superAdmin' and authenticate them.
         $user = config('scola-bookstore.auth_model')::factory()->create(['role' => 'superAdmin']);
@@ -21,7 +21,7 @@ class GetBookTest extends TestCase
     function it_can_get_a_book_with_specific_id()
     {
         // Get a random book from the database.
-        $book = Book::query()->inRandomOrder()->first();
+        $book = Resource::query()->inRandomOrder()->first();
 
         // Send a GET request to retrieve the book by its ID.
         $response = $this->json('GET', "bookstore/books/{$book->id}");

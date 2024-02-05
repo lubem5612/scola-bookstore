@@ -116,7 +116,7 @@ return [
         ],
 
         'publishers' => [
-            'model' => \Transave\ScolaBookstore\Http\Models\Publisher::class,
+            'model' => \Transave\ScolaBookstore\Http\Models\Author::class,
             'table' => 'publishers',
             'rules' => [
                 'store' => [

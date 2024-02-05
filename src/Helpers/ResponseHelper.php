@@ -72,11 +72,12 @@ trait ResponseHelper
     public function sendServerError(\Exception $exception, $code=500)
     {
         if ($this->isValidationError($exception)) {
+            $code = 422;
             $response = [
                 "success" => false,
                 "message" => "Validation error",
                 "data" => null,
-                "errors" => $exception->getMessage(),
+                "errors" => json_decode($exception->getMessage()),
             ];
         }else {
             $response = [
@@ -86,7 +87,7 @@ trait ResponseHelper
                 "errors" => $this->formatServerError($exception),
             ];
         }
-        if (config('scola-cbt.app_env') == 'development') Log::error($exception->getTraceAsString());
+        if (config('scola-bookstore.app_env') == 'local') Log::error($exception->getTraceAsString());
 
         return response()->json($response, $code, [], JSON_INVALID_UTF8_SUBSTITUTE );
     }
@@ -95,7 +96,7 @@ trait ResponseHelper
     {
         $errors = [];
         foreach ($e->getTrace() as $error) {
-            if ($error['line'] && $error['file']) {
+            if (array_key_exists('line', $error ) && $error['line'] && array_key_exists('file', $errors) && $error['file']) {
                 $message = "error on line {$error['line']} in the file {$error['file']}";
                 array_push($errors, $message);
             }

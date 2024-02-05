@@ -12,7 +12,7 @@ use Illuminate\Notifications\Notifiable;
 
 class Pickup extends Model
 {
-    use HasFactory, Notifiable, UUIDHelper;
+    use HasFactory, UUIDHelper;
 
     protected $guarded = [
         "id"

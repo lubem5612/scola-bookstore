@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\Publisher;
+use Transave\ScolaBookstore\Http\Models\Author;
 use Transave\ScolaBookstore\Http\Models\Festchrisft;
 use Transave\ScolaBookstore\Tests\TestCase;
 
@@ -82,7 +82,7 @@ class SearchFestchrisftTest extends TestCase
                ->create();
 
         Festchrisft::factory()->count(2)
-               ->for(Publisher::factory()
+               ->for(Author::factory()
                ->state(['name'=>$faker->company . ' ' . $search]))
                ->create();
 

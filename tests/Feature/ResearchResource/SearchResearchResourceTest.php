@@ -6,8 +6,8 @@ use Carbon\Carbon;
 use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\Publisher;
-use Transave\ScolaBookstore\Http\Models\ResearchResource;
+use Transave\ScolaBookstore\Http\Models\Author;
+use Transave\ScolaBookstore\Http\Models\ResourceCategory;
 use Transave\ScolaBookstore\Tests\TestCase;
 
 class SearchResearchResourceTest extends TestCase
@@ -84,23 +84,23 @@ class SearchResearchResourceTest extends TestCase
     private function testData($search = null)
     {
         $faker = Factory::create();
-        $this->first_name = ResearchResource::factory()->count(2)
+        $this->first_name = ResourceCategory::factory()->count(2)
                ->for(config('scola-bookstore.auth_model')::factory()
                ->state(['first_name' => "michael" . ' ' . $search]))
                ->create();
        
        
-      $this->category = ResearchResource::factory()->count(2)
+      $this->category = ResourceCategory::factory()->count(2)
                ->for(Category::factory()
                ->state(['name' => "michael" . ' ' . $search]))
                ->create();
 
-      $this->publisher = ResearchResource::factory()->count(2)
-               ->for(Publisher::factory()
+      $this->publisher = ResourceCategory::factory()->count(2)
+               ->for(Author::factory()
                ->state(['name'=>$faker->company . ' ' . $search]))
                ->create();
 
-        ResearchResource::factory()
+        ResourceCategory::factory()
             ->count(2)
             ->for(config('scola-bookstore.auth_model')::factory()->create())
             ->create();

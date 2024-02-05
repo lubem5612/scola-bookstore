@@ -6,7 +6,7 @@ use Illuminate\Support\Arr;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
-use Transave\ScolaBookstore\Http\Models\ResearchResource;
+use Transave\ScolaBookstore\Http\Models\ResourceCategory;
 use Transave\ScolaBookstore\Http\Models\User;
 use Illuminate\Support\Facades\Config;
 
@@ -107,7 +107,7 @@ class CreateResearchResource
 
     private function createResearchResources()
     {
-        $researchResource = ResearchResource::query()->create($this->validatedInput);
+        $researchResource = ResourceCategory::query()->create($this->validatedInput);
         return $this->sendSuccess($researchResource->load('user', 'category', 'publisher'), 'Research Resources created successfully');
     }
 

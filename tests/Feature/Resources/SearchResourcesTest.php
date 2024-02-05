@@ -10,7 +10,7 @@ use Transave\ScolaBookstore\Http\Models\BankDetail;
 use Transave\ScolaBookstore\Http\Models\Country;
 use Transave\ScolaBookstore\Http\Models\State;
 use Transave\ScolaBookstore\Http\Models\Lg;
-use Transave\ScolaBookstore\Http\Models\Publisher;
+use Transave\ScolaBookstore\Http\Models\Author;
 use Transave\ScolaBookstore\Http\Models\Save;
 use Transave\ScolaBookstore\Http\Models\School;
 use Transave\ScolaBookstore\Http\Models\User;
@@ -44,7 +44,7 @@ class SearchResourcesTest extends TestCase
     /** @test */
     public function can_get_publishers()
     {
-        Publisher::factory()->count(10)->create();
+        Author::factory()->count(10)->create();
         $response = $this->json('GET', "bookstore/general/publishers");
         $response->assertStatus(200);
 

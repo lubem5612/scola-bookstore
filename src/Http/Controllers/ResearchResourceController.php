@@ -8,7 +8,7 @@ use Transave\ScolaBookstore\Actions\ResearchResources\DeleteResearchResource;
 use Transave\ScolaBookstore\Actions\ResearchResources\SearchResearchResource;
 use Transave\ScolaBookstore\Actions\ResearchResources\UpdateResearchResource;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
-use Transave\ScolaBookstore\Http\Models\ResearchResource;
+use Transave\ScolaBookstore\Http\Models\ResourceCategory;
 
 
 class ResearchResourceController extends Controller
@@ -27,7 +27,7 @@ class ResearchResourceController extends Controller
 
     public function index()
     {
-        return (new SearchResearchResource(ResearchResource::class, ['user', 'category', 'publisher']))->execute();
+        return (new SearchResearchResource(ResourceCategory::class, ['user', 'category', 'publisher']))->execute();
     }
 
 
@@ -41,7 +41,7 @@ class ResearchResourceController extends Controller
 
     public function show($id)
     {
-        return (new SearchResearchResource(ResearchResource::class, ['user', 'category', 'publisher'], $id))->execute();
+        return (new SearchResearchResource(ResourceCategory::class, ['user', 'category', 'publisher'], $id))->execute();
     }
 
 

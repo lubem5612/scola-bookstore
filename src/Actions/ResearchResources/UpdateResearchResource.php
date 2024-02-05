@@ -6,7 +6,7 @@ use Illuminate\Support\Arr;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
-use Transave\ScolaBookstore\Http\Models\ResearchResource;
+use Transave\ScolaBookstore\Http\Models\ResourceCategory;
 
 class UpdateResearchResource
 {
@@ -42,7 +42,7 @@ class UpdateResearchResource
 
     private function setResearchResourceId()
     {
-        $this->researchResource = ResearchResource::query()->find($this->validatedInput['researchResource_id']);
+        $this->researchResource = ResourceCategory::query()->find($this->validatedInput['researchResource_id']);
         return $this;
     }
 

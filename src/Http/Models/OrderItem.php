@@ -31,7 +31,7 @@ class OrderItem extends Model
 
         public function book()
     {
-        return $this->belongsTo(Book::class, 'resource_id')->where('resource_type', 'Book');
+        return $this->belongsTo(Resource::class, 'resource_id')->where('resource_type', 'Book');
     }
 
     public function report()
@@ -58,7 +58,7 @@ class OrderItem extends Model
     public function research_resource()
     {
 
-         return $this->belongsTo(ResearchResource::class, 'resource_id')->where('resource_type', 'ResearchResource');
+         return $this->belongsTo(ResourceCategory::class, 'resource_id')->where('resource_type', 'ResearchResource');
     }
 
 

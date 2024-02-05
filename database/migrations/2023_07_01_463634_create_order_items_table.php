@@ -11,15 +11,13 @@ return new class extends Migration
         if (Schema::hasTable('order_items')) return;
         Schema::create('order_items', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignuuid('order_id');
-            $table->uuid('resource_id');
-            $table->string('resource_type');
+            $table->foreignUuid('order_id')->constrained('orders')->cascadeOnDelete();
+            $table->foreignUuid('resource_id')->constrained('resources')->cascadeOnDelete();
             $table->integer('quantity');
-            $table->decimal('unit_price', 10, 2);
-            $table->decimal('total_amount', 10, 2)->index();
+            $table->decimal('unit_price', 15, 5);
+            $table->float('discount')->nullable()->index();
+            $table->enum('discount_type', ['amount', 'percent'])->default('amount')->index();
             $table->timestamps();
-
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
         });
     }
 

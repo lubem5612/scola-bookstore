@@ -8,8 +8,8 @@ use Illuminate\Http\UploadedFile;
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Actions\Book\CreateBook;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\Publisher;
-use Transave\ScolaBookstore\Http\Models\Book;
+use Transave\ScolaBookstore\Http\Models\Author;
+use Transave\ScolaBookstore\Http\Models\Resource;
 use Transave\ScolaBookstore\Tests\TestCase;
 
 class CreateBookManually extends TestCase
@@ -54,7 +54,7 @@ class CreateBookManually extends TestCase
         $this->request = [
             'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id,
             'category_id' => Category::factory()->create()->id,
-            'publisher_id' => Publisher::factory()->create()->id,
+            'publisher_id' => Author::factory()->create()->id,
             'publisher' => $this->faker->company,
             'publication_date' => $this->faker->date(),
             'title' => $this->faker->name,

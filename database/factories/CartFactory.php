@@ -27,8 +27,8 @@ class CartFactory extends Factory
             'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id,
             'resource_id' => $this->faker->uuid,
             'quantity' => $this->faker->numberBetween(1, 10),
-            'resource_type' => $this->faker->randomElement(['Book', 'Report', 'Journal', 'Festchrisft', 'ConferencePaper', 'ResearchResource', 'Monograph', 'Article']),
             'unit_price' => $this->faker->randomFloat(2, 10, 100),
+            'is_selected' => $this->faker->randomElement([1, 0]),
         ];
     }
 

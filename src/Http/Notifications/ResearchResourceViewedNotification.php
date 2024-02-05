@@ -3,16 +3,16 @@
 namespace Transave\ScolaBookstore\Http\Notifications;
 
 use Illuminate\Notifications\Notification;
-use Transave\ScolaBookstore\Http\Models\ResearchResource;
+use Transave\ScolaBookstore\Http\Models\ResourceCategory;
 use Transave\ScolaBookstore\Http\Models\User;
 
 class ResearchResourceViewedNotification extends Notification
 {
     public User $user;
-    public ResearchResource $researchResource;
+    public ResourceCategory $researchResource;
 
 
-    public function __construct(User $user, ResearchResource $researchResource)
+    public function __construct(User $user, ResourceCategory $researchResource)
     {
         $this->user = $user;
         $this->researchResource = $researchResource;

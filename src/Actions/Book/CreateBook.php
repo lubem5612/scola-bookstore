@@ -6,7 +6,7 @@ use Illuminate\Support\Arr;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
-use Transave\ScolaBookstore\Http\Models\Book;
+use Transave\ScolaBookstore\Http\Models\Resource;
 use Transave\ScolaBookstore\Http\Models\User;
 use Illuminate\Support\Facades\Config;
 
@@ -81,7 +81,7 @@ class CreateBook
 
     private function createBook()
     {
-        $book = Book::query()->create($this->validatedInput);
+        $book = Resource::query()->create($this->validatedInput);
         return $this->sendSuccess($book->load('user', 'category', 'publisher'), 'Book created successfully');
     }
 

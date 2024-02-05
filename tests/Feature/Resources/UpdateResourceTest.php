@@ -13,7 +13,7 @@ use Transave\ScolaBookstore\Http\Models\Country;
 use Transave\ScolaBookstore\Http\Models\Category;
 use Transave\ScolaBookstore\Http\Models\School;
 use Transave\ScolaBookstore\Http\Models\State;
-use Transave\ScolaBookstore\Http\Models\Publisher;
+use Transave\ScolaBookstore\Http\Models\Author;
 use Transave\ScolaBookstore\Tests\TestCase;
 
 class UpdateResourceTest extends TestCase
@@ -31,7 +31,7 @@ class UpdateResourceTest extends TestCase
         State::factory()->count(10)->create();
         Category::factory()->count(10)->create();
         School::factory()->count(10)->create();
-        Publisher::factory()->count(10)->create();
+        Author::factory()->count(10)->create();
         Sanctum::actingAs($user);
     }
 
@@ -56,7 +56,7 @@ class UpdateResourceTest extends TestCase
         $request = [
             'name' => $this->faker->name,
         ];
-        $publisher = Publisher::query()->inRandomOrder()->first();
+        $publisher = Author::query()->inRandomOrder()->first();
         $response = $this->json('PATCH', "bookstore/general/publishers/$publisher->id", $request);
         $response->assertStatus(200);
         $arrayData = json_decode($response->getContent(), true);

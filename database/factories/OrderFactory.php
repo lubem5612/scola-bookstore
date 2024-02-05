@@ -31,7 +31,8 @@ class OrderFactory extends Factory
            'order_status' => $this->faker->randomElement(['success', 'failed']),
            'payment_status' => $this->faker->randomElement(['Paid', 'Pending']),
            'payment_reference' => $this->faker->unique()->randomNumber(4,9),
-
+           'total_amount' => $this->faker->randomFloat(2, 1000, 2000),
+           'shipping_info' => $this->faker->randomElement(['address, fee, delivery_time']),
         ];
     }
 }

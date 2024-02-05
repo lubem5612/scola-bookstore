@@ -5,7 +5,7 @@ namespace Transave\ScolaBookstore\Actions\Book;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
-use Transave\ScolaBookstore\Http\Models\Book;
+use Transave\ScolaBookstore\Http\Models\Resource;
 
 class DeleteBook
 {
@@ -13,7 +13,7 @@ class DeleteBook
     private array $request;
     private array $validatedInput;
     private $uploader;
-    private Book $book;
+    private Resource $book;
 
     public function __construct(array $request)
     {
@@ -78,7 +78,7 @@ class DeleteBook
      */
     private function setBook() :self
     {
-        $this->book = Book::query()->find($this->validatedInput['id']);
+        $this->book = Resource::query()->find($this->validatedInput['id']);
         return $this;
     }
 

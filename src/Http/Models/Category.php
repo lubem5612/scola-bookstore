@@ -26,7 +26,7 @@ class Category extends Model
 
     public function book()
     {
-        return $this->hasMany(Book::class);
+        return $this->hasMany(Resource::class);
     }
 
     public function report()
@@ -51,7 +51,7 @@ class Category extends Model
 
     public function research_resource()
     {
-        return $this->hasMany(ResearchResource::class);
+        return $this->hasMany(ResourceCategory::class);
     }
 
     public function festchrisft()

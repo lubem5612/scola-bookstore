@@ -9,7 +9,7 @@ use Transave\ScolaBookstore\Actions\Search\SearchPublishers;
 use Transave\ScolaBookstore\Actions\Search\SearchSaves;
 use Transave\ScolaBookstore\Actions\Search\SearchSchools;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\Publisher;
+use Transave\ScolaBookstore\Http\Models\Author;
 use Transave\ScolaBookstore\Http\Models\Bank;
 use Transave\ScolaBookstore\Http\Models\BankDetail;
 use Transave\ScolaBookstore\Http\Models\Save;
@@ -31,7 +31,7 @@ class SearchController extends Controller
 
     public function indexPublishers()
     {
-        return (new SearchPublishers(Publisher::class, []))->execute();
+        return (new SearchPublishers(Author::class, []))->execute();
     }
 
 

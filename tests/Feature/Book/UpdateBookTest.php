@@ -6,9 +6,9 @@ use Faker\Factory;
 use Illuminate\Http\UploadedFile;
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Actions\Book\UpdateBook;
-use Transave\ScolaBookstore\Http\Models\Book;
+use Transave\ScolaBookstore\Http\Models\Resource;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\Publisher;
+use Transave\ScolaBookstore\Http\Models\Author;
 use Transave\ScolaBookstore\Tests\TestCase;
 
 class UpdateBookTest extends TestCase
@@ -21,7 +21,7 @@ class UpdateBookTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->book = Book::factory()->create();
+        $this->book = Resource::factory()->create();
         $this->user = config('scola-bookstore.auth_model')::factory()->create(['role' => 'superAdmin']);
         Sanctum::actingAs($this->user);
         $this->testData();
@@ -40,7 +40,7 @@ class UpdateBookTest extends TestCase
     /** @test */
     public function test_can_update_book_via_api()
     {
-        $book = Book::query()->inRandomOrder()->first();
+        $book = Resource::query()->inRandomOrder()->first();
         $response = $this->json('PATCH', "bookstore/books/{$book->id}", $this->request, ['Accept' => 'application/json']);
         $array = json_decode($response->getContent(), true);
         $this->assertTrue($array['success']);
@@ -51,10 +51,10 @@ class UpdateBookTest extends TestCase
     {
        $this->faker = Factory::create();
         $this->request = [
-            'book_id' => Book::factory()->create()->id,
+            'book_id' => Resource::factory()->create()->id,
             'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id,
             'category_id' => Category::factory()->create()->id,
-            'publisher_id' => Publisher::factory()->create()->id,
+            'publisher_id' => Author::factory()->create()->id,
             'publisher' => $this->faker->company,
             'publication_date' => $this->faker->date(),
             'title' => $this->faker->name,

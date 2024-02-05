@@ -5,9 +5,9 @@ namespace Transave\ScolaBookstore\Tests\Feature\ResearchResource;
 use Faker\Factory;
 use Illuminate\Http\UploadedFile;
 use Laravel\Sanctum\Sanctum;
-use Transave\ScolaBookstore\Http\Models\ResearchResource;
+use Transave\ScolaBookstore\Http\Models\ResourceCategory;
 use Transave\ScolaBookstore\Actions\ResearchResources\CreateResearchResource;
-use Transave\ScolaBookstore\Http\Models\Publisher;
+use Transave\ScolaBookstore\Http\Models\Author;
 use Transave\ScolaBookstore\Http\Models\Category;
 use Transave\ScolaBookstore\Http\Models\User;
 use Transave\ScolaBookstore\Tests\TestCase;
@@ -55,7 +55,7 @@ class CreateResearchResourceTest extends TestCase
         $this->request = [
                'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id, 
                'category_id' => Category::factory()->create()->id,
-               'publisher_id' => Publisher::factory()->create()->id,
+               'publisher_id' => Author::factory()->create()->id,
                'publisher' => $this->faker->company,
                'publication_date' => $this->faker->date(),
                'publication_year' => $this->faker->date(),

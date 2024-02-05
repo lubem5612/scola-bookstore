@@ -10,11 +10,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Transave\ScolaBookstore\Database\Factories\StateFactory;
 use Transave\ScolaBookstore\Helpers\UUIDHelper;
-use Illuminate\Notifications\Notifiable;
 
 class State extends Model
 {
-    use HasFactory, Notifiable, UUIDHelper;
+    use HasFactory, UUIDHelper;
 
     protected $table = "states";
 
@@ -32,11 +31,10 @@ class State extends Model
         return $this->hasMany(Lg::class);
     }
 
-    public function pickup()
+    public function pickup() : HasMany
     {
         return $this->hasMany(Pickup::class);
     }
-    
 
     protected static function newFactory()
     {

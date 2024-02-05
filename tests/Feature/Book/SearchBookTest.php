@@ -5,7 +5,7 @@ namespace Transave\ScolaBookstore\Tests\Feature\Book;
 use Carbon\Carbon;
 use Faker\Factory;
 use Laravel\Sanctum\Sanctum;
-use Transave\ScolaBookstore\Http\Models\Book;
+use Transave\ScolaBookstore\Http\Models\Resource;
 use Transave\ScolaBookstore\Tests\TestCase;
 
 class SearchBookTest extends TestCase
@@ -66,12 +66,12 @@ class SearchBookTest extends TestCase
     private function testData($search = null)
     {
         $faker = Factory::create();
-        Book::factory()
+        Resource::factory()
             ->count(3)
             ->for(config('scola-bookstore.auth_model')::factory()->state(['first_name' => $faker->name . ' ' . $search]))
             ->create();
 
-        Book::factory()
+        Resource::factory()
             ->count(3)
             ->for(config('scola-bookstore.auth_model')::factory()->create())
             ->create();

@@ -6,7 +6,7 @@ use Illuminate\Support\Arr;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
-use Transave\ScolaBookstore\Http\Models\Book;
+use Transave\ScolaBookstore\Http\Models\Resource;
 
 class UpdateBook
 {
@@ -42,7 +42,7 @@ class UpdateBook
 
     private function setBookId()
     {
-        $this->book = Book::query()->find($this->validatedInput['book_id']);
+        $this->book = Resource::query()->find($this->validatedInput['book_id']);
         return $this;
     }
 

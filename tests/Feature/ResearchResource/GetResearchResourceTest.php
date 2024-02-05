@@ -2,7 +2,7 @@
 namespace Transave\ScolaBookstore\Tests\Feature\ResearchResource;
 
 use Laravel\Sanctum\Sanctum;
-use Transave\ScolaBookstore\Http\Models\ResearchResource;
+use Transave\ScolaBookstore\Http\Models\ResourceCategory;
 use Transave\ScolaBookstore\Tests\TestCase;
 
 class GetResearchResourceTest extends TestCase
@@ -11,7 +11,7 @@ class GetResearchResourceTest extends TestCase
     {
         parent::setUp();
         // Create five resources records for testing.
-        ResearchResource::factory()->count(5)->create();
+        ResourceCategory::factory()->count(5)->create();
 
         // Create a user with the role 'superAdmin' and authenticate them.
         $user = config('scola-bookstore.auth_model')::factory()->create(['role' => 'user']);
@@ -22,7 +22,7 @@ class GetResearchResourceTest extends TestCase
     function it_can_get_a_research_resource_with_specific_id()
     {
         // Get a random researchResource from the database.
-        $researchResource = ResearchResource::query()->inRandomOrder()->first();
+        $researchResource = ResourceCategory::query()->inRandomOrder()->first();
 
         // Send a GET request to retrieve the researchResource by its ID.
         $response = $this->json('GET', "bookstore/research_resources/{$researchResource->id}");

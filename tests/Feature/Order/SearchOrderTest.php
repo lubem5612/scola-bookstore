@@ -4,7 +4,7 @@ namespace Transave\ScolaBookstore\Tests\Feature\Order;
 
 use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Order;
-use Transave\ScolaBookstore\Http\Models\Book;
+use Transave\ScolaBookstore\Http\Models\Resource;
 use Transave\ScolaBookstore\Tests\TestCase;
 
 class SearchOrderTest extends TestCase
@@ -13,7 +13,7 @@ class SearchOrderTest extends TestCase
     {
         parent::setUp();
         Order::factory()->count(5)->create();
-        Book::factory()->count(5)->create();
+        Resource::factory()->count(5)->create();
         $user = config('scola-bookstore.auth_model')::factory()->create(['role' => 'user']);
         Sanctum::actingAs($user);
     }
@@ -22,7 +22,7 @@ class SearchOrderTest extends TestCase
     function can_get_an_order_with_specific_id()
     {
         $order = Order::query()->inRandomOrder()->first();
-        $book = Book::query()->inRandomOrder()->first();
+        $book = Resource::query()->inRandomOrder()->first();
         $response = $this->json('GET', "bookstore/orders/{$order->id}");
         $array = json_decode($response->getContent(), true);
         dd($array);

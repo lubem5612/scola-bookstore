@@ -11,8 +11,8 @@ return new class extends Migration
         if (Schema::hasTable('notifications')) return;
         Schema::create('notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignuuid('user_id');
-            $table->foreignuuid('book_id');
+            $table->foreignUuid('sender_id')->constrained('users')->cascadeOnDelete();
+            $table->string('title', 300)->index();
             $table->string('message', 600)->index();
             $table->string('type', 60)->index()->nullable();
             $table->timestamps();

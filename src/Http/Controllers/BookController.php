@@ -9,7 +9,7 @@ use Transave\ScolaBookstore\Actions\Book\GetBook;
 use Transave\ScolaBookstore\Actions\Book\SearchBook;
 use Transave\ScolaBookstore\Actions\Book\UpdateBook;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
-use Transave\ScolaBookstore\Http\Models\Book;
+use Transave\ScolaBookstore\Http\Models\Resource;
 
 
 class BookController extends Controller
@@ -26,7 +26,7 @@ class BookController extends Controller
 
     public function index()
     {
-        return (new SearchBook(Book::class, ['user', 'category', 'publisher']))->execute();
+        return (new SearchBook(Resource::class, ['user', 'category', 'publisher']))->execute();
     }
 
 
@@ -38,7 +38,7 @@ class BookController extends Controller
 
     public function show($id)
     {
-        return (new SearchBook(Book::class, ['user', 'category', 'publisher'], $id))->execute();
+        return (new SearchBook(Resource::class, ['user', 'category', 'publisher'], $id))->execute();
     }
 
 

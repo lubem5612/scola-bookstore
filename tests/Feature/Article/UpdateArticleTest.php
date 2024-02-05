@@ -8,7 +8,7 @@ use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Actions\Articles\UpdateArticle;
 use Transave\ScolaBookstore\Http\Models\Article;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\Publisher;
+use Transave\ScolaBookstore\Http\Models\Author;
 use Transave\ScolaBookstore\Tests\TestCase;
 
 class UpdateArticleTest extends TestCase
@@ -55,7 +55,7 @@ class UpdateArticleTest extends TestCase
             'article_id' => $this->article->id,
             'user_id' => config('scola-bookstore.auth_model')::factory()->create()->id, 
             'category_id' => Category::factory()->create()->id,
-            'publisher_id' => Publisher::factory()->create()->id,
+            'publisher_id' => Author::factory()->create()->id,
             'publisher' => $this->faker->company,
             'title' => $this->faker->name,
             'subtitle' => $this->faker->name,

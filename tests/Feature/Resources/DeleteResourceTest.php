@@ -7,7 +7,7 @@ use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Http\Models\Bank;
 use Transave\ScolaBookstore\Http\Models\Category;
 use Transave\ScolaBookstore\Http\Models\bankDetail;
-use Transave\ScolaBookstore\Http\Models\Publisher;
+use Transave\ScolaBookstore\Http\Models\Author;
 use Transave\ScolaBookstore\Http\Models\Save;
 use Transave\ScolaBookstore\Http\Models\Country;
 use Transave\ScolaBookstore\Http\Models\State;
@@ -45,8 +45,8 @@ class DeleteResourceTest extends TestCase
     /** @test */
     public function can_delete_specified_publisher()
     {
-        Publisher::factory()->count(10)->create();
-        $publisher = Publisher::query()->inRandomOrder()->first();
+        Author::factory()->count(10)->create();
+        $publisher = Author::query()->inRandomOrder()->first();
         $response = $this->json('DELETE', "bookstore/general/publishers/{$publisher->id}");
         $response->assertStatus(200);
 

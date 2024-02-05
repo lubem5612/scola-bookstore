@@ -9,7 +9,7 @@ use Laravel\Sanctum\Sanctum;
 use Transave\ScolaBookstore\Actions\ConferencePaper\UpdateConferencePaper;
 use Transave\ScolaBookstore\Http\Models\ConferencePaper;
 use Transave\ScolaBookstore\Http\Models\Category;
-use Transave\ScolaBookstore\Http\Models\Publisher;
+use Transave\ScolaBookstore\Http\Models\Author;
 use Transave\ScolaBookstore\Tests\TestCase;
 
 class UpdatePaperTest extends TestCase
