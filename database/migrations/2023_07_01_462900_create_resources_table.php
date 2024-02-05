@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string('summary', 766)->nullable()->comment('books');
             $table->string('overview', 766)->nullable()->comment('books, research');
             $table->json('conference')->nullable()->comment('name, year, date, location');
-            $table->json('institutional_affiliations')->nullable()->index()->comment('conference, reports');
+            $table->json('institutional_affiliations')->nullable()->comment('conference, reports');
             $table->string('file_path', 700)->nullable();
             $table->string('cover_image', 700)->nullable();
             $table->decimal('price', 15, 5)->index();

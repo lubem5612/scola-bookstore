@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('pickups', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('order_id')->constrained('orders')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->text('address')->index();
+            $table->string('address', 766)->nullable()->index();
             $table->foreignUuid('country_id')->constrained('countries')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignUuid('state_id')->constrained('states')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignUuid('lg_id')->constrained('lgs')->cascadeOnDelete()->cascadeOnUpdate();
