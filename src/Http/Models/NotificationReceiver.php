@@ -22,6 +22,11 @@ class NotificationReceiver extends Model
         return $this->belongsTo(User::class, 'receiver_id', 'id');
     }
 
+    public function notification()
+    {
+        return $this->belongsTo(Notification::class, 'notification_id', 'id');
+    }
+
     protected static function newFactory()
     {
         return NotificationReceiverFactory::new();

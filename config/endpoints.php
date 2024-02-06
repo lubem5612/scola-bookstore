@@ -20,119 +20,189 @@ return [
             'relationships' => [],
         ],
 
-
-        'banks' => [
-            'model' => \Transave\ScolaBookstore\Http\Models\Bank::class,
-            'table' => 'banks',
+        'resource-categories' => [
+            'model' => \Transave\ScolaBookstore\Http\Models\ResourceCategory::class,
+            'table' => 'resource-categories',
             'rules' => [
                 'store' => [
-                    'name' => 'required|string|max:150|unique:banks,name',
-                    'code' => 'required|string|max:10',
-                    'country_id' => 'required|required|exists:countries,id',
+                    'resource_id' => 'required|string|exists:resources,id',
+                    'category_id' => 'required|string|exists:categories,id',
                 ],
                 'update' => [
-                    'bank_id' => 'required|exists:banks,id',
-                    'name' => 'sometimes|required|string|max:150|unique:banks,name',
-                    'code' => 'sometimes|required|string|max:10',
+                    'resource_id' => 'sometimes|required|string|exist:resources,id',
+                    'category_id' => 'sometimes|required|string|exists:categories,id',
+                ]
+            ],
+            'order' => [
+                'column' => 'created_at',
+                'pattern' => 'DESC',
+            ],
+            'relationships' => ['resource', 'category'],
+        ],
+
+        'faculties' => [
+            'model' => \Transave\ScolaBookstore\Http\Models\Faculty::class,
+            'table' => 'faculties',
+            'rules' => [
+                'store' => [
+                    'name' => 'required|string|max:100',
+                ],
+                'update' => [
+                    'name' => 'sometimes|string|max:100',
+                ]
+            ],
+            'order' => [
+                'column' => 'created_at',
+                'pattern' => 'DESC',
+            ],
+            'relationships' => [],
+        ],
+
+        'departments' => [
+            'model' => \Transave\ScolaBookstore\Http\Models\Department::class,
+            'table' => 'departments',
+            'rules' => [
+                'store' => [
+                    'name' => 'required|string|max:100',
+                    'faculty_id' => 'required|string|exists:faculties,id',
+                ],
+                'update' => [
+                    'name' => 'sometimes|string|max:100',
+                    'faculty_id' => 'sometimes|required|string|exists:faculties,id',
+                ]
+            ],
+            'order' => [
+                'column' => 'created_at',
+                'pattern' => 'DESC',
+            ],
+            'relationships' => ['faculty'],
+        ],
+
+        'carts' => [
+            'model' => \Transave\ScolaBookstore\Http\Models\Cart::class,
+            'table' => 'carts',
+            'rules' => [
+                'store' => [
+                    'user_id' => 'required|exists:users,id',
+                    'resource_id' => 'required|exists:resources,id',
+                    'quantity' => 'sometimes|required|integer',
+                    'unit_price' => 'required|numeric|gt:0',
+                    'is_selected' => 'sometimes|boolean|in:0,1'
+                ],
+                'update' => [
+                    'quantity' => 'sometimes|required|integer',
+                    'is_selected' => 'sometimes|boolean|in:0,1'
+                ]
+            ],
+            'order' => [
+                'column' => 'created_at',
+                'pattern' => 'DESC',
+            ],
+            'relationships' => ['user', 'resource'],
+        ],
+
+        'order-items' => [
+            'model' => \Transave\ScolaBookstore\Http\Models\OrderItem::class,
+            'table' => 'order-items',
+            'rules' => [
+                'store' => [
+                    'order_id' => 'required|exists:orders,id',
+                    'resource_id' => 'required|exists:resources,id',
+                    'quantity' => 'sometimes|required|integer',
+                    'unit_price' => 'required|numeric|gt:0',
+                    'discount' => 'nullable|numeric|gt:0',
+                    'discount_type' => 'required_if:discount,!=,null|in:amount,percent',
+                ],
+                'update' => [
+                    'quantity' => 'sometimes|required|integer',
+                    'unit_price' => 'sometimes|required|numeric|gt:0',
+                    'discount' => 'nullable|numeric|gt:0',
+                    'discount_type' => 'required_if:discount,!=,null|in:amount,percent',
+                ]
+            ],
+            'order' => [
+                'column' => 'created_at',
+                'pattern' => 'DESC',
+            ],
+            'relationships' => ['order', 'resource'],
+        ],
+
+        'pickups' => [
+            'model' => \Transave\ScolaBookstore\Http\Models\Pickup::class,
+            'table' => 'pickups',
+            'rules' => [
+                'store' => [
+                    'order_id' => 'required|exists:orders,id',
+                    'address' => 'sometimes|required|string',
+                    'country_id' => 'required|exists:countries,id',
+                    'state_id' => 'sometimes|required|exists:states,id',
+                    'lg_id' => 'sometimes|required|exists:lgs,id',
+                    'recipient_name' => 'required|string',
+                    'postal_code' => 'nullable',
+                    'email' => 'required|email',
+                    'alternative_phone' => 'nullable',
+                ],
+                'update' => [
+                    'address' => 'sometimes|required|string',
                     'country_id' => 'sometimes|required|exists:countries,id',
+                    'state_id' => 'sometimes|required|exists:states,id',
+                    'lg_id' => 'sometimes|required|exists:lgs,id',
+                    'recipient_name' => 'sometimes|required|string',
+                    'postal_code' => 'nullable',
+                    'email' => 'sometimes|required|email',
+                    'alternative_phone' => 'nullable',
                 ]
             ],
             'order' => [
                 'column' => 'created_at',
                 'pattern' => 'DESC',
             ],
-            'relationships' => ['country'],
+            'relationships' => ['order'],
         ],
 
-      
-      'bank_details' => [
-            'model' => \Transave\ScolaBookstore\Http\Models\BankDetail::class,
-            'table' => 'bank_details',
+        'notifications' => [
+            'model' => \Transave\ScolaBookstore\Http\Models\Notification::class,
+            'table' => 'notifications',
             'rules' => [
                 'store' => [
-                    'user_id' => 'required|exists:users,id',
-                    'bank_id' => 'required|exists:banks,id',
-                    'account_number' => 'required|integer',
-                    'account_name' => 'required|string|max:225',
+                    'sender_id' => 'required|exists:users,id',
+                    'title' => 'nullable|string|max:300',
+                    'message' => 'required|string|max:600',
+                    'type' => 'nullable'
                 ],
                 'update' => [
-                    'bank_detail_id' => 'required|exists:bank_details,id',
-                    'user_id' => 'sometimes|required|exists:users,id',
-                    'bank_id' => 'sometimes|required|exists:banks,id',
-                    'account_number' => 'sometimes|required|integer',
-                    'account_name' => 'sometimes|string|max:225',
+                    'sender_id' => 'sometimes|required|exists:users,id',
+                    'title' => 'nullable|string|max:300',
+                    'message' => 'sometimes|required|string|max:600',
+                    'type' => 'nullable'
                 ]
             ],
             'order' => [
                 'column' => 'created_at',
                 'pattern' => 'DESC',
             ],
-            'relationships' => ['user', 'bank'],
+            'relationships' => ['sender'],
         ],
 
-
-        'schools' => [
-            'model' => \Transave\ScolaBookstore\Http\Models\School::class,
-            'table' => 'schools',
+        'notification-receivers' => [
+            'model' => \Transave\ScolaBookstore\Http\Models\NotificationReceiver::class,
+            'table' => 'notification-receivers',
             'rules' => [
                 'store' => [
-                    'faculty' => 'required|string',
-                    'department' => 'required|string',
+                    'receiver_id' => 'required|exists:users,id',
+                    'notification_id' => 'required|exists:notifications,id',
                 ],
                 'update' => [
-                    'school_id' => 'required|exists:schools,id',
-                    'faculty' => 'sometimes|required|string',
-                    'department' => 'sometimes|required|string',
+                    'receiver_id' => 'sometimes|required|exists:users,id',
+                    'notification_id' => 'sometimes|required|exists:notifications,id',
                 ]
             ],
             'order' => [
                 'column' => 'created_at',
                 'pattern' => 'DESC',
             ],
-            'relationships' => [],
+            'relationships' => ['receiver', 'notification'],
         ],
-
-        'saves' => [
-            'model' => \Transave\ScolaBookstore\Http\Models\Save::class,
-            'table' => 'saves',
-            'rules' => [
-                'store' => [
-                    'user_id' => 'required|exists:users,id',
-                    'resource_id' => 'required',
-                    'resource_type' => 'sometimes|string|max:60',
-                ],
-                'update' => [
-                    'save_id' => 'required|exists:saves,id',
-                    'user_id' => 'sometimes|required|exists:users,id',
-                    'resource_id' => 'sometimes|required',
-                    'resource_type' => 'sometimes|string|max:60',
-                ]
-            ],
-            'order' => [
-                'column' => 'created_at',
-                'pattern' => 'DESC',
-            ],
-            'relationships' => ['user', 'book', 'report', 'journal', 'festchrisft', 'conference_paper', 'research_resource', 'monograph', 'article'],
-        ],
-
-        'publishers' => [
-            'model' => \Transave\ScolaBookstore\Http\Models\Author::class,
-            'table' => 'publishers',
-            'rules' => [
-                'store' => [
-                    'name' => 'required|string|max:60|unique:publishers,name',
-                ],
-                'update' => [
-                    'name' => 'sometimes|string|max:60',
-                ]
-            ],
-            'order' => [
-                'column' => 'created_at',
-                'pattern' => 'DESC',
-            ],
-            'relationships' => [],
-        ],
-
 
         'countries' => [
             'model' => \Transave\ScolaBookstore\Http\Models\Country::class,

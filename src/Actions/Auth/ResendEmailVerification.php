@@ -32,7 +32,7 @@ class ResendEmailVerification
         }
     }
 
-    private function setToken(): static
+    private function setToken()
     {
         $this->token = rand(100000, 999999);
         return $this;
@@ -50,7 +50,7 @@ class ResendEmailVerification
         return $this;
     }
 
-    private function sendNotification(): static
+    private function sendNotification()
     {
         try {
             Notification::route('mail', $this->user->email)

@@ -58,7 +58,6 @@ class SearchResources
     {
         switch ($this->request['endpoint'])
         {
-            case "schools":
             case "countries": {
                 $this->queryBuilder->where('name', 'like', "%$this->searchParam%")
                     ->orWhere("code", "like", "%$this->searchParam%");
@@ -99,217 +98,90 @@ class SearchResources
                 });
                 break;
             }
-        
-        // start of saves
-            case "saves": {
-             $search = $this->searchParam;
 
-    $this->queryBuilder->where(function ($query) use ($search) {
-        $query->where('resource_type', 'like', "%$search%")
-            ->orWhere('resource_id', 'like', "%$search%")
-            ->orWhereHas('user', function ($userQuery) use ($search) {
-                $userQuery->where('first_name', 'like', "%$search%")
-                    ->orWhere('last_name', 'like', "%$search%")
-                    ->orWhere('role', 'like', "%$search%");
-            })
-            ->orWhereHas('book', function ($bookQuery) use ($search) {
-                $bookQuery->where('title', 'like', "%$search%")
-                            ->orWhere('primary_author', 'like', "%$search%")
-                            ->orWhere('contributors', 'like', "%$search%")
-                            ->orWhere('ISBN', 'like', "%$search%")
-                            ->orWhere('publication_date', 'like', "%$search%")
-                            ->orWhere('publisher', 'like', "%$search%")
-                            ->orWhere('edition', 'like', "%$search%")
-                            ->orWhereHas('user', function ($bookQuery1) use ($search) {
-                                $bookQuery1->where('first_name', 'like', "%$search%")
-                                    ->orWhere('last_name', 'like', "%$search%")
-                                    ->orWhere('email', 'like', "%$search%");
-                            })
-                            ->orWhereHas('category', function ($bookQuery2) use ($search) {
-                                $bookQuery2->where('name', 'like', "%$search%");
-                            })
-                            ->orWhereHas('publisher', function ($bookQuery3) use ($search) {
-                                $bookQuery3->where('name', 'like', "%$search%");
-                            });
-            })
-            ->orWhereHas('report', function ($reportQuery) use ($search) {
-                $reportQuery->where('title', 'like', "%$search%")
-                                ->orWhere('publisher', 'like', "%$search%") 
-                                ->orWhere('organization', 'like', "%$search%") 
-                                ->orWhere('publication_date', 'like', "%$search%")
-                                ->orWhere('publication_year', 'like', "%$search%")
-                                ->orWhere('report_number', 'like', "%$search%")
-                                ->orWhere('institutional_affiliations', 'like', "%$search%")
-                                ->orWhere('primary_author', 'like', "%$search%")
-                                ->orWhere('contributors', 'like', "%$search%")
-                                ->orWhere('keywords', 'like', "%$search%")
-                                ->orWhere('price', 'like', "%$search%")
-                                ->orWhereHas('user', function ($reportQuery1) use ($search) {
-                                    $reportQuery1->where('first_name', 'like', "%$search%")
-                                        ->orWhere('last_name', 'like', "%$search%")
-                                        ->orWhere('email', 'like', "%$search%");
-                                })
-                                ->orWhereHas('category', function ($reportQuery2) use ($search) {
-                                    $reportQuery2->where('name', 'like', "%$search%");
-                                })
-                                ->orWhereHas('publisher', function ($reportQuery3) use ($search) {
-                                    $reportQuery3->where('name', 'like', "%$search%");
-                                });
-            })
-            ->orWhereHas('journal', function ($journalQuery) use ($search) {
-                $journalQuery->where('title', 'like', "%$search%")
-                           ->orWhere('editorial_board_members', 'like', "%$search%")
-                            ->orWhere('website', 'like', "%$search%")
-                            ->orWhere('editors', 'like', "%$search%")
-                            ->orWhere('editorial_board_members', 'like', "%$search%")
-                            ->orWhere('publication_date', 'like', "%$search%")
-                            ->orWhere('publication_year', 'like', "%$search%")
-                            ->orWhere('volume', 'like', "%$search%")
-                            ->orWhere('page_start', 'like', "%$search%")
-                            ->orWhere('page_end', 'like', "%$search%")
-                            ->orWhere('publisher', 'like', "%$search%")
-                            ->orWhere('price', 'like', "%$search%")
-                            ->orWhereHas('user', function ($journalQuery1) use ($search) {
-                                $journalQuery1->where('first_name', 'like', "%$search%")
-                                    ->orWhere('last_name', 'like', "%$search%")
-                                    ->orWhere('email', 'like', "%$search%");
-                            })
-                            ->orWhereHas('category', function ($journalQuery2) use ($search) {
-                                $journalQuery2->where('name', 'like', "%$search%");
-                            })
-                            ->orWhereHas('publisher', function ($journalQuery3) use ($search) {
-                                $journalQuery3->where('name', 'like', "%$search%");
-                            });
-            })
-            ->orWhereHas('festchrisft', function ($festchrisftQuery) use ($search) {
-                $festchrisftQuery->where('title', 'like', "%$search%")
-                                ->orWhere('publisher', 'like', "%$search%")
-                                ->orWhere('editors', 'like', "%$search%")
-                                ->orWhere('keywords', 'like', "%$search%")
-                                ->orWhere('publication_date', 'like', "%$search%")
-                                ->orWhere('dedicatees', 'like', "%$search%")
-                                ->orWhere('price', 'like', "%$search%");
-            })
-            ->orWhereHas('conference_paper', function ($conferencePaperQuery) use ($search) {
-                $conferencePaperQuery->where('title', 'like', "%$search%")
-                                ->orWhere('subtitle', 'like', "%$search%")
-                                ->orWhere('primary_author', 'like', "%$search%")
-                                ->orWhere('contributors', 'like', "%$search%")
-                                ->orWhere('keywords', 'like', "%$search%")
-                                ->orWhere('conference_date', 'like', "%$search%")
-                                ->orWhere('conference_name', 'like', "%$search%")
-                                ->orWhere('conference_year', 'like', "%$search%")
-                                ->orWhere('conference_location', 'like', "%$search%")
-                                ->orWhere('institutional_affiliations', 'like', "%$search%")
-                                ->orWhere('price', 'like', "%$search%")
-                                ->orWhere('keywords', 'like', "%$search%");
-            })
-            ->orWhereHas('research_resource', function ($researchResourceQuery) use ($search) {
-                $researchResourceQuery->where('title', 'like', "%$search%")
-                                ->orWhere('primary_author', 'like', "%$search%")
-                                ->orWhere('publisher', 'like', "%$search%")
-                                ->orWhere('contributors', 'like', "%$search%")
-                                ->orWhere('keywords', 'like', "%$search%")
-                                ->orWhere('publication_date', 'like', "%$search%")
-                                ->orWhere('publication_year', 'like', "%$search%")
-                                ->orWhere('source', 'like', "%$search%")
-                                ->orWhere('resource_url', 'like', "%$search%")
-                                ->orWhere('resource_type', 'like', "%$search%")
-                                ->orWhere('keywords', 'like', "%$search%")
-                                ->orWhere('price', 'like', "%$search%")
-                                ->orWhereHas('user', function ($researchResourceQuery1) use ($search) {
-                                    $researchResourceQuery1->where('first_name', 'like', "%$search%")
-                                        ->orWhere('last_name', 'like', "%$search%")
-                                        ->orWhere('email', 'like', "%$search%");
-                                })
-                                ->orWhereHas('category', function ($researchResourceQuery2) use ($search) {
-                                    $researchResourceQuery2->where('name', 'like', "%$search%");
-                                })
-                                ->orWhereHas('publisher', function ($researchResourceQuery3) use ($search) {
-                                    $researchResourceQuery3->where('name', 'like', "%$search%");
-                                });
-            })
-            ->orWhereHas('monograph', function ($monographQuery) use ($search) {
-                $monographQuery->where('title', 'like', "%$search%")
-                                ->orWhere('primary_author', 'like', "%$search%")
-                                ->orWhere('publisher', 'like', "%$search%")
-                                ->orWhere('contributors', 'like', "%$search%")
-                                ->orWhere('keywords', 'like', "%$search%")
-                                ->orWhere('publication_date', 'like', "%$search%")
-                                ->orWhere('publication_year', 'like', "%$search%")
-                                ->orWhere('ISBN', 'like', "%$search%")
-                                ->orWhere('edition', 'like', "%$search%")
-                                ->orWhere('keywords', 'like', "%$search%")
-                                ->orWhere('price', 'like', "%$search%")
-                                ->orWhereHas('user', function ($monographQuery1) use ($search) {
-                                    $monographQuery1->where('first_name', 'like', "%$search%")
-                                        ->orWhere('last_name', 'like', "%$search%")
-                                        ->orWhere('email', 'like', "%$search%");
-                                })
-                                ->orWhereHas('category', function ($monographQuery2) use ($search) {
-                                    $monographQuery2->where('name', 'like', "%$search%");
-                                })
-                                ->orWhereHas('publisher', function ($monographQuery3) use ($search) {
-                                    $monographQuery3->where('name', 'like', "%$search%");
-                                });
-            })
-            ->orWhereHas('article', function ($articleQuery) use ($search) {
-                $articleQuery->where('title', 'like', "%$search%")
-                            ->orWhere('publisher', 'like', "%$search%")
-                            ->orWhere('primary_author', 'like', "%$search%")
-                            ->orWhere('contributors', 'like', "%$search%")
-                            ->orWhere('publication_date', 'like', "%$search%")
-                            ->orWhere('keywords', 'like', "%$search%")
-                            ->orWhere('price', 'like', "%$search%")
-                            ->orWhereHas('user', function ($articleQuery1) use ($search) {
-                                $articleQuery1->where('first_name', 'like', "%$search%")
-                                    ->orWhere('last_name', 'like', "%$search%")
-                                    ->orWhere('email', 'like', "%$search%");
-                            })
-                            ->orWhereHas('category', function ($articleQuery2) use ($search) {
-                                $articleQuery2->where('name', 'like', "%$search%");
-                            })
-                            ->orWhereHas('publisher', function ($articleQuery3) use ($search) {
-                                $articleQuery3->where('name', 'like', "%$search%");
-                            });
-                        });
+            case "faculties" : {
+                $search = $this->searchParam;
+                $this->queryBuilder->where(function($q) use ($search) {
+                    $q->where("name", "like", "%$search%");
                 });
-
                 break;
             }
-            
 
-// end of saves
-
-            case "banks": {
+            case "departments" : {
+                //../bookstore/general/departments?faculty_id={$facultyId}
+                $facultyId = request()->query('faculty_id');
+                if (isset($facultyId)) {
+                    $this->queryBuilder->where('faculty_id', $facultyId);
+                }
                 $search = $this->searchParam;
                 $this->queryBuilder->where(function($q) use ($search) {
                     $q->where("name", "like", "%$search%")
-                      ->orWhere("code", "like", "%$search%")
-                        ->orWhereHas("country", function ($q2) use ($search) {
-                            $q2->where("name", "like", "%$search%")
-                               ->orWhere("code", "like", "%$this->searchParam%");
-                     });
-                });
-                break;
-            }
-
-            case "bank_details": {
-                $search = $this->searchParam;
-                $this->queryBuilder->where(function($q) use ($search) {
-                    $q->where("account_number", "like", "%$search%")
-                      ->orWhere("account_name", "like", "%$search%")
-                        ->orWhereHas("bank", function ($q2) use ($search) {
-                           $q2->where("name", "like", "%$search%")
-                              ->orWhere("code", "like", "%$search%")
-                                ->orWhereHas("country", function ($q3) use ($search) {
-                                    $q3->where("name", "like", "%$search%")
-                                    ->orWhere("code", "like", "%$this->searchParam%");
-                            });
+                        ->orWhereHas('faculty', function ($r) use ($search) {
+                            $r->where('name', "like", "%$search%");
                         });
                 });
                 break;
             }
+
+            case "carts" : {
+                $userId = request()->query('user_id');
+                if (isset($userId)) {
+                    $this->queryBuilder->where('user_id', $userId);
+                }
+
+                $resourceId = request()->query('resource_id');
+                if (isset($resourceId)) {
+                    $this->queryBuilder->where('resource_id', $resourceId);
+                }
+
+                $isSelected = request()->query('checked');
+                if (isset($resourceId) || $isSelected == '0') {
+                    $this->queryBuilder->where('is_selected', $isSelected);
+                }
+                $search = $this->searchParam;
+                $this->queryBuilder->where(function($q) use ($search) {
+                    $q->where("quantity", "like", "%$search%")->orWhere("unit_price", "like", "%$search%");
+                });
+                break;
+            }
+
+            case "notifications" : {
+
+            }
+
+            case "notification-receivers" : {
+
+            }
+
+            case "order-items" : {
+
+            }
+
+            case "pickups" : {
+                $orderId = request()->query('order_id');
+                if (isset($orderId)) {
+                    $this->queryBuilder->where('order_id', $orderId);
+                }
+                $search = $this->searchParam;
+                $this->queryBuilder->where(function($q) use ($search) {
+                    $q->where("address", "like", "%$search%")
+                        ->orWhere("recipient_name", "like", "%$search%")
+                        ->orWhere("postal_code", "like", "%$search%")
+                        ->orWhere("email", "like", "%$search%")
+                        ->orWhere("alternative_phone", "like", "%$search%")
+                        ->orWhereHas('country', function ($r) use ($search) {
+                            $r->where('name', "like", "%$search%");
+                        })
+                        ->orWhereHas('state', function ($r) use ($search) {
+                            $r->where('name', "like", "%$search%");
+                        })
+                        ->orWhereHas('lg', function ($r) use ($search) {
+                            $r->where('name', "like", "%$search%");
+                        });
+                });
+                break;
+            }
+
             default:
                 return $this;
         }
