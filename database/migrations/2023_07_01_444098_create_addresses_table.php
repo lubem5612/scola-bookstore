@@ -13,7 +13,7 @@ return new class extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('name')->index();
+            $table->string('address', 400)->index();
             $table->boolean('is_default')->default(false);
             $table->timestamps();
         });

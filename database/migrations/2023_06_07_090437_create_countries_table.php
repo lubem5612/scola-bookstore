@@ -18,6 +18,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name')->index();
             $table->string('code', 10)->nullable()->index();
+            $table->string('continent', 100)->nullable()->index();
             $table->timestamps();
         });
     }

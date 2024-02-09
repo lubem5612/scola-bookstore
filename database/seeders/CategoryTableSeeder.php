@@ -1,9 +1,20 @@
 <?php
 
 
+use Transave\ScolaBookstore\Http\Models\Category;
+
 class CategoryTableSeeder
 {
-    protected $categories = [
-        'books', 'articles', 'journals', 'papers', 'conferences', 'researches', 'reports', 'festchrisfts', 'monographs',
-    ];
+
+    public function run()
+    {
+        $categories = config('constants.categories');
+        foreach ($categories as $category) {
+            Category::query()->updateOrCreate([
+                'name' => $category
+            ], [
+                'name' => $category
+            ]);
+        }
+    }
 }

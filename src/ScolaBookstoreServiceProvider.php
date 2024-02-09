@@ -6,6 +6,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Transave\ScolaBookstore\console\Seeder;
 use Transave\ScolaBookstore\Http\Models\User;
 use Transave\ScolaCbt\Http\Middlewares\AllowIfAdmin;
 use Transave\ScolaCbt\Http\Middlewares\AllowIfPublisher;
@@ -58,7 +59,6 @@ class ScolaBookstoreServiceProvider extends ServiceProvider
             'model' => User::class,
         ]);
 
-
         $router = $this->app->make(Router::class);
         $router->aliasMiddleware('superAdmin', AllowIfSuperAdmin::class);
         $router->aliasMiddleware('admin', AllowIfAdmin::class);
@@ -93,8 +93,6 @@ class ScolaBookstoreServiceProvider extends ServiceProvider
         return ['scola-bookstore'];
     }
 
-
-
     /**
      * Console-specific booting.
      *
@@ -117,6 +115,11 @@ class ScolaBookstoreServiceProvider extends ServiceProvider
             __DIR__.'/../resources/views' => base_path('resources/views/vendor/bookstore'),
         ], 'views');
 
+        // Registering package commands.
+        $this->commands([
+            Seeder::class,
+        ]);
+
     }
 
     protected function registerRoutes()
@@ -133,8 +136,4 @@ class ScolaBookstoreServiceProvider extends ServiceProvider
             'middleware' => config('scola-bookstore.route.middleware'),
         ];
     }
-
-
-
-
 }
