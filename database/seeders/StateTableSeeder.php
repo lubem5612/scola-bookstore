@@ -1,5 +1,6 @@
 <?php
 
+namespace Transave\ScolaBookstore\Database\Seeders;
 
 use Transave\ScolaBookstore\Http\Models\Country;
 use Transave\ScolaBookstore\Http\Models\Lg;

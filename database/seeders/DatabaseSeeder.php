@@ -1,5 +1,6 @@
 <?php
 
+namespace Transave\ScolaBookstore\Database\Seeders;
 
 class DatabaseSeeder
 {

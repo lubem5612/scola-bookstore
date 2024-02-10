@@ -1,6 +1,6 @@
 <?php
 
-
+namespace Transave\ScolaBookstore\Database\Seeders;
 use Transave\ScolaBookstore\Http\Models\User;
 
 class UserTableSeeder

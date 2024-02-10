@@ -25,7 +25,8 @@
     "autoload": {
         "psr-4": {
             "Transave\\ScolaBookstore\\": "src/",
-            "Transave\\ScolaBookstore\\Database\\Factories\\": "database/factories/"
+            "Transave\\ScolaBookstore\\Database\\Factories\\": "database/factories/",
+            "Transave\\ScolaBookstore\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {

@@ -4,7 +4,7 @@
 namespace Transave\ScolaBookstore\console;
 
 
-use DatabaseSeeder;
+use Transave\ScolaBookstore\Database\Seeders\DatabaseSeeder;
 use Illuminate\Console\Command;
 
 class Seeder extends Command
