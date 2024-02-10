@@ -1262,7 +1262,7 @@ return [
             'phone' => '+2340812345678',
             'is_verified' => 1,
             'email_verified_at' => Carbon\Carbon::now(),
-            'password' => bcrypt('password'),
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
             'role' => 'super_admin'
         ],
         'admin' => [
@@ -1272,7 +1272,7 @@ return [
             'phone' => '+2347812345678',
             'is_verified' => 1,
             'email_verified_at' => Carbon\Carbon::now(),
-            'password' => bcrypt('password'),
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
             'role' => 'admin'
         ],
         'user' => [
@@ -1282,7 +1282,7 @@ return [
             'phone' => '+2349812345678',
             'is_verified' => 1,
             'email_verified_at' => Carbon\Carbon::now(),
-            'password' => bcrypt('password'),
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
             'role' => 'user'
         ],
         'reviewer' => [
@@ -1292,7 +1292,7 @@ return [
             'phone' => '+2349112345678',
             'is_verified' => 1,
             'email_verified_at' => Carbon\Carbon::now(),
-            'password' => bcrypt('password'),
+            'password' => \Illuminate\Support\Facades\Hash::make('password'),
             'role' => 'reviewer'
         ],
     ]
