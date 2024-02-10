@@ -75,7 +75,8 @@ class ScolaBookstoreServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/scola-bookstore.php', 'scola-bookstore');
-         $this->mergeConfigFrom(__DIR__.'/../config/endpoints.php', 'endpoints');
+        $this->mergeConfigFrom(__DIR__.'/../config/endpoints.php', 'endpoints');
+        $this->mergeConfigFrom(__DIR__ . '/../config/constants.php', 'constants');
 
         // Register the service the package provides.
         $this->app->singleton('scola-bookstore', function ($app) {
