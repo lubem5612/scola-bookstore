@@ -4,9 +4,7 @@ namespace Transave\ScolaBookstore\Http\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Transave\ScolaBookstore\Database\Factories\BookFactory;
+use Transave\ScolaBookstore\Database\Factories\ResourceFactory;
 use Transave\ScolaBookstore\Helpers\UUIDHelper;
 
 class Resource extends Model
@@ -23,7 +21,7 @@ class Resource extends Model
 
     protected static function newFactory()
     {
-        return BookFactory::new();
+        return ResourceFactory::new();
     }
 
     public function user()
@@ -36,7 +34,7 @@ class Resource extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function publisher()
+    public function author()
     {
         return $this->belongsTo(Author::class);
     }

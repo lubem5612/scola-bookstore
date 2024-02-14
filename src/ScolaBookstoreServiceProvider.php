@@ -6,7 +6,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Transave\ScolaBookstore\console\Seeder;
+use Transave\ScolaBookstore\Console\Seeder;
 use Transave\ScolaBookstore\Http\Models\User;
 use Transave\ScolaCbt\Http\Middlewares\AllowIfAdmin;
 use Transave\ScolaCbt\Http\Middlewares\AllowIfPublisher;

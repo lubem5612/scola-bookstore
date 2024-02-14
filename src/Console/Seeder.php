@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Transave\ScolaBookstore\console;
+namespace Transave\ScolaBookstore\Console;
 
 
 use Transave\ScolaBookstore\Database\Seeders\DatabaseSeeder;
