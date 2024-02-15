@@ -24,24 +24,13 @@ class Resource extends Model
         return ResourceFactory::new();
     }
 
-    public function user()
+    public function categories()
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'resource_categories', 'resource_id', 'category_id');
     }
 
     public function author()
     {
         return $this->belongsTo(Author::class);
     }
-
-    public function order()
-    {
-        return $this->hasMany(Order::class, 'resource_id')->where('resource_type', 'Book');
-    }
-
 }

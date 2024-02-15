@@ -28,53 +28,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected static function newFactory()
+    public function addresses()
     {
-        return UserFactory::new();
+        return $this->hasMany(Address::class);
     }
 
-
-   public function book()
+    public function author()
     {
-        return $this->hasMany(Resource::class);
-    }
-
-    public function report()
-    {
-        return $this->hasMany(Report::class);
-    }
-
-        public function journal()
-    {
-        return $this->hasMany(Journal::class);
-    }
-
-    public function festchrisft()
-    {
-        return $this->hasMany(Festchrisft::class);
-    }
-
-    public function conference_paper()
-    {
-        return $this->hasMany(ConferencePaper::class);
-        
-    }
-
-    public function research_resource()
-    {
-
-         return $this->hasMany(ResourceCategory::class);
-    }
-
-
-    public function monograph()
-    {
-        return $this->hasMany(Monograph::class);
-    }
-
-    public function article()
-    {
-        return $this->hasMany(Article::class);
+        return $this->hasOne(Author::class);
     }
 
     public function order()
@@ -87,24 +48,9 @@ class User extends Authenticatable
         return $this->hasMany(Cart::class);
     }
 
-
-    public function school()
+    protected static function newFactory()
     {
-        return $this->belongsTo(School::class);
+        return UserFactory::new();
     }
 
-    public function saves()
-    {
-        return $this->hasMany(Save::class);
-    }
-
-    public function sales()
-    {
-        return $this->hasMany(Sale::class);
-    }
-
-    public function reviewerRequest()
-    {
-        return $this->hasMany(ReviewerRequest::class);
-    }
 }
