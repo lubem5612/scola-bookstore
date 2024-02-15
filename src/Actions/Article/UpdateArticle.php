@@ -51,7 +51,7 @@ class UpdateArticle
     private function createArticle()
     {
         $this->resource->fill($this->validatedData)->save();
-        return $this->sendSuccess($this->resource->load('author')->refresh(), 'resource updated successfully');
+        return $this->sendSuccess($this->resource->load('author', 'author.user')->refresh(), 'resource updated successfully');
     }
 
     private function setContributors()

@@ -44,7 +44,7 @@ class CreateArticle
     private function createArticle()
     {
         $article = Resource::query()->create($this->validatedData);
-        return $this->sendSuccess($article->load('author'), 'resource created successfully');
+        return $this->sendSuccess($article->load('author', 'author.user'), 'resource created successfully');
     }
 
     private function setContributors()

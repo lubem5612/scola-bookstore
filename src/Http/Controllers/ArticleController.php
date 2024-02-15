@@ -20,7 +20,7 @@ class ArticleController extends Controller
 
     public function index()
     {
-        return (new SearchArticle(Resource::class, ['author']))->execute();
+        return (new SearchArticle(Resource::class, ['author', 'author.user']))->execute();
     }
 
     public function store(Request $request)
@@ -30,7 +30,7 @@ class ArticleController extends Controller
 
     public function show($id)
     {
-        return (new SearchArticle(Resource::class, ['author'], $id))->execute();
+        return (new SearchArticle(Resource::class, ['author', 'author.user'], $id))->execute();
     }
 
     public function update(Request $request, $id)
