@@ -83,7 +83,7 @@ Route::as('bookstore.')->group(function () {
     });
 
     // Address Route
-    Route::prefix('address')->group(function () {
+    Route::prefix('addresses')->group(function () {
         Route::get('/', [ AddressController::class, 'index']);
         Route::post('/', [ AddressController::class, 'store']);
         Route::get('/{id}', [AddressController::class, 'show']);
@@ -93,7 +93,7 @@ Route::as('bookstore.')->group(function () {
     });
 
     // Author Route
-    Route::prefix('author')->group(function () {
+    Route::prefix('authors')->group(function () {
         Route::get('/', [ AuthorController::class, 'index']);
         Route::post('/', [ AuthorController::class, 'store']);
         Route::get('/{id}', [AuthorController::class, 'show']);
