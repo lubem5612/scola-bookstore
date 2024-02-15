@@ -4,21 +4,11 @@ use Illuminate\Support\Facades\Route;
 use Transave\ScolaBookstore\Http\Controllers\AddressController;
 use Transave\ScolaBookstore\Http\Controllers\AuthController;
 use Transave\ScolaBookstore\Http\Controllers\AuthorController;
-use Transave\ScolaBookstore\Http\Controllers\ReviewerRequestController;
-use Transave\ScolaBookstore\Http\Controllers\BookController;
 use Transave\ScolaBookstore\Http\Controllers\OrderController;
 use Transave\ScolaBookstore\Http\Controllers\ResourceController;
 use Transave\ScolaBookstore\Http\Controllers\UserController;
-use Transave\ScolaBookstore\Http\Controllers\ConferencePaperController;
 use Transave\ScolaBookstore\Http\Controllers\ArticleController;
-use Transave\ScolaBookstore\Http\Controllers\monographController;
-use Transave\ScolaBookstore\Http\Controllers\JournalController;
-use Transave\ScolaBookstore\Http\Controllers\ResearchResourceController;
-use Transave\ScolaBookstore\Http\Controllers\ReportController;
-use Transave\ScolaBookstore\Http\Controllers\FestchrisftController;
-use Transave\ScolaBookstore\Http\Controllers\CartController;
-use Transave\ScolaBookstore\Http\Controllers\SalesController;
-use Transave\ScolaBookstore\Http\Controllers\PickupController;
+
 
 // use Transave\ScolaBookstore\Http\Controllers\RestfulAPIController;
 // use Transave\ScolaBookstore\Http\Controllers\SearchController;
