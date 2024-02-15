@@ -186,8 +186,8 @@ class CreateArticle
             'conference_info.*' => 'nullable|string', // 'required_if:conference_info,!=,null|in:name,date,location',  // validate 'name, year, date, location';
             'institutional_affiliations' => 'nullable|array',
             'institutional_affiliations.*' => 'nullable|string', // 'required_if:institutional_affiliations,!=,null|string|in:name',
-            'file' => 'sometimes|required|file|max:10000000',
-            'cover_image' => 'sometimes|required|string|max:700',
+            'file' => 'sometimes|required|file|max:1000000',
+            'cover_image' => 'sometimes|required|file|max:10000|mimes:jpg,jpeg,png,bmp,gif',
             'price' => 'required|numeric|gte:0',
             'percentage_share' => 'required|numeric|gte:3',
         ]);
