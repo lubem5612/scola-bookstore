@@ -10,9 +10,6 @@ use Transave\ScolaBookstore\Http\Controllers\UserController;
 use Transave\ScolaBookstore\Http\Controllers\ArticleController;
 
 
-// use Transave\ScolaBookstore\Http\Controllers\RestfulAPIController;
-// use Transave\ScolaBookstore\Http\Controllers\SearchController;
-
 $prefix = !empty(config('endpoints.prefix')) ? config('endpoints.prefix') : 'general';
 /**
  * |
