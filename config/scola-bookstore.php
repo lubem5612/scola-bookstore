@@ -2,7 +2,7 @@
 
 return [
     'auth_model' => \Transave\ScolaBookstore\Http\Models\User::class,
-    'app_env' => env('APP_ENV', 'local'),
+    'app_env' => env('APP_ENV', 'development'),
 
     'role' => [
         1 => 'superAdmin',
