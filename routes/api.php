@@ -40,7 +40,7 @@ Route::as('bookstore.')->group(function () {
     Route::post('change-password', [AuthController::class, 'changePassword'])->name('changePassword');
 
     //Users Route
-    Route::prefix('users')->group(function () {
+    Route::prefix('users')->as('users.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::get('/{id}', [UserController::class, 'show'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [UserController::class, 'update'])->name('update');
@@ -60,7 +60,7 @@ Route::as('bookstore.')->group(function () {
 //    });
 
     // Resources Route
-    Route::prefix('resources')->group(function () {
+    Route::prefix('resources')->as('resources.')->group(function () {
         Route::get('/', [ArticleController::class, 'index']);
         Route::post('/', [ArticleController::class, 'store']);
         Route::get('/{id}', [ArticleController::class, 'show']);
@@ -70,7 +70,7 @@ Route::as('bookstore.')->group(function () {
     });
 
     // Address Route
-    Route::prefix('addresses')->group(function () {
+    Route::prefix('addresses')->as('addresses.')->group(function () {
         Route::get('/', [ AddressController::class, 'index']);
         Route::post('/', [ AddressController::class, 'store']);
         Route::get('/{id}', [AddressController::class, 'show']);
@@ -80,7 +80,7 @@ Route::as('bookstore.')->group(function () {
     });
 
     // Author Route
-    Route::prefix('authors')->group(function () {
+    Route::prefix('authors')->as('authors.')->group(function () {
         Route::get('/', [ AuthorController::class, 'index']);
         Route::post('/', [ AuthorController::class, 'store']);
         Route::get('/{id}', [AuthorController::class, 'show']);
@@ -90,7 +90,7 @@ Route::as('bookstore.')->group(function () {
     });
 
     //Orders Route
-    Route::prefix('orders')->group(function (){
+    Route::prefix('orders')->as('orders.')->group(function (){
         Route::get('/', [OrderController::class, 'index']);
         Route::post('/', [OrderController::class, 'store']);
         Route::get('/{invoiceNumber}', [OrderController::class, 'show']);
