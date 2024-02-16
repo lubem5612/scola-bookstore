@@ -71,7 +71,7 @@ trait ResponseHelper
 
     public function sendServerError(\Exception $exception, $code=500)
     {
-        if ($this->isValidationError($exception)) {
+        if (Str::contains($exception->getTraceAsString(), 'ValidationHelper.php')) {
             $code = 422;
             $response = [
                 "success" => false,
@@ -102,11 +102,5 @@ trait ResponseHelper
             }
         }
         return $errors;
-    }
-
-    private function isValidationError($exception)
-    {
-        $errorASString = implode(',', $this->formatServerError($exception));
-        return Str::contains($errorASString, 'ValidationHelper.php');
     }
 }
