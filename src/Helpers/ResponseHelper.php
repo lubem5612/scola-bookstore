@@ -14,9 +14,9 @@ trait ResponseHelper
      * @param $result
      * @param $message
      * @param string $status
-     * @return \Illuminate\Http\JsonResponse
+     * @return Response
      */
-    public function sendSuccess($result, $message): \Illuminate\Http\JsonResponse
+    public function sendSuccess($result, $message)
     {
         $response = [
             'success' => true,
@@ -33,7 +33,7 @@ trait ResponseHelper
      * @param $error
      * @param array $errorMessages
      * @param int $code
-     * @return \Illuminate\Http\JsonResponse
+     * @return Response
      */
     public function sendError($error, $errorMessages = [], $code = 404)
     {
@@ -87,7 +87,7 @@ trait ResponseHelper
                 "errors" => $this->formatServerError($exception),
             ];
         }
-        if (config('scola-bookstore.app_env') == 'local') Log::error($exception->getTraceAsString());
+        if (config('app.env') == 'development') Log::error($exception->getTraceAsString());
 
         return response()->json($response, $code, [], JSON_INVALID_UTF8_SUBSTITUTE );
     }

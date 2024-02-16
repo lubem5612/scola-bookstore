@@ -23,4 +23,14 @@ trait ValidationHelper
         abort(422, response()->json($this->validator->errors())->getContent());
     }
 
+    /**
+     * @param $string
+     * @return bool
+     */
+    protected function isJsonValidated($string)
+    {
+        json_decode($string);
+        return json_last_error() === JSON_ERROR_NONE;
+    }
+
 }
