@@ -3,13 +3,9 @@
 namespace Transave\ScolaBookstore\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Transave\ScolaBookstore\Actions\User\CreateUser;
-use Transave\ScolaBookstore\Actions\User\ChangeUserRole;
 use Transave\ScolaBookstore\Actions\User\DeleteUser;
-use Transave\ScolaBookstore\Actions\User\GetUser;
 use Transave\ScolaBookstore\Actions\User\SearchUser;
 use Transave\ScolaBookstore\Actions\User\UpdateUser;
-use Transave\ScolaBookstore\Actions\User\BecomeReviewer;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Http\Models\User;
 
