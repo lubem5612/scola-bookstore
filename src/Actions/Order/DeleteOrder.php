@@ -31,8 +31,7 @@ class DeleteOrder
 
     private function deleteOrder(): self
     {
-        Order::findOrFail($this->validatedInput['order_id'])->delete();
-
+        Order::destroy($this->validatedInput['order_id']);
         return $this;
     }
 
@@ -41,7 +40,6 @@ class DeleteOrder
         $this->validatedInput = $this->validate($this->request, [
             'order_id' => 'required|exists:orders,id',
         ]);
-
         return $this;
     }
 }

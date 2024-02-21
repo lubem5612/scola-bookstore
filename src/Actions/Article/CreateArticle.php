@@ -9,11 +9,12 @@ use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Resource;
+use Transave\ScolaBookstore\Http\Models\ResourceCategory;
 
 class CreateArticle
 {
     use ValidationHelper, ResponseHelper;
-    private $request, $validatedData, $formData, $uploader;
+    private $request, $validatedData, $formData, $uploader, $article;
 
     public function __construct(array $request)
     {
@@ -35,7 +36,10 @@ class CreateArticle
             $this->setReportInfo();
             $this->uploadFile();
             $this->uploadCoverImage();
-            return $this->createArticle();
+            $this->createArticle();
+            $this->createCategories();
+            return $this->sendSuccess($this->article->load('author', 'author.user'), 'resource created successfully');
+
         }catch (\Exception $exception) {
             return $this->sendServerError($exception);
         }
@@ -43,8 +47,20 @@ class CreateArticle
 
     private function createArticle()
     {
-        $article = Resource::query()->create($this->validatedData);
-        return $this->sendSuccess($article->load('author', 'author.user'), 'resource created successfully');
+        $this->article = Resource::query()->create($this->validatedData);
+    }
+
+    private function createCategories()
+    {
+        if (is_array($this->formData['category_ids']) && count($this->formData['category_ids']) > 0)
+        {
+            foreach ($this->formData['category_ids'] as $category_id) {
+                ResourceCategory::query()->create([
+                    'resource_id' => $this->article->id,
+                    'category_id' => $category_id,
+                ]);
+            }
+        }
     }
 
     private function setContributors()
@@ -163,6 +179,8 @@ class CreateArticle
             'source' => 'sometimes|required|string|max:766',
             'page_url' => 'sometimes|required|string|max:766',
             'pages' => 'nullable',
+            'category_ids' => 'required|array',
+            'category_ids.*' => 'required|exists:categories,id',
             'contributors' => 'nullable|array', // json_encoded
             'contributors.*' => 'nullable|string', // 'required_if:contributors,!=,null|string|name',
             'abstract' => 'string|nullable',
@@ -202,7 +220,8 @@ class CreateArticle
             'editors',
             'report_info',
             'publication_info',
-            'contributors'
+            'contributors',
+            'category_ids',
         ]);
     }
 }

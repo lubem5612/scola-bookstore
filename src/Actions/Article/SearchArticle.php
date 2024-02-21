@@ -4,6 +4,7 @@
 namespace Transave\ScolaBookstore\Actions\Article;
 
 
+use Illuminate\Database\Eloquent\Builder;
 use Transave\ScolaBookstore\Helpers\SearchHelper;
 
 class SearchArticle
@@ -12,9 +13,18 @@ class SearchArticle
     private function searchTerms()
     {
         $search = $this->searchParam;
-        $author = request()->query('author_id');
 
-        if (isset($author)) $this->queryBuilder->where('author_id', $author);
+        $author = request()->query('author_id');
+        if (isset($author)) {
+            $this->queryBuilder->where('author_id', $author);
+        }
+
+        $category = request()->query('category_id');
+        if (isset($category)) {
+            $this->queryBuilder->whereHas('categories', function (Builder $builder) use ($category) {
+                $builder->where('id', $category);
+            });
+        }
 
         $this->queryBuilder->where(function ($query) use ($search) {
             $query->where('title', 'like', "%$search%")

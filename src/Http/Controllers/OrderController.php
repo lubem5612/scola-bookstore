@@ -3,8 +3,8 @@
 namespace Transave\ScolaBookstore\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Transave\ScolaBookstore\Actions\Order\CreateOrder;
-use Transave\ScolaBookstore\Actions\Order\UserOrder;
 use Transave\ScolaBookstore\Actions\Order\DeleteOrder;
 use Transave\ScolaBookstore\Actions\Order\DeleteOrderItem;
 use Transave\ScolaBookstore\Actions\Order\SearchOrder;
@@ -16,24 +16,30 @@ class OrderController extends Controller
 {
     use ResponseHelper;
 
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum');
+    }
 
     public function index()
     {
-        return (new SearchOrder(OrderItem::class, ['user', 'order', 'book', 'report', 'journal', 'festchrisft', 'conference_paper', 'research_resource', 'monograph', 'article']))->execute();
+        return (new SearchOrder(Order::class, ['user', 'orderItems', 'pickup']))->execute();
     }
-
 
     public function store(Request $request)
     {
         return (new CreateOrder($request->all()))->execute();
     }
 
-
-    public function show($invoiceNumber)
+    public function show($id)
     {
-        return (new SearchOrder(OrderItem::class, ['user', 'order', 'book', 'report', 'journal', 'festchrisft', 'conference_paper', 'research_resource', 'monograph', 'article'], $invoiceNumber))->execute();
+        if (Str::isUuid($id)) {
+            return (new SearchOrder(Order::class, ['user', 'orderItems', 'pickup'], $id))->execute();
+        }else {
+            $order = Order::query()->with(['user', 'orderItems', 'pickup'])->where('invoice_number', $id)->first();
+            return $this->sendSuccess($order, 'order returned successfully');
+        }
     }
-
 
     public function update(Request $request, $id)
     {
@@ -41,22 +47,12 @@ class OrderController extends Controller
         return (new UpdateOrder($inputs))->execute();
     }
 
-
     public function deleteOrder($id)
     {
         $request = ['order_id' => $id];
         $action = new DeleteOrder($request);
         return $action->execute();
     }
-
-
-        public function userOrder($id)
-    {
-        $request = ['user_id' => $id];
-        $action = new UserOrder($request);
-        return $action->execute();
-    }
-
 
     public function deleteOrderItem($id)
     {

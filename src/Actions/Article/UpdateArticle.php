@@ -9,6 +9,7 @@ use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Resource;
+use Transave\ScolaBookstore\Http\Models\ResourceCategory;
 
 class UpdateArticle
 {
@@ -37,7 +38,8 @@ class UpdateArticle
             $this->setReportInfo();
             $this->uploadFile();
             $this->uploadCoverImage();
-            return $this->createArticle();
+            $this->updateCategories();
+            return $this->updateArticle();
         }catch (\Exception $exception) {
             return $this->sendServerError($exception);
         }
@@ -48,10 +50,24 @@ class UpdateArticle
         $this->resource = Resource::query()->find($this->validatedData['resource_id']);
     }
 
-    private function createArticle()
+    private function updateArticle()
     {
         $this->resource->fill($this->validatedData)->save();
         return $this->sendSuccess($this->resource->load('author', 'author.user')->refresh(), 'resource updated successfully');
+    }
+
+    private function updateCategories()
+    {
+        if (array_key_exists('category_ids', $this->formData) && is_array($this->formData['category_ids']) && count($this->formData['category_ids']) > 0)
+        {
+            ResourceCategory::query()->where('resource_id', $this->resource->id)->delete();
+            foreach ($this->formData['category_ids'] as $category_id) {
+                ResourceCategory::query()->create([
+                    'resource_id' => $this->resource->id,
+                    'category_id' => $category_id,
+                ]);
+            }
+        }
     }
 
     private function setContributors()
@@ -171,6 +187,8 @@ class UpdateArticle
             'source' => 'sometimes|required|string|max:766',
             'page_url' => 'sometimes|required|string|max:766',
             'pages' => 'nullable',
+            'category_ids' => 'nullable|array',
+            'category_ids.*' => 'nullable|exists:categories,id',
             'contributors' => 'nullable|array',
             'contributors.*' => 'nullable|string', // 'required_if:contributors,!=,null|string|name',
             'abstract' => 'string|nullable',

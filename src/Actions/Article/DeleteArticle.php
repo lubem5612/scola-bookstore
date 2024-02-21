@@ -8,6 +8,7 @@ use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Resource;
+use Transave\ScolaBookstore\Http\Models\ResourceCategory;
 
 class DeleteArticle
 {
@@ -55,6 +56,7 @@ class DeleteArticle
 
     private function deleteResource()
     {
+        ResourceCategory::query()->where('resource_id', $this->resource->id)->delete();
         $this->resource->delete();
         return $this->sendSuccess(null, 'resource deleted successfully');
     }

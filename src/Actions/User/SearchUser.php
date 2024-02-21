@@ -11,14 +11,12 @@ class SearchUser
     private function searchTerms()
     {
         $search = $this->searchParam;
-        $this->queryBuilder = $this->queryBuilder->where(function ($query) use ($search) {
+        $this->queryBuilder->where(function ($query) use ($search) {
             $query
                 ->where('first_name', 'like', "%$search%")
                 ->orWhere('last_name', 'like', "%$search%")
                 ->orWhere('role', 'like', "%$search%")
-                ->orWhere('department', 'like', "%$search%")
-                ->orWhere('specialization', 'like', "%$search%")
-                ->orWhere('faculty', 'like', "%$search%")
+                ->orWhere('email', 'like', "%$search%")
                 ->orWhere('phone', 'like', "%$search%");
         });
 

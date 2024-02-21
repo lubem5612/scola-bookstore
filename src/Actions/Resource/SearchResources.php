@@ -5,6 +5,7 @@ namespace Transave\ScolaBookstore\Actions\Resource;
 
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 
 class SearchResources
@@ -91,7 +92,7 @@ class SearchResources
                 break;
             }
 
-            case "publishers": {
+            case "authors": {
                 $search = $this->searchParam;
                 $this->queryBuilder->where(function($q) use ($search) {
                     $q->where("name", "like", "%$search%");
@@ -146,15 +147,102 @@ class SearchResources
             }
 
             case "notifications" : {
+                $search = $this->searchParam;
+                $senderId = request()->query('sender_id');
 
+                if (isset($senderId)) {
+                    $this->queryBuilder->where('sender_id', $senderId);
+                }
+                $this->queryBuilder->where(function (Builder $builder) use ($search) {
+                    $builder->where('title', 'like', "%$search%")
+                        ->orWhere('message', 'like', "%$search%")
+                        ->orWhere('type', 'like', "%$search%");
+                });
+                break;
             }
 
             case "notification-receivers" : {
+                $search = $this->searchParam;
+                $notificationId = request()->query('notification_id');
+                $receiverId = request()->query('receiver_id');
 
+                if (isset($notificationId)) {
+                    $this->queryBuilder->where('notification_id', $notificationId);
+                }
+                if (isset($receiverId)) {
+                    $this->queryBuilder->where('receiver_id', $receiverId);
+                }
+
+                $this->queryBuilder->whereHas('notification', function (Builder $builder) use ($search) {
+                    $builder->where('title', 'like', "%$search%")
+                        ->orWhere('message', 'like', "%$search%")
+                        ->orWhere('type', 'like', "%$search%");
+                })->orWhereHas('receiver', function (Builder $builder2) use ($search) {
+                    $builder2->where('first_name', 'like', "%$search%")
+                        ->orWhere('last_name', 'like', "%$search%")
+                        ->orWhere('email', 'like', "%$search%")
+                        ->orWhere('phone', 'like', "%$search%");
+                });
+                break;
+            }
+
+            case "resource-categories" : {
+                $search = $this->searchParam;
+                $resourceId = request()->query('resource_id');
+                $categoryId = request()->query('category_id');
+
+                if (isset($resourceId)) {
+                    $this->queryBuilder->where('resource_id', $resourceId);
+                }
+                if (isset($categoryId)) {
+                    $this->queryBuilder->where('category_id', $categoryId);
+                }
+
+                $this->queryBuilder->whereHas('resource', function (Builder $builder) use ($search) {
+                    $builder->where('title', 'like', "%$search%")
+                        ->orWhere('subtitle', 'like', "%$search%")
+                        ->orWhere('preface', 'like', "%$search%")
+                        ->orWhere('source', 'like', "%$search%")
+                        ->orWhere('ISBN', 'like', "%$search%")
+                        ->orWhere('percentage_share', 'like', "%$search%")
+                        ->orWhereHas('author', function($query2) use ($search) {
+                            $query2->whereHas('user', function ($query3) use ($search) {
+                                $query3->where('first_name', 'like', "%$search%")
+                                    ->orWhere('last_name', 'like', "%$search%")
+                                    ->orWhere('email', 'like', "%$search%")
+                                    ->orWhere('phone', 'like', "%$search%");
+                            });
+                        });
+                })->orWhereHas('category', function (Builder $builder2) use ($search) {
+                    $builder2->where('name', 'like', "%$search%");
+                });
+                break;
             }
 
             case "order-items" : {
+                $search = $this->searchParam;
+                $orderId = request()->query('order_id');
+                $resourceId = request()->query('resource_id');
+                $userId = request()->query('user_id');
 
+                if (isset($orderId)) {
+                    $this->queryBuilder->where('order_id', $orderId);
+                }
+                if (isset($resourceId)) {
+                    $this->queryBuilder->where('resource_id', $resourceId);
+                }
+                if (isset($userId)) {
+                    $this->queryBuilder->whereHas('order', function (Builder $builder) use ($userId) {
+                        $builder->where('user_id', $userId);
+                    });
+                }
+
+                $this->queryBuilder->where(function (Builder $builder2) use ($search) {
+                    $builder2->where('quantity', 'like', "%$search%")
+                        ->orWhere('unit_price', 'like', "%$search%")
+                        ->orWhere('discount_type', 'like', "%$search%");
+                });
+                break;
             }
 
             case "pickups" : {

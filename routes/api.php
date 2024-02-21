@@ -91,12 +91,12 @@ Route::as('bookstore.')->group(function () {
 
     //Orders Route
     Route::prefix('orders')->as('orders.')->group(function (){
-        Route::get('/', [OrderController::class, 'index']);
-        Route::post('/', [OrderController::class, 'store']);
-        Route::get('/{invoiceNumber}', [OrderController::class, 'show']);
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        Route::post('/', [OrderController::class, 'store'])->name('store');
+        Route::get('/{id}', [OrderController::class, 'show'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [OrderController::class, 'update']); 
-        Route::delete('delete_order/{id}', [OrderController::class, 'deleteOrder'])->name('delete_order');
-        Route::delete('delete_item/{id}', [OrderController::class, 'deleteOrderItem'])->name('delete_item');    
+        Route::delete('/{id}', [OrderController::class, 'deleteOrder'])->name('delete');
+        Route::delete('/{id}/order-item', [OrderController::class, 'deleteOrderItem'])->name('delete_item');
 
     });
 
