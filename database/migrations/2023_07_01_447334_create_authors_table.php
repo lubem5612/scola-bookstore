@@ -13,8 +13,8 @@ return new class extends Migration
         Schema::create('authors', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignUuid('department_id')->constrained('departments')->cascadeOnDelete();
-            $table->foreignUuid('faculty_id')->constrained('faculties')->cascadeOnDelete();
+            $table->foreignUuid('department_id')->nullable()->constrained('departments')->cascadeOnDelete();
+            $table->foreignUuid('faculty_id')->nullable()->constrained('faculties')->cascadeOnDelete();
             $table->string('specialization', 700)->nullable();
             $table->text('bio')->nullable();
             $table->json('bank_info')->nullable()->comment('account_no, account_name, bank_code');

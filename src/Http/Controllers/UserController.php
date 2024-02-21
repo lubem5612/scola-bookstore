@@ -27,34 +27,21 @@ class UserController extends Controller
         $this->middleware(['user'])->only(['update']);
     }
 
-
     public function index()
     {
-        return (new SearchUser(User::class, ['school']))->execute();
+        return (new SearchUser(User::class, []))->execute();
     }
-
-
 
     public function show($id)
     {
-        return (new SearchUser(User::class, ['school'], $id))->execute();
+        return (new SearchUser(User::class, [], $id))->execute();
     }
-
-
 
     public function update(Request $request, $id)
     {     
         $inputs = $request->merge(['user_id' => $id])->all();
         return (new UpdateUser($inputs))->execute();
     }
-
-
-     public function changeRole(Request $request, $id)
-    {
-        $inputs = $request->merge(['user_id' => $id])->all();
-        return (new ChangeUserRole($inputs))->execute();
-    } 
-
 
     public function destroy($id)
     {

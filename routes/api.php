@@ -20,11 +20,11 @@ $prefix = !empty(config('endpoints.prefix')) ? config('endpoints.prefix') : 'gen
  */
 
 Route::prefix($prefix)->as('bookstore.')->group(function () {
-    Route::get('{endpoint}', [ResourceController::class, 'index']);
-    Route::post('{endpoint}', [ResourceController::class, 'store']);
-    Route::get('{endpoint}/{id}', [ResourceController::class, 'show']);
-    Route::match(['post', 'put', 'patch'], '{endpoint}/{id}', [ResourceController::class, 'update']);
-    Route::delete('{endpoint}/{id}', [ResourceController::class, 'destroy']);
+    Route::get('{endpoint}', [ResourceController::class, 'index'])->name('index');
+    Route::post('{endpoint}', [ResourceController::class, 'store'])->name('store');
+    Route::get('{endpoint}/{id}', [ResourceController::class, 'show'])->name('show');
+    Route::match(['post', 'put', 'patch'], '{endpoint}/{id}', [ResourceController::class, 'update'])->name('update');
+    Route::delete('{endpoint}/{id}', [ResourceController::class, 'destroy'])->name('delete');
 });
 
 
@@ -35,29 +35,17 @@ Route::as('bookstore.')->group(function () {
     Route::get('user', [AuthController::class, 'user'])->name('user');
     Route::post('resend-token', [AuthController::class, 'resendToken'])->name('resend-token');
     Route::any('logout', [AuthController::class, 'logout'])->name('logout');
-    Route::put('{user}/email', [AuthController::class, 'updateEmail'])->name('updateEmail');
+    Route::put('{user}/email', [AuthController::class, 'updateEmail'])->name('update-email');
     Route::post('verify-email', [AuthController::class, 'verifyEmail'])->name('verify-email');
-    Route::post('change-password', [AuthController::class, 'changePassword'])->name('changePassword');
+    Route::post('change-password', [AuthController::class, 'changePassword'])->name('change-password');
 
     //Users Route
     Route::prefix('users')->as('users.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::get('/{id}', [UserController::class, 'show'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [UserController::class, 'update'])->name('update');
-        Route::patch('change-role/{id}',  [UserController::class, 'changeRole'])->name('change-role'); 
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('delete');
     });
-
-//        //Carts Route
-//    Route::prefix('carts')->group(function () {
-//        Route::get('/', [ CartController::class, 'index']);
-//        Route::post('/', [CartController::class, 'store']);
-//        Route::get('/{userId}', [CartController::class, 'show']);
-//        Route::delete('/{cartItemId}', [CartController::class, 'removeItem'])->name('removeItem');
-//        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [CartController::class, 'update']);
-//        Route::delete('clear/{userId}', [CartController::class, 'clearCart'])->name('clear');
-//
-//    });
 
     // Resources Route
     Route::prefix('resources')->as('resources.')->group(function () {
@@ -96,8 +84,11 @@ Route::as('bookstore.')->group(function () {
         Route::get('/{id}', [OrderController::class, 'show'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [OrderController::class, 'update']); 
         Route::delete('/{id}', [OrderController::class, 'deleteOrder'])->name('delete');
-        Route::delete('/{id}/order-item', [OrderController::class, 'deleteOrderItem'])->name('delete_item');
+    });
 
+    //OrderItem Route
+    Route::prefix('order-items')->as('order-items.')->group(function() {
+        Route::delete('/{id}', [OrderController::class, 'deleteOrderItem'])->name('delete');
     });
 
 });

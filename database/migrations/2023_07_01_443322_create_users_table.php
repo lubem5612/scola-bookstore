@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('email', 100)->unique();
             $table->string('phone', 20)->nullable()->unique();
             $table->string('password');
-            $table->enum('role', ['super_admin', 'admin', 'publisher', 'user', 'reviewer'])->default('user')->index();
+            $table->enum('role', ['super_admin', 'admin', 'author', 'user', 'reviewer'])->default('user')->index();
             $table->boolean('is_verified')->default(false)->index();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('token')->nullable();

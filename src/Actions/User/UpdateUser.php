@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
+use Transave\ScolaBookstore\Http\Models\Author;
 
 
 class UpdateUser
@@ -28,7 +29,9 @@ class UpdateUser
                 ->validateRequest()
                 ->setUser()
                 ->checkIfNewEmail()
-                ->uploadprofile_imageIfExists()
+                ->uploadOrReplaceImage()
+                ->checkUserRole()
+                ->updateIfAuthor()
                 ->updateUser();
         } catch (\Exception $e) {
             return $this->sendServerError($e);
@@ -49,7 +52,7 @@ class UpdateUser
         return $this;
     }
 
-    private function uploadprofile_imageIfExists()
+    private function uploadOrReplaceImage()
     {
         if (isset($this->request['profile_image']) && $this->request['profile_image']) {
             $response = $this->uploader->uploadOrReplaceFile($this->request['profile_image'], 'bookstore/profile', $this->user, 'profile_image');
@@ -60,6 +63,27 @@ class UpdateUser
         return $this;
     }
 
+    private function checkUserRole()
+    {
+        if (Arr::exists($this->validatedInput, 'role')) {
+            if (auth()->user()->role == 'admin' || auth()->user()->role == 'super_admin') {
+                $this->validatedInput['role'] = $this->request['role'];
+            }else {
+                abort(401, 'role can only be changed by admin or super admin');
+            }
+        }
+        return $this;
+    }
+
+    private function updateIfAuthor()
+    {
+        if (Arr::exists($this->validatedInput, 'role') && $this->validatedInput['role'] == 'author') {
+            Author::query()->updateOrCreate([
+                'user_id' => $this->validatedInput['user_id'],
+            ]);
+        }
+        return $this;
+    }
 
     private function updateUser()
     {
@@ -73,18 +97,12 @@ class UpdateUser
             'user_id' => 'required|exists:users,id',
             'first_name' => 'sometimes|required|string|max:255',
             'last_name' => 'sometimes|required|string|max:255',
-            'role' => 'sometimes|required|in:superAdmin, admin, publisher, user',
-            "school_id" => 'sometimes|required|string|exists:schools,id',
+            'role' => 'sometimes|required|in:super-admin,admin,author,user,reviewer',
             "bio" => 'sometimes|required|string',
-            "specialization" => 'sometimes|required|string',
-            "faculty" => 'sometimes|required|string',
-            "department" => 'sometimes|required|string',
             "profile_image" => 'sometimes|required|file|max:5000|mimes:png,jpeg,jpg,gif,webp',
-            "address" => 'sometimes|required|string',
-            "delivery_address" => 'sometimes|required|string',
             "phone" => 'sometimes|required|string|max:20|Min:11',
         ]);
-        $this->validatedInput = Arr::except($data, ['profile_image']);
+        $this->validatedInput = Arr::except($data, ['profile_image', 'role']);
         return $this;
     }
 }
