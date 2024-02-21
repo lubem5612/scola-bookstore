@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('payment_status')->nullable()->comment('paid or unpaid');
             $table->string('payment_reference')->nullable();
             $table->decimal('total_amount', 18, 6)->default(0);
-            $table->json('shipping_info')->nullable()->comment('address, fee, delivery_time');
             $table->timestamps();
 
         });

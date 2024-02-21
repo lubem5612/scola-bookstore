@@ -1,32 +1,35 @@
 <?php
 
+
 namespace Transave\ScolaBookstore\Actions\Order;
 
+
+use Carbon\Carbon;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use RaadaaPartners\RaadaaBase\Actions\Paystack\VerifyTransaction;
+use Transave\ScolaBookstore\Actions\Mail\PaymentReceipt;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
-use Transave\ScolaBookstore\Actions\Order\PaystackInitialization;
-use Illuminate\Support\Facades\Mail;
-use Transave\ScolaBookstore\Actions\Mail\PaymentReceipt;
-use Transave\ScolaBookstore\Http\Models\Order;
+use Transave\ScolaBookstore\Http\Models\Address;
 use Transave\ScolaBookstore\Http\Models\Cart;
-use Illuminate\Support\Facades\Config;
+use Transave\ScolaBookstore\Http\Models\Order;
 use Transave\ScolaBookstore\Http\Models\OrderItem;
 use Transave\ScolaBookstore\Http\Models\Pickup;
-use Carbon\Carbon;
-use Paystack\Paystack;
-
+use Transave\ScolaBookstore\Http\Models\Resource;
+use Transave\ScolaBookstore\Http\Models\Transaction;
 
 class CreateOrder
 {
     use ValidationHelper, ResponseHelper;
-
-    private array $request;
-    private array $validatedInput;
-    private $user;
-    private $order;
-    private $orderItem;
-    private $pickup;
-
+    private $request, $validatedData;
+    private User $user;
+    private Order $order;
+    private array $cart;
+    private float $totalPrice = 0;
+    private float $totalCommission = 0;
+    private float $totalEarning = 0;
 
     public function __construct(array $request)
     {
@@ -36,212 +39,188 @@ class CreateOrder
     public function execute()
     {
         try {
-            return $this->validateRequest()
-                ->setUser()
-                ->confirmUser()
-                ->checkCart()
-                ->setDeliveryStatus()
-                ->createOrder()
-                ->createPickup()
-                ->initializePaystackTransaction()
-                ->verifyPaystackPayment()
-                ->sendReceiptEmail()
-                ->createSale()
-                ->clearUserCart()
-                ->handleSuccess();
-        } catch (\Exception $e) {
-            return $this->handleError($e);
+            $this->validateRequest();
+            $this->setUser();
+            $this->getSelectedCart();
+            $this->getSelectedResource();
+            $this->createTransaction();
+            $this->createOrder();
+            $this->createOrderItems();
+            $this->creatPickUp();
+            $this->sendMailNotification();
+            $this->clearCheckedOutCart();
+            return $this->sendSuccess($this->order, 'order created successfully');
+        }catch (\Exception $exception) {
+            return $this->sendServerError($exception);
         }
     }
 
-
-
-    private function setUser(): self
+    private function setUser()
     {
-        $this->user = Config::get('scola-bookstore.auth_model')::query()->find($this->validatedInput['user_id']);
-        return $this;
+        $this->user = config('scola-bookstore.auth_model')::find($this->validatedData['user_id']);
     }
 
-
-
-    private function confirmUser(): self
+    private function getSelectedCart()
     {
-        $this->cart = Cart::query()->find($this->user->id);
-        return $this;
+        $this->cart = Cart::query()
+            ->where('is_selected', 1)
+            ->where('user_id', $this->validatedData['user_id'])
+            ->get()->toArray();
     }
 
-
-
-    private function checkCart(): self
+    private function clearCheckedOutCart()
     {
-        if ($this->cart->isEmpty()) {
-            $this->sendError('Cart is empty. Add items before checkout', [], 401);
-        }
-        return $this;
+        $this->cart = Cart::query()
+            ->where('is_selected', 1)
+            ->where('user_id', $this->validatedData['user_id'])
+            ->delete();
     }
 
-
-
-    private function setDeliveryStatus(): void
+    private function getSelectedResource()
     {
-        $this->validatedInput['delivery_status'] = 'processing';
-    }
+        if (Arr::exists($this->validatedData, 'resource_id')) {
+            if (is_array($this->validatedData['resource_id']) && count($this->validatedData['resource_id']) > 0) {
+                foreach ($this->validatedData['resource_id'] as $validatedDatum) {
 
+                    $item['id'] = Str::uuid()->toString();
+                    $item['resource_id'] = $validatedDatum;
+                    $item['user_id'] = $this->validatedData['user_id'];
+                    $item['quantity'] = 1;
+                    $item['is_selected'] = 1;
 
-    protected function createOrder(): self 
-    {
-        $this->order = Order::create([
-            'user_id' => $this->validatedInput['user_id'],
-            'invoice_number' => mt_rand(10000000, 99999999),
-            'order_date' => Carbon::now(),
-            'status' => 'success',
-        ]);
+                    array_push($this->cart, $item);
+                }
+            }else {
 
-        foreach ($this->validatedInput as $key => $value) {
-            if (is_array($value) && isset($value['resource_id'])) {
-                $totalAmount = $value['quantity'] * $value['unit_price'];
+                $item['id'] = Str::uuid()->toString();
+                $item['resource_id'] = $this->validatedData['resource_id'];
+                $item['user_id'] = $this->validatedData['user_id'];
+                $item['quantity'] = 1;
+                $item['is_selected'] = 1;
 
-                $this->orderItem = OrderItem::create([
-                    'order_id' => $this->order->id,
-                    'resource_id' => $this->cart->resource_type,
-                    'resource_type' => $this->cart->resource_type,
-                    'quantity' => $this->cart->quantity,
-                    'unit_price' => $this->cart->unit_price,
-                    'total_amount' => $totalAmount,
-                ]);
+                array_push($this->cart, $item);
             }
         }
-
-        return $this;
     }
 
-
-
-    protected function initializePaystackTransaction()
+    private function createTransaction()
     {
-        $paystack = new PaystackInitialization();
-        $response = $paystack->initializePaystackTransaction($this->validatedInput['total_amount'], $this->user->email);
+        $response = (new VerifyTransaction([
+            'reference' => $this->validatedData['reference']
+        ]))->execute();
 
-        if (!$this->verifyPaystackPayment($response['data']['reference'])) {
-            $this->sendError('Payment verification failed', [], 401);
+        if (!$response['success']) {
+            abort(403, 'transaction failed verification');
+        }
+
+        Transaction::query()->create([
+            'user_id' => $this->user->id,
+            'reference' => $this->validatedData['reference'],
+            'amount' => $this->totalPrice,
+            'charges' => $this->totalCommission,
+            'commission' => $this->totalEarning,
+            'type' => 'credit',
+            'description' => 'Resource purchase attempted',
+            'status' => 'successful',
+            'payload' => json_encode($response),
+        ]);
+    }
+
+    private function createOrder()
+    {
+        if (count($this->cart) > 0) {
+            abort(404, 'cart is empty');
+        }else {
+            $this->order = Order::query()->create([
+                'user_id' => $this->validatedData['user_id'],
+                'invoice_number' => Carbon::now()->format('Ymd').'-'.rand(100000, 999999),
+                'payment_status' => 'paid',
+                'payment_reference' => $this->validatedData['reference']
+            ]);
+        }
+    }
+
+    private function createOrderItems()
+    {
+        foreach ($this->cart as $item) {
+            $resource = Resource::query()->find($item['resource_id']);
+            $item['unit_price'] = $resource->price;
+            $this->totalPrice = $this->totalPrice + (float) $item['unit_price'] * (float)$item['quantity'];
+
+            $this->totalCommission = $this->totalCommission + (float)($resource->percentage_share/100) * (float)$item['unit_price'] * (float)$item['quantity'];
+
+            $percentageEarning = (float)(100 - $resource->percentage_share)/100;
+            $this->totalEarning = $this->totalEarning + $percentageEarning * (float)$item['unit_price']* (float)$item['quantity'];
+
+            OrderItem::query()->create([
+                'order_id' => $this->order->id,
+                'resource_id' => $item['resource_id'],
+                'quantity' => $item['quantity'],
+                'unit_price' => $item['unit_price'],
+                'discount' => 0
+            ]);
         }
 
         $this->order->update([
-            'payment_status' => 'success',
-            'payment_reference' => $response['data']['reference'],
+            'total_amount' => $this->totalPrice
         ]);
-
-        return $this;
     }
 
-
-
-    protected function verifyPaystackPayment()
-    {
-        $paystack = new PaystackInitialization();
-        $verification = $paystack->verifyPayment($this->data['reference']);
-
-        if ($verification['payment_status'] !== 'success') {
-            $this->sendError('Payment verification failed', [], 401);
-        }
-
-        return $this;
-    }
-
-
-    protected function createSale(): self
-    {
-        $totalAmount = $this->order->orderItems()->sum('total_amount');
-        Sale::create([
-            'order_id' => $this->order->id,
-            'total_amount' => $totalAmount,
-            'created_at' => Carbon::now(),
-        ]);
-
-        return $this;
-    }
-
-
-    private function createPickup(): self
-    {
-        $this->pickup = Pickup::create([
-            'order_id' => $this->order->id,
-            'address' => $this->validatedInput['pickup_address'],
-            'country_id' => $this->validatedInput['country_id'],
-            'state_id' => $this->validatedInput['state_id'],
-            'lg_id' => $this->validatedInput['lg_id'],
-            'postal_code' => $this->validatedInput['postal_code'],
-            'recipient_first_name' => $this->validatedInput['recipient_first_name'],
-            'recipient_last_name' => $this->validatedInput['recipient_last_name'],
-            'email' => $this->validatedInput['email'],
-            'alternative_phone' => $this->validatedInput['alternative_phone'],
-        ]);
-
-        return $this;
-    }
-
-
-    protected function sendReceiptEmail()
+    private function sendMailNotification()
     {
         try {
             Mail::to($this->user->email)->send(new PaymentReceipt($this->order));
         } catch (\Exception $e) {
             // Handle email sending error (log, etc.)
         }
-        return $this;
     }
 
-
-    private function clearCart(): self
+    private function creatPickUp()
     {
-        $this->user->cart()->delete();
-        return $this;
+        $address = Address::query()->where('user_id', $this->user->id)
+            ->where('is_default', 1)->first();
+
+        if (!Arr::exists($this->validatedData, 'address'))
+            $this->validatedData['address'] = $address->address;
+
+        if (!Arr::exists($this->validatedData, 'country_id'))
+            $this->validatedData['country_id'] = $address->country_id;
+
+        if (!Arr::exists($this->validatedData, 'state_id'))
+            $this->validatedData['state_id'] = $address->state_id;
+
+        if (!Arr::exists($this->validatedData, 'lg_id'))
+            $this->validatedData['lg_id'] = $address->lg_id;
+
+        if (!Arr::exists($this->validatedData, 'recipient_name'))
+            $this->validatedData['recipient_name'] = $this->user->first_name.' '.$this->user->last_name;
+
+        if (!Arr::exists($this->validatedData, 'email'))
+            $this->validatedData['email'] = $this->user->email;
+
+        if (!Arr::exists($this->validatedData, 'alternative_phone'))
+            $this->validatedData['alternative_phone'] = $this->user->phone;
+
+        $pickUpData = Arr::only($this->validatedData, ['address', 'country_id', 'state_id', 'lg_id', 'email', 'recipient_name', 'postal_code', 'alternative_phone']);
+        $pickUpData['order_id'] = $this->order->id;
+
+        Pickup::query()->create($pickUpData);
     }
 
-
-
-    protected function handleSuccess()
+    private function validateRequest()
     {
-         return $this->sendSuccess('Order placed successfully.');
-    }
-
-
-
-    protected function handleError(\Exception $e)
-    {
-        return $this->sendError($e->getMessage());
-    }
-
-    
-    
-    private function validateRequest(): self
-    {
-        $this->validatedInput = $this->validate($this->request, [ 
-                'user_id' => 'required|exists:users,id',
-                'resource_id' => 'required|string|max:255',
-                'quantity' => 'required|integer|max:255',
-                'order_date' => 'required|max:255',
-                'unit_price' => 'required|max:255|numeric',
-                'total_amount' => 'required|max:255|numeric',
-                'invoice_number' => 'required|string|max:255',
-                'status' => 'required|string|max:255',
-                'resource_type' => 'required|string|max:255',
-                'payment_status' => 'string|max:255',
-                'delivery_status' => 'required|string|max:255',
-                'payment_reference' => 'string|max:255',
-                'state_id' => 'required|exists:states,id',
-                'lg_id' => 'required|exists:lgs,id',
-                'country_id' => 'required|exists:countries,id',
-                'address' => 'required|string|max:255',
-                'postal_code' => 'required|string|max:255',
-                'recipient_first_name' => 'required|string|max:255',
-                'recipient_last_name' => 'required|string|max:255',
-                'email' => 'required|string|max:255',
-                'alternative_phone' => 'string|max:255',
+        $this->validatedData = $this->validate($this->request, [
+            'resource_id' => 'nullable',
+            'reference' => 'required|string',
+            'user_id' => 'required|exists:users,id',
+            'address' => 'required|string|max:750',
+            'country_id' => 'required|exists:countries,id',
+            'state_id' => 'required|exists:states,id',
+            'lg_id' => 'required|exists:lgs,id',
+            'recipient_name' => 'nullable|string|max:150',
+            'postal_code' => 'nullable|string|max:16',
+            'email' => 'nullable|string|max:100',
+            'alternative_phone' => 'nullable|string|max:16|min:8'
         ]);
-
-        return $this;
     }
-
-
 }

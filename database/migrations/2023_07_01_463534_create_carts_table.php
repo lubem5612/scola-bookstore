@@ -15,7 +15,6 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignUuid('resource_id')->constrained('resources')->cascadeOnDelete();
             $table->integer('quantity')->default(1);
-            $table->decimal('unit_price', 10, 2);
             $table->boolean('is_selected')->default(false);
             $table->timestamps();
         });

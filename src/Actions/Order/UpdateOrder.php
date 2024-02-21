@@ -1,18 +1,19 @@
 <?php
 
+
 namespace Transave\ScolaBookstore\Actions\Order;
 
+
+use Illuminate\Support\Arr;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Order;
-use Transave\ScolaBookstore\Http\Models\OrderItem;
+use Transave\ScolaBookstore\Http\Models\Pickup;
 
 class UpdateOrder
 {
     use ValidationHelper, ResponseHelper;
-
-    private array $request;
-    private array $validatedInput;
+    private $request, $validatedData;
     private Order $order;
 
     public function __construct(array $request)
@@ -23,64 +24,49 @@ class UpdateOrder
     public function execute()
     {
         try {
-            return $this->validateRequest()
-                ->setOrder()
-                ->updateOrder()
-                ->updateOrderItems()
-                ->sendSuccess($this->order, 'Order updated successfully');
-        } catch (\Exception $e) {
-            return $this->sendServerError($e);
+            $this->validateRequest();
+            $this->setOrder();
+            $this->updatePickupLocation();
+            return $this->updateOrder();
+        }catch (\Exception $exception) {
+            return $this->sendServerError($exception);
         }
     }
 
-    private function setOrder(): self
+    private function setOrder()
     {
-        $this->order = Order::findOrFail($this->validatedInput['order_id']);
-        return $this;
+        $this->order = Order::query()->find($this->validatedData['order_id']);
     }
 
-    private function updateOrder(): self
+    private function updatePickupLocation()
     {
-        $orderDetails = [
-            'order_status' => $this->validatedInput['order_status'] ?? $this->order->order_status,
-            'delivery_status' => $this->validatedInput['delivery_status'] ?? $this->order->delivery_status,
-        ];
-
-        $this->order->update($orderDetails);
-
-        return $this;
+        $pickup = Pickup::query()->where('order_id', $this->order->id)->first();
+        $data = Arr::only($this->validatedData, ['address', 'country_id', 'state_id', 'lg_id', 'recipient_name', 'postal_code', 'email', 'alternative_phone']);
+        $pickup->fill($data)->save();
     }
 
-
-    private function updateOrderItems(): self
+    private function updateOrder()
     {
-       foreach ($this->validatedInput as $key => $itemData) {
-            $orderItem = OrderItem::findOrFail($this->validatedInput['order_item_id']);
-            $totalAmount = ($itemData['unit_price'] ?? $orderItem->unit_price) * ($itemData['quantity'] ?? $orderItem->quantity);
-
-            $orderItem->update([
-                'quantity' => $itemData['quantity'] ?? $orderItem->quantity,
-                'unit_price' => $itemData['unit_price'] ?? $orderItem->unit_price,
-                'total_amount' => $totalAmount,
-            ]);
-        }
-
-        return $this;
+        $data = Arr::only($this->validatedData, ['delivery_status', 'order_status', 'payment_status']);
+        $this->order->fill($data)->save();
+        return $this->sendSuccess($this->order->refresh(), 'order updated successfully');
     }
 
-
-
-    private function validateRequest(): self
+    private function validateRequest()
     {
-        $this->validatedInput = $this->validate($this->request, [
+        $this->validatedData = $this->validate($this->request, [
             'order_id' => 'required|exists:orders,id',
-            'status' => 'sometimes|required|string|max:225',
-            'order_item_id' => 'required|exists:order_items,id',
-            'quantity' => 'sometimes|required|integer|max:225',
-            'unit_price' => 'sometimes|required|max:225|numeric',
-            'total_amount' => 'sometimes|required|max:225|numeric',
+            'delivery_status' => 'sometimes|required|in:processing,on_the_way,arrived,delivered,cancelled',
+            'order_status' => 'sometimes|required|in:success,failed',
+            'payment_status' => 'sometimes|required|in:paid,unpaid',
+            'address' => 'nullable|string|max:750',
+            'country_id' => 'nullable|exists:countries,id',
+            'state_id' => 'nullable|exists:states,id',
+            'lg_id' => 'nullable|exists:lgs,id',
+            'recipient_name' => 'nullable|string|max:150',
+            'postal_code' => 'nullable|string|max:16',
+            'email' => 'nullable|string|max:100',
+            'alternative_phone' => 'nullable|string|max:16|min:8'
         ]);
-
-        return $this;
     }
 }

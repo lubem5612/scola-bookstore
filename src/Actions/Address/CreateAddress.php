@@ -53,7 +53,11 @@ class CreateAddress
         $this->validatedData = $this->validate($this->request, [
             'user_id' => 'required|exists:users,id',
             'address' => 'required|string|max:400',
-            'is_default' => 'sometimes|in:0,1'
+            'is_default' => 'sometimes|in:0,1',
+            'country_id' => 'required|exists:countries,id',
+            'state_id' => 'required|exists:states,id',
+            'lg_id' => 'required|exists:lgs,id',
+            'postal_code' => 'nullable'
         ]);
     }
 }
