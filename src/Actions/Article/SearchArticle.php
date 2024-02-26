@@ -49,4 +49,15 @@ class SearchArticle
 
         return $this;
     }
+
+    private function querySingleResource()
+    {
+        if (!is_null($this->id) || isset($this->id)) {
+            $this->output = $this->queryBuilder->find($this->id);
+            $this->output->update([
+                'number_of_views' => (int)$this->output->number_of_views + 1
+            ]);
+        }
+        return $this;
+    }
 }

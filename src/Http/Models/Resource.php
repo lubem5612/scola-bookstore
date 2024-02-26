@@ -33,4 +33,10 @@ class Resource extends Model
     {
         return $this->belongsTo(Author::class);
     }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
 }

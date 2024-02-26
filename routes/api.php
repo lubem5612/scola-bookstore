@@ -5,6 +5,7 @@ use Transave\ScolaBookstore\Http\Controllers\AddressController;
 use Transave\ScolaBookstore\Http\Controllers\AuthController;
 use Transave\ScolaBookstore\Http\Controllers\AuthorController;
 use Transave\ScolaBookstore\Http\Controllers\OrderController;
+use Transave\ScolaBookstore\Http\Controllers\PageController;
 use Transave\ScolaBookstore\Http\Controllers\ResourceController;
 use Transave\ScolaBookstore\Http\Controllers\UserController;
 use Transave\ScolaBookstore\Http\Controllers\ArticleController;
@@ -26,8 +27,6 @@ Route::prefix($prefix)->as('bookstore.')->group(function () {
     Route::match(['post', 'put', 'patch'], '{endpoint}/{id}', [ResourceController::class, 'update'])->name('update');
     Route::delete('{endpoint}/{id}', [ResourceController::class, 'destroy'])->name('delete');
 });
-
-
 
 Route::as('bookstore.')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('login');
@@ -89,6 +88,11 @@ Route::as('bookstore.')->group(function () {
     //OrderItem Route
     Route::prefix('order-items')->as('order-items.')->group(function() {
         Route::delete('/{id}', [OrderController::class, 'deleteOrderItem'])->name('delete');
+    });
+
+    //OrderItem Route
+    Route::prefix('pages')->as('pages.')->group(function() {
+        Route::get('/home', [ PageController::class, 'homePage'])->name('home');
     });
 
 });

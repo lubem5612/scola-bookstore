@@ -265,6 +265,29 @@ return [
             ],
             'relationships' => ['state'],
         ],
+
+        'reviews' => [
+            'model' => \Transave\ScolaBookstore\Http\Models\Review::class,
+            'table' => 'reviews',
+            'rules' => [
+                'store' => [
+                    'user_id' => 'sometimes|required|exists:users,id',
+                    'resource_id' => 'required|exists:resources,id',
+                    'review' => 'nullable|string|max:750',
+                    'rating' => 'required|integer|min:1|max:5',
+                ],
+                'update' => [
+                    'resource_id' => 'sometimes|required|exists:resources,id',
+                    'review' => 'nullable|string|max:750',
+                    'rating' => 'nullable|integer|min:1|max:5',
+                ]
+            ],
+            'order' => [
+                'column' => 'created_at',
+                'pattern' => 'DESC',
+            ],
+            'relationships' => ['user', 'resource'],
+        ],
     ],
 
     "prefix" => "general",

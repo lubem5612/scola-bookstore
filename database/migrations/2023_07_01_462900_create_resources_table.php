@@ -38,6 +38,7 @@ return new class extends Migration
             $table->string('cover_image', 700)->nullable();
             $table->decimal('price', 15, 5)->index();
             $table->float('percentage_share', 5, 2)->default(50);
+            $table->integer('number_of_views')->default(0);
             $table->timestamps();
         });
     }
