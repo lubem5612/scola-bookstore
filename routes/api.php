@@ -90,7 +90,7 @@ Route::as('bookstore.')->group(function () {
         Route::delete('/{id}', [OrderController::class, 'deleteOrderItem'])->name('delete');
     });
 
-    //OrderItem Route
+    //Pages Route
     Route::prefix('pages')->as('pages.')->group(function() {
         Route::get('/home', [ PageController::class, 'homePage'])->name('home');
         Route::get('/resources/{id}', [ PageController::class, 'singleResource'])->name('resources.show');
