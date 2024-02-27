@@ -4,8 +4,9 @@
 namespace Transave\ScolaBookstore\Http\Controllers;
 
 
+use Transave\ScolaBookstore\Actions\Page\HomePageService;
+use Transave\ScolaBookstore\Actions\Page\SingleResource;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
-use Transave\ScolaBookstore\Http\Models\Resource;
 
 class PageController extends Controller
 {
@@ -18,9 +19,11 @@ class PageController extends Controller
 
     public function homePage()
     {
-        $data = [];
-        $data['best_selling_resources'] = Resource::query()->withCount(['author.user', 'orderItems.order'])->get();
+       return (new HomePageService())->execute();
+    }
 
-        return $this->sendSuccess($data, 'homepage data returned successfully');
+    public function singleResource($id)
+    {
+        return (new SingleResource(['resource_id' => $id]))->execute();
     }
 }

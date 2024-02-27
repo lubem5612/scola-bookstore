@@ -93,6 +93,7 @@ Route::as('bookstore.')->group(function () {
     //OrderItem Route
     Route::prefix('pages')->as('pages.')->group(function() {
         Route::get('/home', [ PageController::class, 'homePage'])->name('home');
+        Route::get('/resources/{id}', [ PageController::class, 'singleResource'])->name('resources.show');
     });
 
 });
