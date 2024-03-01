@@ -97,7 +97,7 @@ class Register
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'unique:users'],
-            'role' => ['string', 'in:superAdmin,admin,publisher,user'],
+            'role' => ['string', 'in:admin,author,user,reviewer'],
             'password' => ['required', 'string'],
         ]);
         $this->validatedInput = Arr::only($data, ['first_name', 'last_name', 'email', 'role', 'password']);
