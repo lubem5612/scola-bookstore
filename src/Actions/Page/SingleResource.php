@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Resource;
-use function Termwind\li;
 
 class SingleResource
 {
@@ -53,6 +52,11 @@ class SingleResource
 
                 $resources = array_merge($resources, $list);
             }
+        }
+
+        if (count($resources) < 10) {
+            $available = Resource::query()->inRandomOrder()->take(10)->get();
+            $resources = array_merge($resources, $available->toArray());
         }
 
         $result['resource'] = $this->resource;

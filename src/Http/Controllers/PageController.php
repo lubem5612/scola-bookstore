@@ -5,6 +5,7 @@ namespace Transave\ScolaBookstore\Http\Controllers;
 
 
 use Transave\ScolaBookstore\Actions\Page\HomePageService;
+use Transave\ScolaBookstore\Actions\Page\SingleAuthor;
 use Transave\ScolaBookstore\Actions\Page\SingleResource;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 
@@ -25,5 +26,10 @@ class PageController extends Controller
     public function singleResource($id)
     {
         return (new SingleResource(['resource_id' => $id]))->execute();
+    }
+
+    public function singleAuthor($id)
+    {
+        return (new SingleAuthor(['author_id' => $id]))->execute();
     }
 }
