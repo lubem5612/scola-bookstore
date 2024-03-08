@@ -50,7 +50,7 @@ Route::as('bookstore.')->group(function () {
     Route::prefix('resources')->as('resources.')->group(function () {
         Route::get('/', [ArticleController::class, 'index'])->name('index');
         Route::post('/', [ArticleController::class, 'store'])->name('store');
-        Route::get('/{id}', [ArticleController::class, 'show'])->name('show');
+        Route::get('/{id}', [PageController::class, 'singleResource'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [ArticleController::class, 'update'])->name('update');
         Route::delete('/{id}', [ArticleController::class, 'destroy'])->name('delete');
 
@@ -70,7 +70,7 @@ Route::as('bookstore.')->group(function () {
     Route::prefix('authors')->as('authors.')->group(function () {
         Route::get('/', [ AuthorController::class, 'index'])->name('index');
         Route::post('/', [ AuthorController::class, 'store'])->name('store');
-        Route::get('/{id}', [AuthorController::class, 'show'])->name('show');
+        Route::get('/{id}', [PageController::class, 'singleAuthor'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [AuthorController::class, 'update'])->name('update');
         Route::delete('/{id}', [AuthorController::class, 'destroy'])->name('delete');
 
