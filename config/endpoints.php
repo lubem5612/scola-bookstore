@@ -37,7 +37,7 @@ return [
                 'column' => 'created_at',
                 'pattern' => 'DESC',
             ],
-            'relationships' => ['resource', 'category'],
+            'relationships' => ['resource', 'category', 'resource.author', 'resource.author.user'],
         ],
 
         'faculties' => [
