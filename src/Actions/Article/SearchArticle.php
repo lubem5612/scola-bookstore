@@ -22,7 +22,7 @@ class SearchArticle
         $category = request()->query('category_id');
         if (isset($category)) {
             $this->queryBuilder->whereHas('categories', function (Builder $builder) use ($category) {
-                $builder->where('id', $category);
+                $builder->where('categories.id', $category);
             });
         }
 
