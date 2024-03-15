@@ -60,13 +60,11 @@ class Register
     private function setUserType(): self
 
     {
-        if (isset($this->validatedInput['role']) && in_array($this->validatedInput['role'], ['superAdmin', 'admin', 'publisher', 'user'])) {
-            $this->validatedInput['role'] = $this->validatedInput['role'];
-        } else {
+        if (!Arr::exists($this->validatedInput, 'role')) {
             $this->validatedInput['role'] = 'user';
         }
-        return $this;
 
+        return $this;
     }
 
     private function setVerificationToken(): self
