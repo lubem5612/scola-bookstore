@@ -6,6 +6,9 @@ namespace Transave\ScolaBookstore\Actions\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Notification;
+use Transave\ScolaBookstore\Helpers\UploadHelper;
+use Transave\ScolaBookstore\Http\Models\Author;
+use Transave\ScolaBookstore\Http\Models\Reviewer;
 use Transave\ScolaBookstore\Http\Models\User;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
@@ -20,12 +23,13 @@ class Register
     private array $request;
     private array $validatedInput;
     private User $user;
+    private $uploader;
 
     public function __construct(array $request)
     {
         $this->request = $request;
+        $this->uploader = new UploadHelper();
     }
-
 
     public function execute()
     {
@@ -35,15 +39,18 @@ class Register
                 ->setUserPassword()
                 ->setVerificationToken()
                 ->setUserType()
+                ->uploadProfileImage()
+                ->setBankInformation()
+                ->setPreviousProjects()
                 ->createUser()
+                ->createAuthor()
+                ->createReviewer()
                 ->sendNotification()
-                ->sendSuccess($this->user, 'account created successfully');
+                ->sendSuccess($this->user->load('author', 'reviewer'), 'account created successfully');
         }catch (\Exception $exception){
             return $this->sendServerError($exception);
         }
     }
-
-
 
     private function setUserPassword(): self
     {
@@ -53,7 +60,48 @@ class Register
 
     private function createUser(): self
     {
-        $this->user = User::query()->create($this->validatedInput);
+        $userData = Arr::only($this->validatedInput, [
+            'role',
+            'verification_token',
+            'email_verified_at',
+            'password',
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'profile_image'
+        ]);
+        $this->user = User::query()->create($userData);
+        return $this;
+    }
+
+    private function createAuthor()
+    {
+        if (Arr::exists($this->validatedInput, 'role') && $this->validatedInput['role'] == 'author') {
+            $authorData = Arr::only($this->validatedInput, [
+                'department_id',
+                'faculty_id',
+                'specialization',
+                'bank_info',
+                'bio',
+            ]);
+            $authorData['user_id'] = $this->user->id;
+            Author::query()->create($authorData);
+        }
+       return $this;
+    }
+
+    private function createReviewer()
+    {
+        if (Arr::exists($this->validatedInput, 'role') && $this->validatedInput['role'] == 'reviewer') {
+            $reviewerData = Arr::only($this->validatedInput, [
+                'specialization',
+                'status',
+                'previous_projects'
+            ]);
+            $reviewerData['user_id'] = $this->user->id;
+            Reviewer::query()->create($reviewerData);
+        }
         return $this;
     }
 
@@ -74,8 +122,6 @@ class Register
         return $this;
     }
 
-
-
     private function sendNotification()
     {
         try {
@@ -89,7 +135,45 @@ class Register
         return $this;
     }
 
-    public function validateRequest(): self
+    private function uploadProfileImage()
+    {
+        if (Arr::exists($this->request, 'profile_image') && $this->request['profile_image'])
+        {
+            $response = $this->uploader->uploadFile($this->request['profile_image'], 'bookstore/profile');
+            if ($response['success']) $this->validatedInput['profile_image'] = $response['upload_url'];
+        }
+        return $this;
+    }
+
+    private function setPreviousProjects()
+    {
+        if (Arr::exists($this->validatedInput, 'role') && $this->validatedInput['role'] == 'reviewer') {
+            if (Arr::exists($this->request, 'previous_projects')
+                && is_array($this->request['previous_projects'])
+                && count($this->request['previous_projects']) > 0) {
+                $this->validatedInput['previous_projects'] = json_encode($this->request['previous_projects']);
+            }
+        }
+        return $this;
+    }
+
+    private function setBankInformation()
+    {
+        if (Arr::exists($this->validatedInput, 'role') && $this->validatedInput['role'] == 'author') {
+            if (Arr::exists($this->request, 'bank_info') && $this->request['bank_info'])
+            {
+                $validator = $this->validate($this->request['bank_info'], [
+                    'bank_code' => 'required',
+                    'account_no' => 'required|string',
+                    'account_name' => 'required|string'
+                ]);
+                $this->validatedInput['bank_info'] = json_encode($this->request['bank_info']);
+            }
+        }
+        return $this;
+    }
+
+    private function validateRequest(): self
     {
         $data = $this->validate($this->request, [
             'first_name' => ['required', 'string', 'max:255'],
@@ -97,8 +181,21 @@ class Register
             'email' => ['required', 'string', 'email', 'unique:users'],
             'role' => ['string', 'in:admin,author,user,reviewer'],
             'password' => ['required', 'string'],
+            'profile_image' => ['nullable', 'file', 'mimes:jpeg,png,jpg,webp,gif', 'max:3000'],
+            "phone" => 'sometimes|required|string|max:20|Min:11',
+
+            'specialization' => ['required_unless:role,user', 'string', 'max:700'],
+            'status' => ['nullable', 'string', 'required_if:role,reviewer', 'in:approved,rejected,suspended'],
+            'previous_projects' => ['nullable', 'required_if:role,reviewer', 'array'],
+            'previous_projects.*' => ['nullable', 'required_if:role,reviewer', 'string'],
+
+            'department_id' => ['required_if:role,author', 'exists:departments,id'],
+            'faculty_id' => ['required_if:role,author', 'exists:faculties,id'],
+            'bio' => ['nullable', 'required_if:role,author'],
+            'bank_info' => ['nullable', 'required_if:role,author', 'array'],
+            'bank_info.*' => ['nullable', 'required_if:role,author', 'string'],
         ]);
-        $this->validatedInput = Arr::only($data, ['first_name', 'last_name', 'email', 'role', 'password']);
+        $this->validatedInput = Arr::except($data, ['profile_image', 'bank_info', 'previous_projects']);
         return $this;
     }
 }

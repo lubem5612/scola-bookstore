@@ -7,6 +7,8 @@ use Transave\ScolaBookstore\Helpers\UploadHelper;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Author;
+use Transave\ScolaBookstore\Http\Models\Reviewer;
+use Transave\ScolaBookstore\Http\Models\User;
 
 
 class UpdateUser
@@ -28,11 +30,15 @@ class UpdateUser
             return $this
                 ->validateRequest()
                 ->setUser()
-                ->checkIfNewEmail()
+                ->checkIfPhoneIsNew()
                 ->uploadOrReplaceImage()
                 ->checkUserRole()
-                ->updateIfAuthor()
-                ->updateUser();
+                ->setPreviousProjects()
+                ->setBankInformation()
+                ->updateAuthor()
+                ->updateReviewer()
+                ->updateUser()
+                ->sendSuccess($this->user->refresh()->load('author', 'reviewer'), 'user updated');
         } catch (\Exception $e) {
             return $this->sendServerError($e);
         }
@@ -41,14 +47,6 @@ class UpdateUser
     private function setUser()
     {
         $this->user = config('scola-bookstore.auth_model')::query()->find($this->validatedInput['user_id']);
-        return $this;
-    }
-
-    private function checkIfNewEmail()
-    {
-        if ($this->user->isDirty('email')) {
-            $this->validatedInput['email'] = $this->request['email'];
-        }
         return $this;
     }
 
@@ -75,23 +73,86 @@ class UpdateUser
         return $this;
     }
 
-    private function updateIfAuthor()
+    private function checkIfPhoneIsNew()
     {
-        if (Arr::exists($this->validatedInput, 'role') && $this->validatedInput['role'] == 'author') {
-            Author::query()->updateOrCreate([
-                'user_id' => $this->validatedInput['user_id'],
-            ]);
+        if ($this->user->isDirty('phone')) {
+            $this->validatedInput['phone'] = $this->request['phone'];
         }
         return $this;
     }
 
     private function updateUser()
     {
-        $this->user->fill($this->validatedInput)->save();
-        return $this->sendSuccess($this->user->refresh(), 'user updated');
+        $userData = Arr::only($this->validatedInput, [
+            'role',
+            'first_name',
+            'last_name',
+            'profile_image',
+            'phone'
+        ]);
+        $this->user->fill($userData)->save();
+        return $this;
     }
 
-    private function validateRequest(): self
+    private function updateAuthor()
+    {
+        if ($this->user->role == 'author') {
+            $authorData = Arr::only($this->validatedInput, [
+                'department_id',
+                'faculty_id',
+                'specialization',
+                'bank_info',
+                'bio',
+            ]);
+           $author = Author::query()->where('user_id', $this->user->id)->first();
+           $author->fill($authorData)->save();
+        }
+        return $this;
+    }
+
+    private function updateReviewer()
+    {
+        if ($this->user->role == 'reviewer') {
+            $reviewerData = Arr::only($this->validatedInput, [
+                'specialization',
+                'status',
+                'previous_projects'
+            ]);
+            $reviewer = Reviewer::query()->where('user_id', $this->user->id)->first();
+            $reviewer->fill($reviewerData)->save();
+        }
+        return $this;
+    }
+
+    private function setPreviousProjects()
+    {
+        if ($this->user->role == 'reviewer') {
+            if (Arr::exists($this->request, 'previous_projects')
+                && is_array($this->request['previous_projects'])
+                && count($this->request['previous_projects']) > 0) {
+                $this->validatedInput['previous_projects'] = json_encode($this->request['previous_projects']);
+            }
+        }
+        return $this;
+    }
+
+    private function setBankInformation()
+    {
+        if ($this->user->role == 'author') {
+            if (Arr::exists($this->request, 'bank_info') && $this->request['bank_info'])
+            {
+                $validator = $this->validate($this->request['bank_info'], [
+                    'bank_code' => 'required',
+                    'account_no' => 'required|string',
+                    'account_name' => 'required|string'
+                ]);
+                $this->validatedInput['bank_info'] = json_encode($this->request['bank_info']);
+            }
+        }
+        return $this;
+    }
+
+    private function validateRequest()
     {
         $data = $this->validate($this->request, [
             'user_id' => 'required|exists:users,id',
@@ -101,8 +162,18 @@ class UpdateUser
             "bio" => 'sometimes|required|string',
             "profile_image" => 'sometimes|required|file|max:5000|mimes:png,jpeg,jpg,gif,webp',
             "phone" => 'sometimes|required|string|max:20|Min:11',
+
+            'specialization' => ['nullable', 'string', 'max:700'],
+            'status' => ['nullable', 'string', 'in:approved,rejected,suspended'],
+            'previous_projects' => ['nullable', 'array'],
+            'previous_projects.*' => ['nullable', 'string'],
+
+            'department_id' => ['nullable', 'exists:departments,id'],
+            'faculty_id' => ['nullable', 'exists:faculties,id'],
+            'bank_info' => ['nullable', 'array'],
+            'bank_info.*' => ['nullable', 'string'],
         ]);
-        $this->validatedInput = Arr::except($data, ['profile_image', 'role']);
+        $this->validatedInput = Arr::except($data, ['profile_image', 'role', 'bank_info', 'previous_projects']);
         return $this;
     }
 }

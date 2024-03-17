@@ -25,12 +25,12 @@ class UserController extends Controller
 
     public function index()
     {
-        return (new SearchUser(User::class, []))->execute();
+        return (new SearchUser(User::class, ['author', 'reviewer']))->execute();
     }
 
     public function show($id)
     {
-        return (new SearchUser(User::class, [], $id))->execute();
+        return (new SearchUser(User::class, ['author', 'reviewer'], $id))->execute();
     }
 
     public function update(Request $request, $id)

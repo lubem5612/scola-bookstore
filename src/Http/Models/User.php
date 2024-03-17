@@ -38,6 +38,11 @@ class User extends Authenticatable
         return $this->hasOne(Author::class);
     }
 
+    public function reviewer()
+    {
+        return $this->hasOne(Reviewer::class);
+    }
+
     public function order()
     {
         return $this->hasMany(Order::class);

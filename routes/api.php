@@ -67,14 +67,14 @@ Route::as('bookstore.')->group(function () {
     });
 
     // Author Route
-    Route::prefix('authors')->as('authors.')->group(function () {
-        Route::get('/', [ AuthorController::class, 'index'])->name('index');
-        Route::post('/', [ AuthorController::class, 'store'])->name('store');
-        Route::get('/{id}', [PageController::class, 'singleAuthor'])->name('show');
-        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [AuthorController::class, 'update'])->name('update');
-        Route::delete('/{id}', [AuthorController::class, 'destroy'])->name('delete');
-
-    });
+//    Route::prefix('authors')->as('authors.')->group(function () {
+//        Route::get('/', [ AuthorController::class, 'index'])->name('index');
+//        Route::post('/', [ AuthorController::class, 'store'])->name('store');
+//        Route::get('/{id}', [PageController::class, 'singleAuthor'])->name('show');
+//        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [AuthorController::class, 'update'])->name('update');
+//        Route::delete('/{id}', [AuthorController::class, 'destroy'])->name('delete');
+//
+//    });
 
     //Orders Route
     Route::prefix('orders')->as('orders.')->group(function (){
