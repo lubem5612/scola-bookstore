@@ -35,6 +35,7 @@ class UpdateUser
                 ->checkUserRole()
                 ->setPreviousProjects()
                 ->setBankInformation()
+                ->changeReviewerStatus()
                 ->updateAuthor()
                 ->updateReviewer()
                 ->updateUser()
@@ -68,6 +69,18 @@ class UpdateUser
                 $this->validatedInput['role'] = $this->request['role'];
             }else {
                 abort(401, 'role can only be changed by admin or super admin');
+            }
+        }
+        return $this;
+    }
+
+    private function changeReviewerStatus()
+    {
+        if (Arr::exists($this->validatedInput, 'status')) {
+            if (auth()->user()->role == 'admin' || auth()->user()->role == 'super_admin') {
+                $this->validatedInput['status'] = $this->request['status'];
+            }else {
+                abort(401, 'status can only be changed by admin or super admin');
             }
         }
         return $this;
@@ -173,7 +186,7 @@ class UpdateUser
             'bank_info' => ['nullable', 'array'],
             'bank_info.*' => ['nullable', 'string'],
         ]);
-        $this->validatedInput = Arr::except($data, ['profile_image', 'role', 'bank_info', 'previous_projects']);
+        $this->validatedInput = Arr::except($data, ['profile_image', 'role', 'bank_info', 'previous_projects', 'status']);
         return $this;
     }
 }
