@@ -179,7 +179,7 @@ class Register
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'unique:users'],
-            'role' => ['string', 'in:admin,author,user,reviewer'],
+            'role' => ['required', 'string', 'in:admin,author,user,reviewer'],
             'password' => ['required', 'string'],
             'profile_image' => ['nullable', 'file', 'mimes:jpeg,png,jpg,webp,gif', 'max:3000'],
             "phone" => 'sometimes|required|string|max:20|Min:11',
@@ -191,7 +191,7 @@ class Register
 
             'department_id' => ['required_if:role,author', 'exists:departments,id'],
             'faculty_id' => ['required_if:role,author', 'exists:faculties,id'],
-            'bio' => ['nullable', 'required_if:role,author'],
+            'bio' => ['nullable', 'string'],
             'bank_info' => ['nullable', 'required_if:role,author', 'array'],
             'bank_info.*' => ['nullable', 'required_if:role,author', 'string'],
         ]);
