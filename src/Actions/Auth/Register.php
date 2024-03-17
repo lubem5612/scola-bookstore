@@ -42,6 +42,7 @@ class Register
                 ->uploadProfileImage()
                 ->setBankInformation()
                 ->setPreviousProjects()
+                ->setReviewerStatus()
                 ->createUser()
                 ->createAuthor()
                 ->createReviewer()
@@ -101,6 +102,14 @@ class Register
             ]);
             $reviewerData['user_id'] = $this->user->id;
             Reviewer::query()->create($reviewerData);
+        }
+        return $this;
+    }
+
+    private function setReviewerStatus()
+    {
+        if (Arr::exists($this->validatedInput, 'role') && $this->validatedInput['role'] == 'reviewer') {
+            $this->validatedInput['status'] = 'pending';
         }
         return $this;
     }
@@ -185,7 +194,7 @@ class Register
             "phone" => 'sometimes|required|string|max:20|Min:11',
 
             'specialization' => ['required_unless:role,user', 'string', 'max:700'],
-            'status' => ['nullable', 'string', 'required_if:role,reviewer', 'in:approved,rejected,suspended'],
+            'status' => ['nullable', 'string', 'in:approved,rejected,suspended,pending'],
             'previous_projects' => ['nullable', 'required_if:role,reviewer', 'array'],
             'previous_projects.*' => ['nullable', 'required_if:role,reviewer', 'string'],
 

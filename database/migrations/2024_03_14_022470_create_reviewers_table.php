@@ -18,7 +18,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('specialization', 700)->nullable()->index();
-            $table->enum('status', ['approved', 'rejected', 'suspended'])->default('approved')->index();
+            $table->enum('status', ['approved', 'rejected', 'suspended', 'pending'])->default('pending')->index();
             $table->json('previous_projects')->nullable();
             $table->timestamps();
         });
