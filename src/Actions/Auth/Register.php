@@ -193,16 +193,16 @@ class Register
             'profile_image' => ['nullable', 'file', 'mimes:jpeg,png,jpg,webp,gif', 'max:3000'],
             "phone" => 'sometimes|required|string|max:20|Min:11',
 
-            'specialization' => ['required_unless:role,user', 'string', 'max:700'],
+            'specialization' => ['nullable', 'string', 'max:700'],
             'status' => ['nullable', 'string', 'in:approved,rejected,suspended,pending'],
-            'previous_projects' => ['nullable', 'required_if:role,reviewer', 'array'],
-            'previous_projects.*' => ['nullable', 'required_if:role,reviewer', 'string'],
+            'previous_projects' => ['nullable', 'array'],
+            'previous_projects.*' => ['nullable', 'string'],
 
-            'department_id' => ['required_if:role,author', 'exists:departments,id'],
-            'faculty_id' => ['required_if:role,author', 'exists:faculties,id'],
+            'department_id' => ['nullable', 'exists:departments,id'],
+            'faculty_id' => ['nullable', 'exists:faculties,id'],
             'bio' => ['nullable', 'string'],
-            'bank_info' => ['nullable', 'required_if:role,author', 'array'],
-            'bank_info.*' => ['nullable', 'required_if:role,author', 'string'],
+            'bank_info' => ['nullable', 'array'],
+            'bank_info.*' => ['nullable', 'string'],
         ]);
         $this->validatedInput = Arr::except($data, ['profile_image', 'bank_info', 'previous_projects']);
         return $this;
