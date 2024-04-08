@@ -19,6 +19,16 @@ class SearchArticle
             $this->queryBuilder->where('author_id', $author);
         }
 
+        $isPublished = request()->query('is_published');
+        if (isset($isPublished) || $isPublished == '0' || $isPublished == '1') {
+            $this->queryBuilder->where('is_published', $isPublished);
+        }
+
+        $status = request()->query('status');
+        if (isset($status) || $status == '0' || $status == '1') {
+            $this->queryBuilder->where('status', $status);
+        }
+
         $category = request()->query('category_id');
         if (isset($category)) {
             $this->queryBuilder->whereHas('categories', function (Builder $builder) use ($category) {

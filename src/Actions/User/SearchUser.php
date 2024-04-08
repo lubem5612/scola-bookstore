@@ -11,6 +11,14 @@ class SearchUser
 
     private function searchTerms()
     {
+        $userType = request()->query('role');
+        if (isset($userType)) {
+            if (auth()->check() && in_array($userType, ['super_admin', 'admin'])) {
+                $this->queryBuilder->where('id', '!=', auth()->id());
+            }
+            $this->queryBuilder->where('role', $userType);
+        }
+
         $search = $this->searchParam;
         $this->queryBuilder->where(function (Builder $query) use ($search) {
             $query

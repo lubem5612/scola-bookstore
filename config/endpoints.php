@@ -168,13 +168,15 @@ return [
                     'sender_id' => 'required|exists:users,id',
                     'title' => 'nullable|string|max:300',
                     'message' => 'required|string|max:600',
-                    'type' => 'nullable'
+                    'type' => 'nullable',
+                    'status' => 'nullable|in:open,close'
                 ],
                 'update' => [
                     'sender_id' => 'sometimes|required|exists:users,id',
                     'title' => 'nullable|string|max:300',
                     'message' => 'sometimes|required|string|max:600',
-                    'type' => 'nullable'
+                    'type' => 'nullable',
+                    'status' => 'nullable|in:open,close'
                 ]
             ],
             'order' => [

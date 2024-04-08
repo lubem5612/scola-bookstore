@@ -208,6 +208,8 @@ class CreateArticle
             'cover_image' => 'sometimes|required|file|max:10000|mimes:jpg,jpeg,png,bmp,gif',
             'price' => 'required|numeric|gte:0',
             'percentage_share' => 'required|numeric|gte:3',
+            'is_published' => 'nullable|in:0,1',
+            'status' => 'nullable|in:0,1',
         ]);
 
         $this->validatedData = Arr::except($this->formData, [
