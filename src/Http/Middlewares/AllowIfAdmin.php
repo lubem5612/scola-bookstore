@@ -11,10 +11,10 @@ class AllowIfAdmin
     use ResponseHelper;
     public function handle(Request $request, Closure $next)
     {
-        $user = $request->user();
-        if (!empty($user) && in_array($user->role,['superAdmin', 'admin'])) {
+        $user = auth('sanctum')->user();
+        if (!empty($user) && in_array($user->role,['super_admin', 'admin'])) {
             return $next($request);
         }
-        return $this->sendError('You are not an Admin.', [], 401);
+        return $this->sendError('You are not an admin.', [], 401);
     }
 }

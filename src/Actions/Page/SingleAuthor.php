@@ -41,7 +41,7 @@ class SingleAuthor
 
     private function getAuthorResources()
     {
-        $this->outputData['resources'] = Resource::query()
+        $this->outputData['resources'] = Resource::query()->with(['categories'])
             ->where('author_id', $this->validatedData['author_id'])->orderBy('number_of_views', 'desc')
             ->take(10)->get()->toArray();
     }

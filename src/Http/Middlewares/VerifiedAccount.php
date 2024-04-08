@@ -11,7 +11,7 @@ class VerifiedAccount
     use ResponseHelper;
     public function handle(Request $request, Closure $next)
     {
-        $user = $request->user();
+        $user = auth('sanctum')->user();
         if (!empty($user) && $user->is_verified) {
             return $next($request);
         }

@@ -8,14 +8,13 @@ use Transave\ScolaBookstore\Helpers\ResponseHelper;
 
 class AllowIfPublisher
 {
-
     use ResponseHelper;
-        public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        $user = $request->user();
-        if (!empty($user) && in_array($user->role,['superAdmin', 'admin', 'publisher'])) {
+        $user = auth('sanctum')->user();
+        if (!empty($user) && in_array($user->role,['super_admin', 'admin', 'author'])) {
             return $next($request);
         }
-        return $this->sendError('You are not an Admin.', [], 401);
+        return $this->sendError('You are not allowed to perform this operation', [], 401);
     }
 }

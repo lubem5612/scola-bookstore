@@ -11,8 +11,8 @@ class AllowIfUser
     use ResponseHelper;
     public function handle(Request $request, Closure $next)
     {
-        $user = $request->user();
-        if (!empty($user) && in_array($user->role,['superAdmin', 'admin', 'publisher', 'user'])) {
+        $user = auth('sanctum')->user();
+        if (!empty($user) && in_array($user->role,['super_admin', 'admin', 'author', 'user', 'reviewer'])) {
             return $next($request);
         }
         return $this->sendError('You are not registered.', [], 401);
