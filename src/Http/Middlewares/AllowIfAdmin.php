@@ -1,6 +1,6 @@
 <?php
 
-namespace Transave\ScolaCbt\Http\Middlewares;
+namespace Transave\ScolaBookstore\Http\Middlewares;
 
 use Closure;
 use Illuminate\Http\Request;

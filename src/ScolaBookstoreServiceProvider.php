@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Transave\ScolaBookstore\Console\Seeder;
 use Transave\ScolaBookstore\Http\Models\User;
-use Transave\ScolaCbt\Http\Middlewares\AllowIfAdmin;
-use Transave\ScolaCbt\Http\Middlewares\AllowIfPublisher;
-use Transave\ScolaCbt\Http\Middlewares\AllowIfSuperAdmin;
-use Transave\ScolaCbt\Http\Middlewares\AllowIfUser;
-use Transave\ScolaCbt\Http\Middlewares\VerifiedAccount;
+use Transave\ScolaBookstore\Http\Middlewares\AllowIfAdmin;
+use Transave\ScolaBookstore\Http\Middlewares\AllowIfPublisher;
+use Transave\ScolaBookstore\Http\Middlewares\AllowIfSuperAdmin;
+use Transave\ScolaBookstore\Http\Middlewares\AllowIfUser;
+use Transave\ScolaBookstore\Http\Middlewares\VerifiedAccount;
 
 
 class ScolaBookstoreServiceProvider extends ServiceProvider
