@@ -86,7 +86,6 @@ return [
                     'user_id' => 'required|exists:users,id',
                     'resource_id' => 'required|exists:resources,id',
                     'quantity' => 'sometimes|required|integer',
-                    'unit_price' => 'required|numeric|gt:0',
                     'is_selected' => 'sometimes|boolean|in:0,1'
                 ],
                 'update' => [

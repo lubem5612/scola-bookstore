@@ -141,7 +141,7 @@ class SearchResources
                 }
                 $search = $this->searchParam;
                 $this->queryBuilder->where(function($q) use ($search) {
-                    $q->where("quantity", "like", "%$search%")->orWhere("unit_price", "like", "%$search%");
+                    $q->where("quantity", "like", "%$search%");
                 });
                 break;
             }
@@ -156,6 +156,7 @@ class SearchResources
                 $this->queryBuilder->where(function (Builder $builder) use ($search) {
                     $builder->where('title', 'like', "%$search%")
                         ->orWhere('message', 'like', "%$search%")
+                        ->orWhere('status', 'like', "%$search%")
                         ->orWhere('type', 'like', "%$search%");
                 });
                 break;
