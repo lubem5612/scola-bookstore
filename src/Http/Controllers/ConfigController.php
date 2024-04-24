@@ -20,9 +20,9 @@ class ConfigController extends Controller
     {
         try {
             $data['paystack_reference'] = 'bookstore-'.Carbon::now()->format('YmdHi').'-'.strtolower(Str::random(6));
-            $data['paystack_secret_key'] = config('raadaa.paystack.secret_key');
-            $data['paystack_public_key'] = config('raadaa.paystack.public_key');
-            $data['paystack_base_url'] = config('raadaa.paystack.base_url');
+            $data['paystack_secret_key'] = env('PAYSTACK_SECRET_KEY');
+            $data['paystack_public_key'] = env('PAYSTACK_PUBLIC_KEY');
+            $data['paystack_base_url'] = env('PAYSTACK_BASE_URL', 'https://api.paystack.co');
 
             return $this->sendSuccess($data, 'paystack merchant details retrieved');
         }catch (\Exception $exception) {
