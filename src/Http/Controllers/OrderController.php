@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Transave\ScolaBookstore\Actions\Order\CreateOrder;
 use Transave\ScolaBookstore\Actions\Order\DeleteOrder;
-use Transave\ScolaBookstore\Actions\Order\DeleteOrderItem;
 use Transave\ScolaBookstore\Actions\Order\SearchOrder;
 use Transave\ScolaBookstore\Actions\Order\UpdateOrder;
+use Transave\ScolaBookstore\Actions\Order\VerifyOrder;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Http\Models\Order;
 
@@ -47,17 +47,15 @@ class OrderController extends Controller
         return (new UpdateOrder($inputs))->execute();
     }
 
-    public function deleteOrder($id)
+    public function verify($reference)
+    {
+        return (new VerifyOrder(['reference' => $reference]))->execute();
+    }
+
+    public function destroy($id)
     {
         $request = ['order_id' => $id];
         $action = new DeleteOrder($request);
-        return $action->execute();
-    }
-
-    public function deleteOrderItem($id)
-    {
-        $request = ['order_item_id' => $id];
-        $action = new DeleteOrderItem($request);
         return $action->execute();
     }
 }

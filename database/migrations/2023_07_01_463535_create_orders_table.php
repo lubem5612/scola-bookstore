@@ -12,7 +12,7 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('invoice_number')->unique()->index();
             $table->enum('delivery_status', ['processing', 'on_the_way', 'arrived', 'delivered', 'cancelled'])->default('processing')->index();
-            $table->enum('order_status', ['success', 'failed'])->default('success')->index();
+            $table->enum('order_status', ['success', 'failed', 'cancelled', 'pending'])->default('success')->index();
             $table->string('payment_status')->nullable()->comment('paid or unpaid');
             $table->string('payment_reference')->nullable();
             $table->decimal('total_amount', 18, 6)->default(0);

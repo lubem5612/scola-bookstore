@@ -65,7 +65,7 @@ class UpdateOrder
             'lg_id' => 'nullable|exists:lgs,id',
             'recipient_name' => 'nullable|string|max:150',
             'postal_code' => 'nullable|string|max:16',
-            'email' => 'nullable|string|max:100',
+            'email' => 'nullable|email|max:100',
             'alternative_phone' => 'nullable|string|max:16|min:8'
         ]);
     }

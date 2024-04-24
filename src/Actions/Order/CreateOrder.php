@@ -6,10 +6,7 @@ namespace Transave\ScolaBookstore\Actions\Order;
 
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use RaadaaPartners\RaadaaBase\Actions\Paystack\VerifyTransaction;
-use Transave\ScolaBookstore\Actions\Mail\PaymentReceipt;
 use Transave\ScolaBookstore\Helpers\ResponseHelper;
 use Transave\ScolaBookstore\Helpers\ValidationHelper;
 use Transave\ScolaBookstore\Http\Models\Address;
@@ -18,7 +15,6 @@ use Transave\ScolaBookstore\Http\Models\Order;
 use Transave\ScolaBookstore\Http\Models\OrderItem;
 use Transave\ScolaBookstore\Http\Models\Pickup;
 use Transave\ScolaBookstore\Http\Models\Resource;
-use Transave\ScolaBookstore\Http\Models\Transaction;
 
 class CreateOrder
 {
@@ -43,11 +39,9 @@ class CreateOrder
             $this->setUser();
             $this->getSelectedCart();
             $this->getSelectedResource();
-            $this->createTransaction();
             $this->createOrder();
             $this->createOrderItems();
             $this->creatPickUp();
-            $this->sendMailNotification();
             $this->clearCheckedOutCart();
             return $this->sendSuccess($this->order, 'order created successfully');
         }catch (\Exception $exception) {
@@ -57,7 +51,7 @@ class CreateOrder
 
     private function setUser()
     {
-        $this->user = config('scola-bookstore.auth_model')::find($this->validatedData['user_id']);
+        $this->user = config('scola-bookstore.auth_model')::query()->find($this->validatedData['user_id']);
     }
 
     private function getSelectedCart()
@@ -103,29 +97,6 @@ class CreateOrder
         }
     }
 
-    private function createTransaction()
-    {
-        $response = (new VerifyTransaction([
-            'reference' => $this->validatedData['reference']
-        ]))->execute();
-
-        if (!$response['success']) {
-            abort(403, 'transaction failed verification');
-        }
-
-        Transaction::query()->create([
-            'user_id' => $this->user->id,
-            'reference' => $this->validatedData['reference'],
-            'amount' => $this->totalPrice,
-            'charges' => $this->totalCommission,
-            'commission' => $this->totalEarning,
-            'type' => 'credit',
-            'description' => 'Resource purchase attempted',
-            'status' => 'successful',
-            'payload' => json_encode($response),
-        ]);
-    }
-
     private function createOrder()
     {
         if (count($this->cart) > 0) {
@@ -134,7 +105,7 @@ class CreateOrder
             $this->order = Order::query()->create([
                 'user_id' => $this->validatedData['user_id'],
                 'invoice_number' => Carbon::now()->format('Ymd').'-'.rand(100000, 999999),
-                'payment_status' => 'paid',
+                'payment_status' => 'unpaid',
                 'payment_reference' => $this->validatedData['reference']
             ]);
         }
@@ -150,7 +121,7 @@ class CreateOrder
             $this->totalCommission = $this->totalCommission + (float)($resource->percentage_share/100) * (float)$item['unit_price'] * (float)$item['quantity'];
 
             $percentageEarning = (float)(100 - $resource->percentage_share)/100;
-            $this->totalEarning = $this->totalEarning + $percentageEarning * (float)$item['unit_price']* (float)$item['quantity'];
+            $this->totalEarning = $this->totalEarning + $percentageEarning * (float)$item['unit_price'] * (float)$item['quantity'];
 
             OrderItem::query()->create([
                 'order_id' => $this->order->id,
@@ -162,17 +133,9 @@ class CreateOrder
         }
 
         $this->order->update([
-            'total_amount' => $this->totalPrice
+            'total_amount' => $this->totalPrice,
+            'meta_data' => json_encode(['commission' => $this->totalCommission, 'earning' => $this->totalEarning, 'message' => 'resource purchase attempted']),
         ]);
-    }
-
-    private function sendMailNotification()
-    {
-        try {
-            Mail::to($this->user->email)->send(new PaymentReceipt($this->order));
-        } catch (\Exception $e) {
-            // Handle email sending error (log, etc.)
-        }
     }
 
     private function creatPickUp()
@@ -219,7 +182,7 @@ class CreateOrder
             'lg_id' => 'required|exists:lgs,id',
             'recipient_name' => 'nullable|string|max:150',
             'postal_code' => 'nullable|string|max:16',
-            'email' => 'nullable|string|max:100',
+            'email' => 'nullable|email|max:100',
             'alternative_phone' => 'nullable|string|max:16|min:8'
         ]);
     }

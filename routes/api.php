@@ -81,8 +81,9 @@ Route::as('bookstore.')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('index');
         Route::post('/', [OrderController::class, 'store'])->name('store');
         Route::get('/{id}', [OrderController::class, 'show'])->name('show');
+        Route::get('/{reference}/verify', [OrderController::class, 'verify'])->name('verify');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [OrderController::class, 'update']); 
-        Route::delete('/{id}', [OrderController::class, 'deleteOrder'])->name('delete');
+        Route::delete('/{id}', [OrderController::class, 'destroy'])->name('delete');
     });
 
     //OrderItem Route
