@@ -18,8 +18,6 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('order_id')->constrained('orders')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('address', 766)->nullable()->index();
-            $table->foreignUuid('country_id')->constrained('countries')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignUuid('state_id')->nullable()->constrained('states')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignUuid('lg_id')->nullable()->constrained('lgs')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('recipient_name')->index();
             $table->string('postal_code')->nullable()->index();

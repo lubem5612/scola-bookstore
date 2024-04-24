@@ -136,12 +136,6 @@ class CreateOrder
         if (!Arr::exists($this->validatedData, 'address'))
             $this->validatedData['address'] = $address->address;
 
-        if (!Arr::exists($this->validatedData, 'country_id'))
-            $this->validatedData['country_id'] = $address->country_id;
-
-        if (!Arr::exists($this->validatedData, 'state_id'))
-            $this->validatedData['state_id'] = $address->state_id;
-
         if (!Arr::exists($this->validatedData, 'lg_id'))
             $this->validatedData['lg_id'] = $address->lg_id;
 
@@ -170,8 +164,6 @@ class CreateOrder
             'reference' => 'required|string',
             'user_id' => 'required|exists:users,id',
             'address' => 'required|string|max:750',
-            'country_id' => 'required|exists:countries,id',
-            'state_id' => 'required|exists:states,id',
             'lg_id' => 'required|exists:lgs,id',
             'recipient_name' => 'nullable|string|max:150',
             'postal_code' => 'nullable|string|max:16',
