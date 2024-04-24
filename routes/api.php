@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Transave\ScolaBookstore\Http\Controllers\AddressController;
 use Transave\ScolaBookstore\Http\Controllers\AuthController;
 use Transave\ScolaBookstore\Http\Controllers\AuthorController;
+use Transave\ScolaBookstore\Http\Controllers\ConfigController;
 use Transave\ScolaBookstore\Http\Controllers\OrderController;
 use Transave\ScolaBookstore\Http\Controllers\PageController;
 use Transave\ScolaBookstore\Http\Controllers\ResourceController;
@@ -86,16 +87,15 @@ Route::as('bookstore.')->group(function () {
         Route::delete('/{id}', [OrderController::class, 'destroy'])->name('delete');
     });
 
-    //OrderItem Route
-    Route::prefix('order-items')->as('order-items.')->group(function() {
-        Route::delete('/{id}', [OrderController::class, 'deleteOrderItem'])->name('delete');
-    });
-
     //Pages Route
     Route::prefix('pages')->as('pages.')->group(function() {
         Route::get('/home', [ PageController::class, 'homePage'])->name('home');
         Route::get('/resources/{id}', [ PageController::class, 'singleResource'])->name('resources.show');
         Route::get('/authors/{id}', [ PageController::class, 'singleAuthor'])->name('authors.show');
+    });
+
+    Route::prefix('config')->as('config.')->group(function() {
+        Route::get('paystack', [ ConfigController::class, 'paystack'])->name('paystack');
     });
 
 });
