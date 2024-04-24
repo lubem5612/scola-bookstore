@@ -38,7 +38,7 @@ class CreateOrder
             $this->validateRequest();
             $this->setUser();
             $this->getSelectedCart();
-            $this->getSelectedResource();
+            $this->getSelectedResources();
             $this->createOrder();
             $this->createOrderItems();
             $this->creatPickUp();
@@ -70,26 +70,16 @@ class CreateOrder
             ->delete();
     }
 
-    private function getSelectedResource()
+    private function getSelectedResources()
     {
-        if (Arr::exists($this->validatedData, 'resource_id')) {
-            if (is_array($this->validatedData['resource_id']) && count($this->validatedData['resource_id']) > 0) {
-                foreach ($this->validatedData['resource_id'] as $validatedDatum) {
-
-                    $item['id'] = Str::uuid()->toString();
-                    $item['resource_id'] = $validatedDatum;
-                    $item['user_id'] = $this->validatedData['user_id'];
-                    $item['quantity'] = 1;
-                    $item['is_selected'] = 1;
-
-                    array_push($this->cart, $item);
-                }
-            }else {
-
+        if (Arr::exists($this->validatedData, 'resources')
+            && is_array($this->validatedData['resources'])
+            && count($this->validatedData['resources']) > 0) {
+            foreach ($this->validatedData['resources'] as $resource) {
                 $item['id'] = Str::uuid()->toString();
-                $item['resource_id'] = $this->validatedData['resource_id'];
+                $item['resource_id'] = $resource['id'];
                 $item['user_id'] = $this->validatedData['user_id'];
-                $item['quantity'] = 1;
+                $item['quantity'] = $resource['quantity'];
                 $item['is_selected'] = 1;
 
                 array_push($this->cart, $item);
@@ -99,7 +89,7 @@ class CreateOrder
 
     private function createOrder()
     {
-        if (count($this->cart) > 0) {
+        if (count($this->cart) == 0) {
             abort(404, 'cart is empty');
         }else {
             $this->order = Order::query()->create([
@@ -173,7 +163,10 @@ class CreateOrder
     private function validateRequest()
     {
         $this->validatedData = $this->validate($this->request, [
-            'resource_id' => 'nullable',
+            'resources' => 'sometimes|required|array',
+            'resources.*' => 'required_unless:resources,null',
+            'resources.*.id' => 'required_unless:resources.*,null|exists:resources,id',
+            'resources.*.quantity' => 'required_unless:resources.*,null|integer|gt:0',
             'reference' => 'required|string',
             'user_id' => 'required|exists:users,id',
             'address' => 'required|string|max:750',
