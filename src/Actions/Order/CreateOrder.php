@@ -15,12 +15,13 @@ use Transave\ScolaBookstore\Http\Models\Order;
 use Transave\ScolaBookstore\Http\Models\OrderItem;
 use Transave\ScolaBookstore\Http\Models\Pickup;
 use Transave\ScolaBookstore\Http\Models\Resource;
+use Transave\ScolaBookstore\Http\Models\User;
 
 class CreateOrder
 {
     use ValidationHelper, ResponseHelper;
     private $request, $validatedData;
-    private User $user;
+    private $user;
     private Order $order;
     private array $cart;
     private float $totalPrice = 0;
@@ -51,7 +52,7 @@ class CreateOrder
 
     private function setUser()
     {
-        $this->user = config('scola-bookstore.auth_model')::query()->find($this->validatedData['user_id']);
+        $this->user = User::find($this->validatedData['user_id']);
     }
 
     private function getSelectedCart()
@@ -64,10 +65,11 @@ class CreateOrder
 
     private function clearCheckedOutCart()
     {
-        $this->cart = Cart::query()
+        Cart::query()
             ->where('is_selected', 1)
             ->where('user_id', $this->validatedData['user_id'])
             ->delete();
+        $this->cart = [];
     }
 
     private function getSelectedResources()
@@ -125,6 +127,7 @@ class CreateOrder
         $this->order->update([
             'total_amount' => $this->totalPrice,
             'meta_data' => json_encode(['commission' => $this->totalCommission, 'earning' => $this->totalEarning, 'message' => 'resource purchase attempted']),
+            'order_status' => 'pending',
         ]);
     }
 

@@ -22,17 +22,23 @@ class DeleteOrder
     {
         try {
             return $this->validateRequest()
-                ->deleteOrder()
-                ->sendSuccess(null, 'Order and associated items deleted successfully');
+                ->deleteOrder();
         } catch (\Exception $e) {
             return $this->sendServerError($e);
         }
     }
 
-    private function deleteOrder(): self
+    private function deleteOrder(): \Illuminate\Http\Response
     {
-        Order::destroy($this->validatedInput['order_id']);
-        return $this;
+        $order = Order::query()->find($this->validatedInput['order_id']);
+        if (empty($order)) {
+            return $this->sendError('order not found');
+        }elseif ($order->payment_status == 'paid') {
+            return $this->sendError('order has already been paid and cant be cancelled');
+        }else {
+            $order->delete();
+            return $this->sendSuccess(null, 'order deleted successfully');
+        }
     }
 
     private function validateRequest(): self

@@ -15,7 +15,7 @@ class VerifyOrder
     use ValidationHelper, ResponseHelper;
     private array $request;
     private array $validatedData;
-    private $response;
+    private $response, $transaction;
     private Order $order;
 
     public function __construct(array $request)
@@ -29,7 +29,9 @@ class VerifyOrder
             $this->validateRequest();
             $this->getOrder();
             $this->getTransaction();
-            return $this->createTransaction();
+            $this->createTransaction();
+            $this->updateOrder();
+            return $this->sendSuccess($this->transaction, 'transaction created successfully');
         }catch (\Exception $exception) {
             return $this->sendServerError($exception);
         }
@@ -54,7 +56,7 @@ class VerifyOrder
     private function createTransaction()
     {
         $metaData = json_decode($this->order->meta_data, true);
-        $transaction = Transaction::query()->create([
+        $this->transaction = Transaction::query()->create([
             'user_id' => $this->order->user_id,
             'reference' => $this->validatedData['reference'],
             'amount' => $this->order->total_amount,
@@ -65,8 +67,15 @@ class VerifyOrder
             'status' => 'successful',
             'payload' => json_encode($this->response),
         ]);
+    }
 
-        return $this->sendSuccess($transaction, 'transaction created successfully');
+    private function updateOrder()
+    {
+        $this->order->update([
+            'payment_status' => 'paid',
+            'delivery_status' => 'processing',
+            'order_status' => 'success'
+        ]);
     }
 
     public function validateRequest()
