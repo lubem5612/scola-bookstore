@@ -135,8 +135,8 @@ class SearchResources
                     $this->queryBuilder->where('resource_id', $resourceId);
                 }
 
-                $isSelected = request()->query('checked');
-                if (isset($resourceId) || $isSelected == '0') {
+                $isSelected = request()->query('is_selected');
+                if (isset($resourceId) || $isSelected == '0' || $isSelected = '1') {
                     $this->queryBuilder->where('is_selected', $isSelected);
                 }
                 $search = $this->searchParam;
