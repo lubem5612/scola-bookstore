@@ -66,6 +66,8 @@ class SearchResources
             }
             case "states": {
                 $search = $this->searchParam;
+                $country = request()->query('country_id');
+                if (isset($country)) $this->queryBuilder->where('country_id', $country);
                 $this->queryBuilder->where('name', 'like', "%$search%")
                     ->orWhere("capital", "like", "%$search%")
                     ->orWhereHas("country", function ($q) use ($search) {
@@ -75,6 +77,8 @@ class SearchResources
             }
             case "lgs": {
                 $search = $this->searchParam;
+                $state = request()->query('state_id');
+                if (isset($state)) $this->queryBuilder->where('state_id', $state);
                 $this->queryBuilder->where(function($q) use ($search) {
                     $q->where("name", "like", "%$search%")
                         ->orWhereHas("state", function ($q2) use ($search) {
