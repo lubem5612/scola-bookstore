@@ -23,6 +23,7 @@ class SearchResources
     private $startAt = '';
     private $endAt = '';
     private $resources = [];
+    private $table = '';
 
     public function __construct(array $request)
     {
@@ -33,15 +34,14 @@ class SearchResources
     public function execute()
     {
         try {
-            return $this
-                ->validateAndSetDefaults()
-                ->setModel()
-                ->setModelRelationship()
-                ->searchTerms()
-                ->filterWithTimeStamps()
-                ->filterWithOrder()
-                ->getResources()
-                ->sendSuccess($this->resources, 'resources returned');
+            $this->validateAndSetDefaults();
+            $this->setModel();
+            $this->setModelRelationship();
+            $this->searchTerms();
+            $this->filterWithTimeStamps();
+            $this->filterWithOrder();
+            $this->getResources();
+            return $this->sendSuccess($this->resources, "{$this->table} retrieved successfully");
         }catch (\Exception $e) {
             return $this->sendServerError($e);
         }
@@ -52,7 +52,6 @@ class SearchResources
         abort_if(!array_key_exists('model', $this->route), 401, 'model not configured');
         $this->model = $this->route['model'];
         $this->queryBuilder = $this->model::query();
-        return $this;
     }
 
     private function searchTerms()
@@ -66,15 +65,19 @@ class SearchResources
             }
             case "states": {
                 $countryId = request()->query('country_id');
-                if (isset($countryId))
-                    $this->queryBuilder = $this->queryBuilder->where('country_id', $countryId);
+                if (isset($countryId)) {
+                    $this->queryBuilder->where('country_id', $countryId);
+                }
 
                 $search = $this->searchParam;
-                $this->queryBuilder->where('name', 'like', "%$search%")
-                    ->orWhere("capital", "like", "%$search%")
-                    ->orWhereHas("country", function (Builder $q) use ($search) {
-                        $q->where("name", "like", "%$search%");
-                    });
+                $this->queryBuilder->where(function(Builder $builder) use ($search) {
+                    $builder->where("name", "like", "%$search%")
+                        ->orWhere("capital", "like", "%$search%")
+                        ->orWhereHas("country", function (Builder $builder2) use ($search) {
+                            $builder2->where("name", "like", "%$search%")
+                                ->orWhere("code", "like", "%$search%");
+                        });
+                });
                 break;
             }
             case "lgs": {
@@ -276,11 +279,9 @@ class SearchResources
                 });
                 break;
             }
-
             default:
-                return $this;
+                //;
         }
-        return $this;
     }
 
     private function filterWithTimeStamps()
@@ -293,7 +294,6 @@ class SearchResources
                     ->whereBetween('created_at', [$start, $end]);
             }
         }
-        return $this;
     }
 
     private function getResources()
@@ -302,7 +302,6 @@ class SearchResources
             $this->resources = $this->queryBuilder->paginate($this->perPage);
         }else
             $this->resources = $this->queryBuilder->get();
-        return $this;
     }
 
     private function filterWithOrder()
@@ -314,7 +313,6 @@ class SearchResources
         }else {
             $this->queryBuilder = $this->queryBuilder->orderBy('created_at', 'desc');
         }
-        return $this;
     }
 
     private function setModelRelationship()
@@ -323,18 +321,17 @@ class SearchResources
             $this->relationships = $this->route['relationships'];
             $this->queryBuilder = $this->queryBuilder->with($this->relationships);
         }
-        return $this;
     }
 
     private function validateAndSetDefaults()
     {
         abort_if(!array_key_exists($this->request['endpoint'], $this->routeConfig), 401, 'endpoint not found');
         $this->route = $this->routeConfig[$this->request['endpoint']];
+        $this->table = $this->route['table'];
         $this->startAt = request()->query('start');
         $this->endAt = request()->query('end');
         $this->searchParam = request()->query("search");
         $this->perPage = request()->query("per_page");
-        return $this;
     }
 
 }
