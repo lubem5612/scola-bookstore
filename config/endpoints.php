@@ -219,8 +219,8 @@ return [
                 ]
             ],
             'order' => [
-                'column' => 'created_at',
-                'pattern' => 'DESC',
+                'column' => 'name',
+                'pattern' => 'ASC',
             ],
             'relationships' => [],
         ],
@@ -241,8 +241,8 @@ return [
                 ]
             ],
             'order' => [
-                'column' => 'created_at',
-                'pattern' => 'DESC',
+                'column' => 'name',
+                'pattern' => 'ASC',
             ],
             'relationships' => ['country'],
         ],
@@ -261,8 +261,8 @@ return [
                 ]
             ],
             'order' => [
-                'column' => 'created_at',
-                'pattern' => 'DESC',
+                'column' => 'name',
+                'pattern' => 'ASC',
             ],
             'relationships' => ['state'],
         ],
