@@ -28,7 +28,7 @@ class DeleteOrder
         }
     }
 
-    private function deleteOrder(): \Illuminate\Http\Response
+    private function deleteOrder()
     {
         $order = Order::query()->find($this->validatedInput['order_id']);
         if (empty($order)) {

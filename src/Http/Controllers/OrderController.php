@@ -54,8 +54,6 @@ class OrderController extends Controller
 
     public function destroy($id)
     {
-        $request = ['order_id' => $id];
-        $action = new DeleteOrder($request);
-        return $action->execute();
+        return (new DeleteOrder(['order_id' => $id]))->execute();
     }
 }
