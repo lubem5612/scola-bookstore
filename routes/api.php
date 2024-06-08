@@ -104,7 +104,7 @@ Route::as('bookstore.')->group(function () {
             Route::get('metrics', [ DashboardController::class, 'adminAnalytics'])->name('metrics');
             Route::get('graph', [ DashboardController::class, 'adminGraph'])->name('graph');
         });
-        Route::group(['prefix' => 'author', 'as' => 'author.'], function() {
+        Route::group(['prefix' => 'authors', 'as' => 'authors.'], function() {
             Route::get('books-ordered', [DashboardController::class, 'authorOrderItems'])->name('orders');
             Route::get('{id}/metrics', [DashboardController::class, 'authorRevenue'])->name('metrics');
         });
