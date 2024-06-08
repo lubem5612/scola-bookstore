@@ -5,6 +5,7 @@ use Transave\ScolaBookstore\Http\Controllers\AddressController;
 use Transave\ScolaBookstore\Http\Controllers\AuthController;
 use Transave\ScolaBookstore\Http\Controllers\AuthorController;
 use Transave\ScolaBookstore\Http\Controllers\ConfigController;
+use Transave\ScolaBookstore\Http\Controllers\DashboardController;
 use Transave\ScolaBookstore\Http\Controllers\OrderController;
 use Transave\ScolaBookstore\Http\Controllers\PageController;
 use Transave\ScolaBookstore\Http\Controllers\ResourceController;
@@ -96,6 +97,17 @@ Route::as('bookstore.')->group(function () {
 
     Route::prefix('config')->as('config.')->group(function() {
         Route::get('paystack', [ ConfigController::class, 'paystack'])->name('paystack');
+    });
+
+    Route::prefix('dashboard')->as('dashboard.')->group(function() {
+        Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
+            Route::get('metrics', [ DashboardController::class, 'adminAnalytics'])->name('metrics');
+            Route::get('graph', [ DashboardController::class, 'adminGraph'])->name('graph');
+        });
+        Route::group(['prefix' => 'author', 'as' => 'author.'], function() {
+            Route::get('books-ordered', [DashboardController::class, 'authorOrderItems'])->name('orders');
+            Route::get('{id}/metrics', [DashboardController::class, 'authorRevenue'])->name('metrics');
+        });
     });
 
 });

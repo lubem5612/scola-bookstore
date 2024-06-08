@@ -73,7 +73,7 @@ trait SearchHelper
         return $this;
     }
 
-    private function handlePagination()
+    public function handlePagination()
     {
         if (is_null($this->id) && !isset($this->id)) {
             if (isset($this->perPage)) {
@@ -84,13 +84,13 @@ trait SearchHelper
         return $this;
     }
 
-    private function searchTerms()
+    public function searchTerms()
     {
         //
         return $this;
     }
 
-    private function groupedBy()
+    public function groupedBy()
     {
         if (is_null($this->id) && !isset($this->id)) {
             $this->queryBuilder = $this->queryBuilder->orderBy("created_at", "DESC");

@@ -157,8 +157,12 @@ class UpdateUser
                 $validator = $this->validate($this->request['bank_info'], [
                     'bank_code' => 'required',
                     'account_no' => 'required|string',
-                    'account_name' => 'required|string'
+                    'account_name' => 'required|string',
+                    'account_status' => 'sometimes|required|in:active,inactive',
                 ]);
+                if (!Arr::exists($this->request['bank_info'], 'account_status')) {
+                    $this->request['bank_info']['account_status'] = 'inactive';
+                }
                 $this->validatedInput['bank_info'] = json_encode($this->request['bank_info']);
             }
         }
