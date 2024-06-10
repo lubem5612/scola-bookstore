@@ -29,14 +29,14 @@ class AdminAnalytic extends BaseAction
     public function setValidationRules(): array
     {
         return [
-            "year" => "sometimes|required|integer|min:2024|max:2100",
+            "year" => "nullable|integer|min:2024|max:2100",
         ];
     }
 
     private function setYear()
     {
         if (!Arr::exists($this->validatedData, "year")) {
-            $this->year = date('Y');
+            $this->validatedData['year'] = date('Y');
         }
     }
 
@@ -45,7 +45,7 @@ class AdminAnalytic extends BaseAction
         foreach (range(0, 11) as $item) {
             $month = $item + 1;
             $data = [
-                "sales" => Order::query()->whereYear('created_at', $this->year)
+                "sales" => Order::query()->whereYear('created_at', $this->validatedData['year'])
                     ->whereMonth('created_at', $month)->sum('total_amount'),
                 "month" => $this->months[$item]
             ];
