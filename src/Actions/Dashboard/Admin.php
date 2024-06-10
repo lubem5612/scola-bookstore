@@ -37,7 +37,7 @@ class Admin extends BaseAction
 
     private function setTopResources()
     {
-        $this->response['best_selling_resources'] = Author::query()
+        $this->response['best_selling_resources'] = Resource::query()
             ->with(['author.user'])->withCount(['orders'])
             ->orderBy('orders_count', 'desc')->take(9)->get();
     }
