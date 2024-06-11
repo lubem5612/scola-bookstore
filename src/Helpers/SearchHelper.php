@@ -4,13 +4,21 @@ namespace Transave\ScolaBookstore\Helpers;
 
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 
 trait SearchHelper
 {
     use ResponseHelper;
 
-    private $output, $queryBuilder, $relationshipArray, $searchParam, $perPage, $startAt, $endAt, $id;
+    private mixed $output;
+    private array $relationshipArray;
+    private string $searchParam;
+    private ?int|string|null $perPage;
+    private ?string|null $startAt;
+    private ?string|null $endAt;
+    private ?int|string $id;
+    private Builder $queryBuilder;
 
     public function __construct($model, array $relationshipArray=[], $id=null)
     {

@@ -34,7 +34,6 @@ class UpdateUser
                 ->uploadOrReplaceImage()
                 ->checkUserRole()
                 ->setPreviousProjects()
-                ->setBankInformation()
                 ->changeReviewerStatus()
                 ->updateAuthor()
                 ->updateReviewer()
@@ -114,7 +113,6 @@ class UpdateUser
                 'department_id',
                 'faculty_id',
                 'specialization',
-                'bank_info',
                 'bio',
             ]);
            $author = Author::query()->where('user_id', $this->user->id)->first();
@@ -149,26 +147,6 @@ class UpdateUser
         return $this;
     }
 
-    private function setBankInformation()
-    {
-        if ($this->user->role == 'author') {
-            if (Arr::exists($this->request, 'bank_info') && $this->request['bank_info'])
-            {
-                $validator = $this->validate($this->request['bank_info'], [
-                    'bank_code' => 'required',
-                    'account_no' => 'required|string',
-                    'account_name' => 'required|string',
-                    'account_status' => 'sometimes|required|in:active,inactive',
-                ]);
-                if (!Arr::exists($this->request['bank_info'], 'account_status')) {
-                    $this->request['bank_info']['account_status'] = 'inactive';
-                }
-                $this->validatedInput['bank_info'] = json_encode($this->request['bank_info']);
-            }
-        }
-        return $this;
-    }
-
     private function validateRequest()
     {
         $data = $this->validate($this->request, [
@@ -187,10 +165,8 @@ class UpdateUser
 
             'department_id' => ['nullable', 'exists:departments,id'],
             'faculty_id' => ['nullable', 'exists:faculties,id'],
-            'bank_info' => ['nullable', 'array'],
-            'bank_info.*' => ['nullable', 'string'],
         ]);
-        $this->validatedInput = Arr::except($data, ['profile_image', 'role', 'bank_info', 'previous_projects', 'status']);
+        $this->validatedInput = Arr::except($data, ['profile_image', 'role', 'previous_projects', 'status']);
         return $this;
     }
 }

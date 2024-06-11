@@ -44,7 +44,7 @@ class User extends Authenticatable
         return $this->hasOne(Reviewer::class);
     }
 
-    public function order()
+    public function orders()
     {
         return $this->hasMany(Order::class);
     }
@@ -52,6 +52,11 @@ class User extends Authenticatable
     public function cart()
     {
         return $this->hasMany(Cart::class);
+    }
+
+    public function paymentDetails()
+    {
+        return $this->hasMany(PaymentDetail::class);
     }
 
     protected static function newFactory()

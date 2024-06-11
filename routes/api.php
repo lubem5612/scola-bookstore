@@ -8,6 +8,7 @@ use Transave\ScolaBookstore\Http\Controllers\ConfigController;
 use Transave\ScolaBookstore\Http\Controllers\DashboardController;
 use Transave\ScolaBookstore\Http\Controllers\OrderController;
 use Transave\ScolaBookstore\Http\Controllers\PageController;
+use Transave\ScolaBookstore\Http\Controllers\PaymentDetailController;
 use Transave\ScolaBookstore\Http\Controllers\ResourceController;
 use Transave\ScolaBookstore\Http\Controllers\UserController;
 use Transave\ScolaBookstore\Http\Controllers\ArticleController;
@@ -65,6 +66,16 @@ Route::as('bookstore.')->group(function () {
         Route::get('/{id}', [AddressController::class, 'show'])->name('show');
         Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [AddressController::class, 'update'])->name('update');
         Route::delete('/{id}', [AddressController::class, 'destroy'])->name('delete');
+
+    });
+
+    // Payment Details Route
+    Route::prefix('payment-details')->as('payment-details.')->group(function () {
+        Route::get('/', [ PaymentDetailController::class, 'index'])->name('index');
+        Route::post('/', [ PaymentDetailController::class, 'store'])->name('store');
+        Route::get('/{id}', [PaymentDetailController::class, 'show'])->name('show');
+        Route::match(['POST', 'PUT', 'PATCH'], '/{id}', [PaymentDetailController::class, 'update'])->name('update');
+        Route::delete('/{id}', [PaymentDetailController::class, 'destroy'])->name('delete');
 
     });
 

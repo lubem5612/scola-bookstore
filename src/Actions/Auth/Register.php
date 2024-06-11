@@ -40,7 +40,6 @@ class Register
                 ->setVerificationToken()
                 ->setUserType()
                 ->uploadProfileImage()
-                ->setBankInformation()
                 ->setPreviousProjects()
                 ->setReviewerStatus()
                 ->createUser()
@@ -83,7 +82,6 @@ class Register
                 'department_id',
                 'faculty_id',
                 'specialization',
-                'bank_info',
                 'bio',
             ]);
             $authorData['user_id'] = $this->user->id;
@@ -165,22 +163,22 @@ class Register
         }
         return $this;
     }
-
-    private function setBankInformation()
-    {
-        if (Arr::exists($this->validatedInput, 'role') && $this->validatedInput['role'] == 'author') {
-            if (Arr::exists($this->request, 'bank_info') && $this->request['bank_info'])
-            {
-                $validator = $this->validate($this->request['bank_info'], [
-                    'bank_code' => 'required',
-                    'account_no' => 'required|string',
-                    'account_name' => 'required|string'
-                ]);
-                $this->validatedInput['bank_info'] = json_encode($this->request['bank_info']);
-            }
-        }
-        return $this;
-    }
+//
+//    private function setBankInformation()
+//    {
+//        if (Arr::exists($this->validatedInput, 'role') && $this->validatedInput['role'] == 'author') {
+//            if (Arr::exists($this->request, 'bank_info') && $this->request['bank_info'])
+//            {
+//                $validator = $this->validate($this->request['bank_info'], [
+//                    'bank_code' => 'required',
+//                    'account_no' => 'required|string',
+//                    'account_name' => 'required|string'
+//                ]);
+//                $this->validatedInput['bank_info'] = json_encode($this->request['bank_info']);
+//            }
+//        }
+//        return $this;
+//    }
 
     private function validateRequest(): self
     {
@@ -201,10 +199,8 @@ class Register
             'department_id' => ['nullable', 'exists:departments,id'],
             'faculty_id' => ['nullable', 'exists:faculties,id'],
             'bio' => ['nullable', 'string'],
-            'bank_info' => ['nullable', 'array'],
-            'bank_info.*' => ['nullable', 'string'],
         ]);
-        $this->validatedInput = Arr::except($data, ['profile_image', 'bank_info', 'previous_projects']);
+        $this->validatedInput = Arr::except($data, ['profile_image', 'previous_projects']);
         return $this;
     }
 }
