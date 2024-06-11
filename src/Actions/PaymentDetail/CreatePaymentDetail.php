@@ -5,6 +5,7 @@ namespace Transave\ScolaBookstore\Actions\PaymentDetail;
 
 
 use Illuminate\Support\Arr;
+use RaadaaPartners\RaadaaBase\Actions\Paystack\BankList;
 use Transave\ScolaBookstore\Actions\BaseAction;
 use Transave\ScolaBookstore\Http\Models\PaymentDetail;
 use Transave\ScolaBookstore\Http\Models\User;
@@ -21,6 +22,7 @@ class CreatePaymentDetail extends BaseAction
     {
         $this->setDefault();
         $this->setAccountName();
+        $this->setBankName();
         return $this->createPaymentDetail();
     }
 
@@ -31,7 +33,6 @@ class CreatePaymentDetail extends BaseAction
             'account_number' => 'required',
             'account_name' => 'sometimes|required|string|max:80',
             'account_status' => 'sometimes|required|in:active|inactive',
-            'bank_name' => 'required|string',
             'bank_code' => 'required|string',
             'is_default' => 'sometimes|required|integer|in:0,1',
         ];
@@ -55,6 +56,17 @@ class CreatePaymentDetail extends BaseAction
             $user = User::query()->find($this->validatedData['user_id']);
             $this->validatedData['account_name'] = $user->first_name.' '.$user->last_name;
         }
+    }
+
+    private function setBankName()
+    {
+        $bankList = (new BankList())->execute();
+        $bankList = json_decode($bankList, true);
+        $bankCollection = collect($bankList['data']);
+
+        $bank = $bankCollection->where('code', $this->validatedData['code'])->first();
+        if (empty($bank)) abort(404, 'bank not found for bank code');
+        $this->validatedData['bank_name'] = $bank['name'];
     }
 
     private function createPaymentDetail()
