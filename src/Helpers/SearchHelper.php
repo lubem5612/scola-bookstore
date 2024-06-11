@@ -4,13 +4,12 @@ namespace Transave\ScolaBookstore\Helpers;
 
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
-use Transave\ScolaBookstore\Helpers\ResponseHelper;
+
 
 trait SearchHelper
 {
     use ResponseHelper;
-    
+
     private $output, $queryBuilder, $relationshipArray, $searchParam, $perPage, $startAt, $endAt, $id;
 
     public function __construct($model, array $relationshipArray=[], $id=null)
@@ -27,15 +26,13 @@ trait SearchHelper
     public function execute()
     {
         try {
-            return
-                $this
-                    ->modelHasRelationship()
-                    ->handleTimeStampQuery()
-                    ->searchTerms()
-                    ->groupedBy()
-                    ->handlePagination()
-                    ->querySingleResource()
-                    ->sendSuccess($this->output, 'query returned Ok');
+            $this->modelHasRelationship();
+            $this->handleTimeStampQuery();
+            $this->searchTerms();
+            $this->groupedBy();
+            $this->handlePagination();
+            $this->querySingleResource();
+            return $this->sendSuccess($this->output, 'query returned Ok');
 
         }catch (\Exception $ex) {
             return $this->sendServerError($ex);

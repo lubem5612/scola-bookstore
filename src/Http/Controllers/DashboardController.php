@@ -31,9 +31,7 @@ class DashboardController extends Controller
 
     public function authorOrderItems()
     {
-        return (new AuthorOrders(OrderItem::class, ['resource' => function($query) {
-           $query->select('title', 'price', 'author_id');
-        }, 'resource.author.user']))->execute();
+        return (new AuthorOrders())->execute();
     }
 
     public function authorRevenue($id)
