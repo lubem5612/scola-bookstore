@@ -110,6 +110,12 @@ Route::as('bookstore.')->group(function () {
         Route::get('paystack', [ ConfigController::class, 'paystack'])->name('paystack');
     });
 
+    Route::prefix('paystack')->as('paystack.')->group(function () {
+        Route::get('bank-list', function () {
+            return (new \RaadaaPartners\RaadaaBase\Actions\Paystack\BankList())->execute();
+        });
+    });
+
     Route::prefix('dashboard')->as('dashboard.')->group(function() {
         Route::group(['prefix' => 'admin', 'as' => 'admin.'], function() {
             Route::get('metrics', [ DashboardController::class, 'adminAnalytics'])->name('metrics');
