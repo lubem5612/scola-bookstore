@@ -33,7 +33,6 @@ class UpdatePaymentDetail extends BaseAction
             'account_number' => 'sometimes|required',
             'account_name' => 'sometimes|required|string|max:80',
             'account_status' => 'sometimes|required|in:active,inactive',
-            'bank_name' => 'sometimes|required|string',
             'bank_code' => 'sometimes|required|string',
             'is_default' => 'sometimes|required|integer|in:0,1',
         ];
@@ -43,7 +42,7 @@ class UpdatePaymentDetail extends BaseAction
     {
         if (Arr::exists($this->validatedData, 'is_default') && $this->validatedData['is_default']) {
             if ($this->validatedData['is_default'] == 1) {
-                PaymentDetail::query()->where('user_id', $this->validatedData['user_id'])
+                PaymentDetail::query()->where('user_id', $this->paymentDetail->user_id)
                     ->update(['is_default' => 0]);
             }
         }else {
