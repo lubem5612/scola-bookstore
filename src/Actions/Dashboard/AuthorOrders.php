@@ -45,9 +45,9 @@ class AuthorOrders
             ->leftJoin('orders', 'order_items.order_id', '=', 'orders.id')
             ->leftJoin('authors', 'resources.author_id', '=', 'authors.id')
             ->leftJoin('users', 'authors.user_id', '=', 'users.id')
-            ->select('order_items.*', 'resources.title', 'resources.source', 'resources.price',
-                'resources.page_url', 'orders.payment_status', 'orders.order_status', 'users.first_name',
-                'users.last_name', 'users.email');
+            ->select('order_items.id as order_item_id'.'order_items.quantity'. 'order_items.unit_price',
+                'resources.title', 'resources.source', 'resources.price', 'resources.page_url', 'orders.payment_status',
+                'orders.order_status', 'users.first_name', 'users.last_name', 'users.email');
     }
 
     private function filterByAuthorId()
