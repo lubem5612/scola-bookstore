@@ -7,6 +7,7 @@ namespace Transave\ScolaBookstore\Actions\PaymentDetail;
 use Illuminate\Support\Arr;
 use Transave\ScolaBookstore\Actions\BaseAction;
 use Transave\ScolaBookstore\Http\Models\PaymentDetail;
+use Transave\ScolaBookstore\Http\Models\User;
 
 class CreatePaymentDetail extends BaseAction
 {
@@ -19,6 +20,7 @@ class CreatePaymentDetail extends BaseAction
     public function handle()
     {
         $this->setDefault();
+        $this->setAccountName();
         return $this->createPaymentDetail();
     }
 
@@ -27,7 +29,7 @@ class CreatePaymentDetail extends BaseAction
         return [
             'user_id' => 'required|exists:users,id',
             'account_number' => 'required',
-            'account_name' => 'required|string|max:80',
+            'account_name' => 'sometimes|required|string|max:80',
             'account_status' => 'sometimes|required|in:active|inactive',
             'bank_name' => 'required|string',
             'bank_code' => 'required|string',
@@ -44,6 +46,14 @@ class CreatePaymentDetail extends BaseAction
             }
         }else {
             $this->validatedData['is_default'] = 0;
+        }
+    }
+
+    private function setAccountName()
+    {
+        if (!Arr::exists($this->validatedData, 'account_name')) {
+            $user = User::query()->find($this->validatedData['user_id']);
+            $this->validatedData['account_name'] = $user->first_name.' '.$user->last_name;
         }
     }
 
