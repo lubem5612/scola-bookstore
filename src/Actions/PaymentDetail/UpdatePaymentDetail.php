@@ -5,6 +5,7 @@ namespace Transave\ScolaBookstore\Actions\PaymentDetail;
 
 
 use Illuminate\Support\Arr;
+use RaadaaPartners\RaadaaBase\Actions\Paystack\BankList;
 use Transave\ScolaBookstore\Actions\BaseAction;
 use Transave\ScolaBookstore\Http\Models\PaymentDetail;
 
@@ -21,6 +22,7 @@ class UpdatePaymentDetail extends BaseAction
     {
         $this->setPaymentDetail();
         $this->setDefault();
+        $this->setBankNameFromCode();
         return $this->updatePaymentDetail();
     }
 
@@ -30,7 +32,7 @@ class UpdatePaymentDetail extends BaseAction
             'payment_detail_id' => 'required|exists:payment_details,id',
             'account_number' => 'sometimes|required',
             'account_name' => 'sometimes|required|string|max:80',
-            'account_status' => 'sometimes|required|in:active|inactive',
+            'account_status' => 'sometimes|required|in:active,inactive',
             'bank_name' => 'sometimes|required|string',
             'bank_code' => 'sometimes|required|string',
             'is_default' => 'sometimes|required|integer|in:0,1',
@@ -46,6 +48,18 @@ class UpdatePaymentDetail extends BaseAction
             }
         }else {
             $this->validatedData['is_default'] = 0;
+        }
+    }
+
+    private function setBankNameFromCode()
+    {
+        if (Arr::exists($this->validatedData, 'bank_code') && $this->validatedData['bank_code']) {
+            $bankList = (new BankList())->execute();
+            $bankCollection = collect($bankList['data']);
+
+            $bank = $bankCollection->where('code', $this->validatedData['bank_code'])->first();
+            if (empty($bank)) abort(404, 'bank not found for bank code');
+            $this->validatedData['bank_name'] = $bank['name'];
         }
     }
 

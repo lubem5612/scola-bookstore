@@ -22,6 +22,7 @@ class CreatePaymentDetail extends BaseAction
     {
         $this->setDefault();
         $this->setAccountName();
+        $this->setAccountStatus();
         $this->setBankName();
         return $this->createPaymentDetail();
     }
@@ -32,7 +33,7 @@ class CreatePaymentDetail extends BaseAction
             'user_id' => 'required|exists:users,id',
             'account_number' => 'required',
             'account_name' => 'sometimes|required|string|max:80',
-            'account_status' => 'sometimes|required|in:active|inactive',
+            'account_status' => 'sometimes|required|in:active,inactive',
             'bank_code' => 'required|string',
             'is_default' => 'sometimes|required|integer|in:0,1',
         ];
@@ -58,13 +59,19 @@ class CreatePaymentDetail extends BaseAction
         }
     }
 
+    private function setAccountStatus()
+    {
+        if (!Arr::exists($this->validatedData, 'account_status')) {
+            $this->validatedData['account_status'] = 'inactive';
+        }
+    }
+
     private function setBankName()
     {
         $bankList = (new BankList())->execute();
-        $bankList = json_decode($bankList, true);
         $bankCollection = collect($bankList['data']);
 
-        $bank = $bankCollection->where('code', $this->validatedData['code'])->first();
+        $bank = $bankCollection->where('code', $this->validatedData['bank_code'])->first();
         if (empty($bank)) abort(404, 'bank not found for bank code');
         $this->validatedData['bank_name'] = $bank['name'];
     }
