@@ -59,9 +59,9 @@ class UpdateAuthor
     private function validateRequest()
     {
         $validator = $this->validate($this->request, [
-            'author_id' => 'required|exists:authors,id',
-            'department_id' => 'nullable|exists:departments,id',
-            'faculty_id' => 'nullable|exists:faculties,id',
+            'author_id' => 'required|exists:bs_authors,id',
+            'department_id' => 'nullable|exists:bs_departments,id',
+            'faculty_id' => 'nullable|exists:bs_faculties,id',
             'specialization' => 'nullable|string|max:700',
             'bio' => 'nullable',
             'bank_info' => 'nullable|array',

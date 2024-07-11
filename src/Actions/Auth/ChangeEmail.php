@@ -29,10 +29,10 @@ class ChangeEmail
         }
     }
 
-    private function validateNewEmail(): static
+    private function validateNewEmail()
     {
         $this->validate($this->request, [
-            'email' => 'required|email|unique:users,email'
+            'email' => 'required|email|unique:fc_users,email'
         ]);
         return $this;
     }

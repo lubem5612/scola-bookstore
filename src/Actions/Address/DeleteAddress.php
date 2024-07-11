@@ -53,7 +53,7 @@ class DeleteAddress
     private function validateRequest()
     {
         $this->validatedData = $this->validate($this->request, [
-            'address_id' => 'required|exists:addresses,id'
+            'address_id' => 'required|exists:bs_addresses,id'
         ]);
     }
 

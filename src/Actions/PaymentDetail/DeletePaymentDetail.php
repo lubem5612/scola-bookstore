@@ -26,7 +26,7 @@ class DeletePaymentDetail extends BaseAction
     public function setValidationRules(): array
     {
         return [
-            "payment_detail_id" => "required|exists:addresses,id"
+            "payment_detail_id" => "required|exists:bs_addresses,id"
         ];
     }
 

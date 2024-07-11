@@ -9,11 +9,11 @@ return new class extends Migration
 {
     public function up()
     {
-        if (Schema::hasTable('carts')) return;
-        Schema::create('carts', function (Blueprint $table) {
+        if (Schema::hasTable('bs_carts')) return;
+        Schema::create('bs_carts', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignUuid('resource_id')->constrained('resources')->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained('fc_users')->cascadeOnDelete();
+            $table->foreignUuid('resource_id')->constrained('bs_resources')->cascadeOnDelete();
             $table->integer('quantity')->default(1);
             $table->boolean('is_selected')->default(false);
             $table->timestamps();
@@ -22,6 +22,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('bs_carts');
     }
 };

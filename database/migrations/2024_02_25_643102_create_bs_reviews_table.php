@@ -14,11 +14,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('states', function (Blueprint $table) {
+        Schema::create('bs_reviews', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name')->index();
-            $table->string('capital', 100)->nullable()->index();
-            $table->foreignUuid('country_id')->constrained('countries')->cascadeOnDelete();
+            $table->foreignUuid('user_id')->nullable()->constrained('fc_users')->cascadeOnDelete();
+            $table->foreignUuid('resource_id')->constrained('bs_resources')->cascadeOnDelete();
+            $table->string('review', 750)->nullable()->index();
+            $table->integer('rating');
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('states');
+        Schema::dropIfExists('bs_reviews');
     }
 };

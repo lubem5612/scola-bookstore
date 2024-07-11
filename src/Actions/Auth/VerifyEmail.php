@@ -60,7 +60,7 @@ class VerifyEmail
     private function validateRequest()
     {
         $this->validate($this->request, [
-            "verification_token" => 'string|exists:users,verification_token'
+            "verification_token" => 'string|exists:fc_users,verification_token'
         ]);
         return $this;
     }

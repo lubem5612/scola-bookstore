@@ -30,7 +30,7 @@ class ChangePassword
         }
     }
 
-    private function validatePassword(): static
+    private function validatePassword()
     {
         $this->validate($this->request, [
             'password' => 'string|min:6',

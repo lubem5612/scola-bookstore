@@ -30,7 +30,7 @@ class CreatePaymentDetail extends BaseAction
     public function setValidationRules(): array
     {
         return [
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:fc_users,id',
             'account_number' => 'required',
             'account_name' => 'sometimes|required|string|max:80',
             'account_status' => 'sometimes|required|in:active,inactive',

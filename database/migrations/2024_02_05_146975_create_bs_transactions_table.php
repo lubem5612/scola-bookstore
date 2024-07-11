@@ -14,9 +14,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('bs_transactions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained('fc_users')->cascadeOnDelete();
             $table->string('reference', 50)->unique();
             $table->decimal('amount', 19, 8);
             $table->decimal('charges', 19, 8)->default(0);
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('bs_transactions');
     }
 };

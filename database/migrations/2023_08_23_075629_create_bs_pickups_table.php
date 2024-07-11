@@ -14,11 +14,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pickups', function (Blueprint $table) {
+        Schema::create('bs_pickups', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('order_id')->constrained('orders')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('order_id')->constrained('bs_orders')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('address', 766)->nullable()->index();
-            $table->foreignUuid('lg_id')->nullable()->constrained('lgs')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('lg_id')->nullable()->constrained('bs_lgs')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('recipient_name')->index();
             $table->string('postal_code')->nullable()->index();
             $table->string('email')->index();
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pickups');
+        Schema::dropIfExists('bs_pickups');
     }
 };

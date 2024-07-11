@@ -10,14 +10,14 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
+        Schema::table('bs_orders', function (Blueprint $table) {
             $table->json('meta_data')->after('total_amount')->nullable();
         });
     }
 
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
+        Schema::table('bs_orders', function (Blueprint $table) {
             $table->dropColumn('meta_data');
         });
     }

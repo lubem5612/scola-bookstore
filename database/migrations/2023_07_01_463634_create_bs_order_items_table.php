@@ -8,11 +8,11 @@ return new class extends Migration
 {
     public function up()
     {
-        if (Schema::hasTable('order_items')) return;
-        Schema::create('order_items', function (Blueprint $table) {
+        if (Schema::hasTable('bs_order_items')) return;
+        Schema::create('bs_order_items', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('order_id')->constrained('orders')->cascadeOnDelete();
-            $table->foreignUuid('resource_id')->constrained('resources')->cascadeOnDelete();
+            $table->foreignUuid('order_id')->constrained('bs_orders')->cascadeOnDelete();
+            $table->foreignUuid('resource_id')->constrained('bs_resources')->cascadeOnDelete();
             $table->integer('quantity');
             $table->decimal('unit_price', 15, 5);
             $table->float('discount')->nullable()->index();
@@ -23,6 +23,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('order_items');
+        Schema::dropIfExists('bs_order_items');
     }
 };

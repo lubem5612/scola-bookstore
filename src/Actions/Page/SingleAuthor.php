@@ -49,7 +49,7 @@ class SingleAuthor
     private function validateRequest()
     {
         $this->validatedData = $this->validate($this->request, [
-            'author_id' => 'required|exists:authors,id'
+            'author_id' => 'required|exists:bs_authors,id'
         ]);
     }
 }

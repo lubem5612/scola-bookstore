@@ -55,7 +55,7 @@ class DeleteReviewer
     private function validateRequest(): self
     {
         $this->validatedInput = $this->validate($this->request, [
-            'reviewer_id' => 'required|exists:reviewer_requests,id',
+            'reviewer_id' => 'required|exists:bs_reviewer_requests,id',
         ]);
         return $this;
     }

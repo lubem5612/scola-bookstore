@@ -9,9 +9,9 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('payment_details', function (Blueprint $table) {
+        Schema::create('bs_payment_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained('fc_users')->cascadeOnDelete();
             $table->string('account_number', 20)->index();
             $table->string('account_name', 100)->index();
             $table->string('account_status', 20)->index()->comment('active, inactive');
@@ -22,16 +22,16 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::table('authors', function (Blueprint $table) {
+        Schema::table('bs_authors', function (Blueprint $table) {
             $table->dropColumn('bank_info');
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('payment_details');
+        Schema::dropIfExists('bs_payment_details');
 
-        Schema::table('authors', function (Blueprint $table) {
+        Schema::table('bs_authors', function (Blueprint $table) {
             $table->json('bank_info')->after('bio')->nullable()->comment('account_no, account_name, bank_code');
         });
     }

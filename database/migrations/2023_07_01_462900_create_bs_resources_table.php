@@ -9,10 +9,10 @@ return new class extends Migration
 {
     public function up()
     {
-        if (Schema::hasTable('resources')) return;
-        Schema::create('resources', function (Blueprint $table) {
+        if (Schema::hasTable('bs_resources')) return;
+        Schema::create('bs_resources', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('author_id')->constrained('authors')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('author_id')->constrained('bs_authors')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('title', 500)->index();
             $table->string('subtitle', 500)->nullable()->index();
             $table->string('preface', 766)->nullable()->comment('books');
@@ -45,6 +45,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('departments');
+        Schema::dropIfExists('bs_resources');
     }
 };

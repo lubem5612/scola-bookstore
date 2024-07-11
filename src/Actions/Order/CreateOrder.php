@@ -162,10 +162,10 @@ class CreateOrder
         $this->validatedData = $this->validate($this->request, [
             'resources' => 'sometimes|required|array',
             'resources.*' => 'required_unless:resources,null',
-            'resources.*.id' => 'required_unless:resources.*,null|exists:resources,id',
+            'resources.*.id' => 'required_unless:resources.*,null|exists:bs_resources,id',
             'resources.*.quantity' => 'required_unless:resources.*,null|integer|gt:0',
             'reference' => 'required|string',
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:fc_users,id',
             'address' => 'required|string|max:750',
             'lg_id' => 'required|exists:lgs,id',
             'recipient_name' => 'nullable|string|max:150',

@@ -55,14 +55,14 @@ class UpdateOrder
     private function validateRequest()
     {
         $this->validatedData = $this->validate($this->request, [
-            'order_id' => 'required|exists:orders,id',
+            'order_id' => 'required|exists:bs_orders,id',
             'delivery_status' => 'sometimes|required|in:processing,on_the_way,arrived,delivered,cancelled',
             'order_status' => 'sometimes|required|in:success,failed',
             'payment_status' => 'sometimes|required|in:paid,unpaid',
             'address' => 'nullable|string|max:750',
-            'country_id' => 'nullable|exists:countries,id',
-            'state_id' => 'nullable|exists:states,id',
-            'lg_id' => 'nullable|exists:lgs,id',
+            'country_id' => 'nullable|exists:bs_countries,id',
+            'state_id' => 'nullable|exists:bs_states,id',
+            'lg_id' => 'nullable|exists:bs_lgs,id',
             'recipient_name' => 'nullable|string|max:150',
             'postal_code' => 'nullable|string|max:16',
             'email' => 'nullable|email|max:100',

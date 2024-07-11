@@ -41,13 +41,13 @@ class AuthorOrders
     private function initQueryBuilder()
     {
         $this->queryBuilder = OrderItem::query()
-            ->leftJoin('resources', 'order_items.resource_id', '=', 'resources.id')
-            ->leftJoin('orders', 'order_items.order_id', '=', 'orders.id')
-            ->leftJoin('authors', 'resources.author_id', '=', 'authors.id')
-            ->leftJoin('users', 'authors.user_id', '=', 'users.id')
-            ->select('order_items.id as order_item_id', 'order_items.quantity', 'order_items.unit_price as purchase_price',
-                'resources.title', 'resources.source', 'resources.price', 'resources.page_url', 'orders.payment_status',
-                'orders.order_status', 'users.first_name', 'users.last_name', 'users.email');
+            ->leftJoin('bs_resources', 'bs_order_items.resource_id', '=', 'bs_resources.id')
+            ->leftJoin('bs_orders', 'bs_order_items.order_id', '=', 'bs_orders.id')
+            ->leftJoin('bs_authors', 'bs_resources.author_id', '=', 'bs_authors.id')
+            ->leftJoin('fc_users', 'bs_authors.user_id', '=', 'fc_users.id')
+            ->select('bs_order_items.id as order_item_id', 'bs_order_items.quantity', 'bs_order_items.unit_price as purchase_price',
+                'bs_resources.title', 'bs_resources.source', 'bs_resources.price', 'bs_resources.page_url', 'bs_orders.payment_status',
+                'bs_orders.order_status', 'fc_users.first_name', 'fc_users.last_name', 'fc_users.email');
     }
 
     private function filterByAuthorId()

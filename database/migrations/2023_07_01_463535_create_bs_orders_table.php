@@ -7,9 +7,9 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) { 
+        Schema::create('bs_orders', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained('fc_users')->cascadeOnDelete();
             $table->string('invoice_number')->unique()->index();
             $table->enum('delivery_status', ['processing', 'on_the_way', 'arrived', 'delivered', 'cancelled'])->default('processing')->index();
             $table->enum('order_status', ['success', 'failed', 'cancelled', 'pending'])->default('success')->index();
@@ -23,7 +23,7 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('bs_orders');
     }
 };
 

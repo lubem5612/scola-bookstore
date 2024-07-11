@@ -196,8 +196,8 @@ class Register
             'previous_projects' => ['nullable', 'array'],
             'previous_projects.*' => ['nullable', 'string'],
 
-            'department_id' => ['nullable', 'exists:departments,id'],
-            'faculty_id' => ['nullable', 'exists:faculties,id'],
+            'department_id' => ['nullable', 'exists:bs_departments,id'],
+            'faculty_id' => ['nullable', 'exists:bs_faculties,id'],
             'bio' => ['nullable', 'string'],
         ]);
         $this->validatedInput = Arr::except($data, ['profile_image', 'previous_projects']);

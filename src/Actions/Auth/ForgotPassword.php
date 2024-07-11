@@ -84,7 +84,7 @@ class ForgotPassword
     private function validateRequest()
     {
         $this->validate($this->request, [
-            "email" => 'string|email|exists:users,email'
+            "email" => 'string|email|exists:fc_users,email'
         ]);
         return $this;
     }

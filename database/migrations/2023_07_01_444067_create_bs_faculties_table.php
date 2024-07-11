@@ -9,8 +9,8 @@ return new class extends Migration
 {
     public function up()
     {
-        if (Schema::hasTable('faculties')) return;
-        Schema::create('faculties', function (Blueprint $table) {
+        if (Schema::hasTable('bs_faculties')) return;
+        Schema::create('bs_faculties', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name', 100)->index();
             $table->timestamps();
@@ -19,6 +19,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('faculties');
+        Schema::dropIfExists('bs_faculties');
     }
 };

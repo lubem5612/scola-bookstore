@@ -58,12 +58,12 @@ class UpdateAddress
     private function validateRequest()
     {
         $this->validatedData = $this->validate($this->request, [
-            'address_id' => 'required|exists:addresses,id',
+            'address_id' => 'required|exists:bs_addresses,id',
             'address' => 'sometimes|required|string|max:400',
             'is_default' => 'sometimes|in:0,1',
-            'country_id' => 'sometimes|required|exists:countries,id',
-            'state_id' => 'sometimes|required|exists:states,id',
-            'lg_id' => 'sometimes|required|exists:lgs,id',
+            'country_id' => 'sometimes|required|exists:bs_countries,id',
+            'state_id' => 'sometimes|required|exists:bs_states,id',
+            'lg_id' => 'sometimes|required|exists:bs_lgs,id',
             'postal_code' => 'nullable'
         ]);
     }

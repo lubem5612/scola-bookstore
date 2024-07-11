@@ -150,7 +150,7 @@ class UpdateUser
     private function validateRequest()
     {
         $data = $this->validate($this->request, [
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:fc_users,id',
             'first_name' => 'sometimes|required|string|max:255',
             'last_name' => 'sometimes|required|string|max:255',
             'role' => 'sometimes|required|in:super-admin,admin,author,user,reviewer',
@@ -163,8 +163,8 @@ class UpdateUser
             'previous_projects' => ['nullable', 'array'],
             'previous_projects.*' => ['nullable', 'string'],
 
-            'department_id' => ['nullable', 'exists:departments,id'],
-            'faculty_id' => ['nullable', 'exists:faculties,id'],
+            'department_id' => ['nullable', 'exists:bs_departments,id'],
+            'faculty_id' => ['nullable', 'exists:bs_faculties,id'],
         ]);
         $this->validatedInput = Arr::except($data, ['profile_image', 'role', 'previous_projects', 'status']);
         return $this;

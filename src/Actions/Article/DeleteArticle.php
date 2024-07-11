@@ -64,7 +64,7 @@ class DeleteArticle
     private function validateRequest()
     {
         $this->validatedData = $this->validate($this->request, [
-            'resource_id' => 'required|exists:resources,id'
+            'resource_id' => 'required|exists:bs_resources,id'
         ]);
     }
 }

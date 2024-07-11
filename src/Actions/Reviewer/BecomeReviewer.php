@@ -70,7 +70,7 @@ class BecomeReviewer
     private function validateRequest(): self
     {
         $this->validatedInput = $this->validate($this->request, [
-            'user_id' => 'required|exists:users,id',
+            'user_id' => 'required|exists:fc_users,id',
             'specialization' => 'required|string',
             'previous_projects' => 'required|array',
             'year_of_project' => 'required|integer',

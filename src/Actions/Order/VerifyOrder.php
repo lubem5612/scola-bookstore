@@ -81,7 +81,7 @@ class VerifyOrder
     public function validateRequest()
     {
         $this->validatedData = $this->validate($this->request, [
-            'reference' => 'required|exists:orders,payment_reference',
+            'reference' => 'required|exists:bs_orders,payment_reference',
         ]);
         return $this;
     }

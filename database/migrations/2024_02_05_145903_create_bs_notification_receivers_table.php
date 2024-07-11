@@ -14,10 +14,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('lgs', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name')->index();
-            $table->foreignUuid('state_id')->constrained('states')->cascadeOnDelete();
+        Schema::create('bs_notification_receivers', function (Blueprint $table) {
+            $table->id();
+            $table->foreignUuid('receiver_id')->constrained('fc_users')->cascadeOnDelete();
+            $table->foreignUuid('notification_id')->constrained('bs_notifications')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lgs');
+        Schema::dropIfExists('bs_notification_receivers');
     }
 };

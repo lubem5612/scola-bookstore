@@ -172,7 +172,7 @@ class CreateArticle
     private function validateRequest()
     {
         $this->formData = $this->validate($this->request, [
-            'author_id' => 'required|exists:authors,id',
+            'author_id' => 'required|exists:bs_authors,id',
             'title' => 'required|string|max:500',
             'subtitle' => 'sometimes|required|string|max:500',
             'preface' => 'sometimes|required|string|max:766',
@@ -180,7 +180,7 @@ class CreateArticle
             'page_url' => 'sometimes|required|string|max:766',
             'pages' => 'nullable',
             'category_ids' => 'required|array',
-            'category_ids.*' => 'required|exists:categories,id',
+            'category_ids.*' => 'required|exists:bs_categories,id',
             'contributors' => 'nullable|array', // json_encoded
             'contributors.*' => 'nullable|string', // 'required_if:contributors,!=,null|string|name',
             'abstract' => 'string|nullable',

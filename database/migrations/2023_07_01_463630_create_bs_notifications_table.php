@@ -8,10 +8,10 @@ return new class extends Migration
 {
     public function up()
     {
-        if (Schema::hasTable('notifications')) return;
-        Schema::create('notifications', function (Blueprint $table) {
+        if (Schema::hasTable('bs_notifications')) return;
+        Schema::create('bs_notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('sender_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignUuid('sender_id')->constrained('fc_users')->cascadeOnDelete();
             $table->string('title', 300)->index();
             $table->string('message', 600)->index();
             $table->string('type', 60)->index()->nullable();
@@ -21,6 +21,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('bs_notifications');
     }
 };

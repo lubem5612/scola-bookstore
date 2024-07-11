@@ -52,9 +52,9 @@ class CreateAuthor
     private function validateRequest()
     {
         $validator = $this->validate($this->request, [
-            'user_id' => 'required|exists:users,id',
-            'department_id' => 'required|exists:departments,id',
-            'faculty_id' => 'required|exists:faculties,id',
+            'user_id' => 'required|exists:fc_users,id',
+            'department_id' => 'required|exists:bs_departments,id',
+            'faculty_id' => 'required|exists:bs_faculties,id',
             'specialization' => 'required|string|max:700',
             'bio' => 'nullable',
             'bank_info' => 'nullable|array',

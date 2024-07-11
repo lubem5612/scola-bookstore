@@ -29,7 +29,7 @@ class UpdatePaymentDetail extends BaseAction
     public function setValidationRules(): array
     {
         return [
-            'payment_detail_id' => 'required|exists:payment_details,id',
+            'payment_detail_id' => 'required|exists:bs_payment_details,id',
             'account_number' => 'sometimes|required',
             'account_name' => 'sometimes|required|string|max:80',
             'account_status' => 'sometimes|required|in:active,inactive',

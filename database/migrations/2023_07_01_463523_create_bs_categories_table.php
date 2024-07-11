@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up() {
-        if (Schema::hasTable('categories')) return;
-        Schema::create('categories', function (Blueprint $table) {
+        if (Schema::hasTable('bs_categories')) return;
+        Schema::create('bs_categories', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name', 100);
             $table->timestamps();
@@ -24,6 +24,6 @@ return new class extends Migration
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('bs_categories');
     }
 };

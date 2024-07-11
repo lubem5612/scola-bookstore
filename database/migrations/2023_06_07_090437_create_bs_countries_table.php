@@ -14,12 +14,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('reviewers', function (Blueprint $table) {
+        Schema::create('bs_countries', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('specialization', 700)->nullable()->index();
-            $table->enum('status', ['approved', 'rejected', 'suspended', 'pending'])->default('pending')->index();
-            $table->json('previous_projects')->nullable();
+            $table->string('name')->index();
+            $table->string('code', 10)->nullable()->index();
+            $table->string('continent', 100)->nullable()->index();
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reviewers');
+        Schema::dropIfExists('bs_countries');
     }
 };

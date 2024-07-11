@@ -179,8 +179,8 @@ class UpdateArticle
     private function validateRequest()
     {
         $this->formData = $this->validate($this->request, [
-            'resource_id' => 'required|exists:resources,id',
-            'author_id' => 'sometimes|required|exists:authors,id',
+            'resource_id' => 'required|exists:bs_resources,id',
+            'author_id' => 'sometimes|required|exists:bs_authors,id',
             'title' => 'nullable|string|max:500',
             'subtitle' => 'sometimes|required|string|max:500',
             'preface' => 'sometimes|required|string|max:766',
@@ -188,7 +188,7 @@ class UpdateArticle
             'page_url' => 'sometimes|required|string|max:766',
             'pages' => 'nullable',
             'category_ids' => 'nullable|array',
-            'category_ids.*' => 'nullable|exists:categories,id',
+            'category_ids.*' => 'nullable|exists:bs_categories,id',
             'contributors' => 'nullable|array',
             'contributors.*' => 'nullable|string', // 'required_if:contributors,!=,null|string|name',
             'abstract' => 'string|nullable',

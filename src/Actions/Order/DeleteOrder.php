@@ -44,7 +44,7 @@ class DeleteOrder
     private function validateRequest(): self
     {
         $this->validatedInput = $this->validate($this->request, [
-            'order_id' => 'required|exists:orders,id',
+            'order_id' => 'required|exists:bs_orders,id',
         ]);
         return $this;
     }
