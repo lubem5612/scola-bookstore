@@ -17,7 +17,7 @@ class Notification extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    protected $table = 'notifications';
+    protected $table = 'bs_notifications';
 
     public function sender()
     {

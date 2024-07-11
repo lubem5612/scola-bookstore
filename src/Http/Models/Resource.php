@@ -11,7 +11,7 @@ class Resource extends Model
 {
     use HasFactory, UUIDHelper;
 
-    protected $table = "resources";
+    protected $table = "bs_resources";
 
     protected $guarded = ['id'];
 
@@ -26,7 +26,7 @@ class Resource extends Model
 
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'resource_categories', 'resource_id', 'category_id');
+        return $this->belongsToMany(Category::class, 'bs_resource_categories', 'resource_id', 'category_id');
     }
 
     public function author()

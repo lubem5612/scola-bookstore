@@ -12,7 +12,7 @@ class ResourceCategory extends Model
 {
     use HasFactory, UUIDHelper;
     
-    protected $table = "resource_categories";
+    protected $table = "bs_resource_categories";
 
     protected $guarded = ['id'];
     

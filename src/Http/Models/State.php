@@ -15,7 +15,7 @@ class State extends Model
 {
     use HasFactory, UUIDHelper;
 
-    protected $table = "states";
+    protected $table = "bs_states";
 
     protected $guarded = [
         "id"

@@ -10,7 +10,7 @@ use Transave\ScolaBookstore\Helpers\UUIDHelper;
 class Cart extends Model
 {
     use HasFactory, UUIDHelper;
-    protected $table = "carts";
+    protected $table = "bs_carts";
     protected $hidden = ['created_at', 'updated_at'];
 
     protected $guarded = [

@@ -13,7 +13,7 @@ class NotificationReceiver extends Model
 {
     use HasFactory, UUIDHelper;
 
-    protected $table = 'notification_receivers';
+    protected $table = 'bs_notification_receivers';
     protected $guarded = ['id'];
     protected $hidden = ['created_at', 'updated_at'];
 

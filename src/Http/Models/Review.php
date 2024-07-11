@@ -14,7 +14,7 @@ class Review extends Model
 {
     use HasFactory, UUIDHelper;
 
-    protected $table = "reviews";
+    protected $table = "bs_reviews";
 
     protected $guarded = [
         "id"

@@ -12,7 +12,7 @@ use Transave\ScolaBookstore\Helpers\UUIDHelper;
 class Address extends Model
 {
     use HasFactory, UUIDHelper;
-    protected $table = 'addresses';
+    protected $table = 'bs_addresses';
 
     protected $guarded = [ 'id' ];
 

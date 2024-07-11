@@ -11,7 +11,7 @@ class OrderItem extends Model
 {
     use HasFactory, UUIDHelper;
     
-    protected $table = "order_items";
+    protected $table = "bs_order_items";
 
     protected $guarded = ['id'];
     

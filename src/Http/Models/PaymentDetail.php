@@ -11,7 +11,7 @@ use Transave\ScolaBookstore\Helpers\UUIDHelper;
 class PaymentDetail extends Model
 {
     use UUIDHelper, HasFactory;
-    protected $table = "payment_details";
+    protected $table = "bs_payment_details";
 
     protected $guarded = [ 'id' ];
 

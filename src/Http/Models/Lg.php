@@ -15,7 +15,7 @@ class Lg extends Model
 {
        use HasFactory, Notifiable, UUIDHelper;
 
-    protected $table = "lgs";
+    protected $table = "bs_lgs";
 
     protected $guarded = [
         "id"

@@ -16,7 +16,7 @@ class Pickup extends Model
         "id"
     ];
 
-    protected $table = "pickups";
+    protected $table = "bs_pickups";
 
     public function state()
     {

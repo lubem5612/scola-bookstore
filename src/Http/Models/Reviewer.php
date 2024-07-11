@@ -13,7 +13,7 @@ use Transave\ScolaBookstore\Helpers\UUIDHelper;
 class Reviewer extends Model
 {
     use HasFactory, UUIDHelper;
-    protected $table = 'reviewers';
+    protected $table = 'bs_reviewers';
     protected $guarded = ['id'];
     protected $hidden = ['created_at', 'updated_at'];
 

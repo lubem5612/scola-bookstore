@@ -16,7 +16,7 @@ class Department extends Model
 
     protected $guarded = ['id'];
 
-    protected $table = 'departments';
+    protected $table = 'bs_departments';
 
     protected $hidden = ['created_at', 'updated_at'];
 

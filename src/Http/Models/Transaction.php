@@ -13,7 +13,7 @@ class Transaction extends Model
 {
     use HasFactory, UUIDHelper;
 
-    protected $table = "transactions";
+    protected $table = "bs_transactions";
 
     protected $guarded = [
         "id"

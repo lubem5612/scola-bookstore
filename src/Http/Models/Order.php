@@ -14,7 +14,7 @@ class Order extends Model
     use HasFactory, Notifiable, UUIDHelper, HasApiTokens;
 
     
-    protected $table = "orders";
+    protected $table = "bs_orders";
 
     protected $guarded = [
         "id"

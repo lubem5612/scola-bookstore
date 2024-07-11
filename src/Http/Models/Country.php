@@ -19,7 +19,7 @@ class Country extends Model
         "id"
     ];
 
-    protected $table = "countries";
+    protected $table = "bs_countries";
 
     public function state() : HasMany
     {

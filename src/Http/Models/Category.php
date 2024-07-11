@@ -10,7 +10,7 @@ use Transave\ScolaBookstore\Helpers\UUIDHelper;
 class Category extends Model
 {
     use HasFactory, UUIDHelper;
-    protected $table = "categories";
+    protected $table = "bs_categories";
 
     protected $guarded = [
         "id"
@@ -20,7 +20,7 @@ class Category extends Model
 
     public function resources()
     {
-        return $this->belongsToMany(Resource::class, 'resource_categories', 'category_id', 'resource_id');
+        return $this->belongsToMany(Resource::class, 'bs_resource_categories', 'category_id', 'resource_id');
     }
 
     protected static function newFactory()
