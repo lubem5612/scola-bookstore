@@ -26,7 +26,7 @@ class SearchUser
                 ->orWhere('last_name', 'like', "%$search%")
                 ->orWhere('role', 'like', "%$search%")
                 ->orWhere('email', 'like', "%$search%")
-                ->orWhere('phone', 'like', "%$search%")
+                ->orWhere('telephone', 'like', "%$search%")
                 ->orWhereHas('author', function (Builder $builder) use ($search) {
                     $builder->where('specialization', 'like', "%$search%")
                         ->orWhereHas('department', function (Builder $department) use ($search) {

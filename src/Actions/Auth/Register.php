@@ -68,9 +68,9 @@ class Register
             'first_name',
             'last_name',
             'email',
-            'phone',
-            'profile_image'
+            'image_url'
         ]);
+        $userData['telephone'] = $this->validatedInput['phone'];
         $this->user = User::query()->create($userData);
         return $this;
     }
@@ -147,7 +147,7 @@ class Register
         if (Arr::exists($this->request, 'profile_image') && $this->request['profile_image'])
         {
             $response = $this->uploader->uploadFile($this->request['profile_image'], 'bookstore/profile');
-            if ($response['success']) $this->validatedInput['profile_image'] = $response['upload_url'];
+            if ($response['success']) $this->validatedInput['image_url'] = $response['upload_url'];
         }
         return $this;
     }
@@ -163,22 +163,6 @@ class Register
         }
         return $this;
     }
-//
-//    private function setBankInformation()
-//    {
-//        if (Arr::exists($this->validatedInput, 'role') && $this->validatedInput['role'] == 'author') {
-//            if (Arr::exists($this->request, 'bank_info') && $this->request['bank_info'])
-//            {
-//                $validator = $this->validate($this->request['bank_info'], [
-//                    'bank_code' => 'required',
-//                    'account_no' => 'required|string',
-//                    'account_name' => 'required|string'
-//                ]);
-//                $this->validatedInput['bank_info'] = json_encode($this->request['bank_info']);
-//            }
-//        }
-//        return $this;
-//    }
 
     private function validateRequest(): self
     {

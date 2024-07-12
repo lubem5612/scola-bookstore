@@ -106,6 +106,9 @@ return new class extends Migration
             if (!Schema::hasColumn('fc_users', 'token')) {
                 $table->string('token')->nullable()->after('email_verified_at');
             }
+            if (!Schema::hasColumn('fc_users', 'image_url')) {
+                $table->string('image_url', 600)->nullable()->after('profile_image');
+            }
         });
 
         Schema::dropIfExists('users');
