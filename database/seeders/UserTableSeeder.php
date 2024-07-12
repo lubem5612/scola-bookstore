@@ -29,8 +29,8 @@ class UserTableSeeder
 //        ],
         'admin' => [
             'first_name' => 'Admin',
-            'last_name' => 'Bookstore',
-            'email' => 'admin@bookstore.com',
+            'last_name' => 'Scola-Projects',
+            'email' => 'admin@scolaprojects.com',
             'telephone' => '+2347812345678',
             'is_verified' => 1,
             'role' => 'admin'
